@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="EngineMath.h" />
+    <ClInclude Include="EngineDebug.h" />
+    <ClInclude Include="EngineFile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EngineDebug.cpp" />
+    <ClCompile Include="EngineFile.cpp" />
+    <ClCompile Include="EngineMath.cpp" />
+  </ItemGroup>
+</Project>
