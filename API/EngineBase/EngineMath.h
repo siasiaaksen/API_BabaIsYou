@@ -37,7 +37,6 @@ public:
 		return Result;
 	}
 
-
 	bool operator==(FIntPoint _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
@@ -49,8 +48,6 @@ public:
 		Y += _Other.Y;
 		return *this;
 	}
-
-
 };
 
 class EngineMath
