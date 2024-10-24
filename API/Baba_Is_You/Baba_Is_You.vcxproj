@@ -151,7 +151,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ContentsCore.h">
+    <ClInclude Include="BabaContentsCore.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -166,7 +166,7 @@
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ContentsCore.cpp">
+    <ClCompile Include="BabaContentsCore.cpp">
       <SubType>
       </SubType>
     </ClCompile>

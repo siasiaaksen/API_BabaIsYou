@@ -1,25 +1,25 @@
 #include "PreCompile.h"
-#include "ContentsCore.h"
+#include "BabaContentsCore.h"
 #include <EngineCore/EngineAPICore.h>
 
 #include "PlayGameMode.h"
 #include "Player.h"
 
-ContentsCore::ContentsCore()
+BabaContentsCore::BabaContentsCore()
 {
 }
 
-ContentsCore::~ContentsCore()
+BabaContentsCore::~BabaContentsCore()
 {
 }
 
-void ContentsCore::BeginPlay()
+void BabaContentsCore::BeginPlay()
 {
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
-void ContentsCore::Tick()
+void BabaContentsCore::Tick()
 {
 }
 

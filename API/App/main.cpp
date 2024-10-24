@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include <Baba_Is_You/ContentsCore.h>
+#include <Baba_Is_You/BabaContentsCore.h>
 
 
 #include <EngineCore/EngineAPICore.h>
@@ -12,6 +12,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
-	ContentsCore User;
+	BabaContentsCore User;
 	return UEngineAPICore::EngineStart(hInstance, &User);
 }

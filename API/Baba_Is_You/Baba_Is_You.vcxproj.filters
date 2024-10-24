@@ -10,7 +10,7 @@
     <ClInclude Include="PlayGameMode.h">
       <Filter>ContentsObject\GameMode</Filter>
     </ClInclude>
-    <ClInclude Include="ContentsCore.h">
+    <ClInclude Include="BabaContentsCore.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -24,7 +24,7 @@
     <ClCompile Include="PlayGameMode.cpp">
       <Filter>ContentsObject\GameMode</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsCore.cpp">
+    <ClCompile Include="BabaContentsCore.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>

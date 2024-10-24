@@ -4,7 +4,7 @@
 
 
 HINSTANCE UEngineWindow::hInstance = nullptr;
-std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
+std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasses;
 int WindowCount = 0;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -76,8 +76,8 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelega
 
 void UEngineWindow::CreateWindowClass(const WNDCLASSEXA& _Class)
 {
-    std::map<std::string, WNDCLASSEXA>::iterator EndIter = WindowClasss.end();
-    std::map<std::string, WNDCLASSEXA>::iterator FindIter = WindowClasss.find(std::string(_Class.lpszClassName));
+    std::map<std::string, WNDCLASSEXA>::iterator EndIter = WindowClasses.end();
+    std::map<std::string, WNDCLASSEXA>::iterator FindIter = WindowClasses.find(std::string(_Class.lpszClassName));
 
     if (EndIter != FindIter)
     {
@@ -87,7 +87,7 @@ void UEngineWindow::CreateWindowClass(const WNDCLASSEXA& _Class)
 
     RegisterClassExA(&_Class);
 
-    WindowClasss.insert(std::pair{ _Class.lpszClassName, _Class });
+    WindowClasses.insert(std::pair{ _Class.lpszClassName, _Class });
 }
 
 UEngineWindow::UEngineWindow()
@@ -100,7 +100,7 @@ UEngineWindow::~UEngineWindow()
 
 void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassName)
 {
-    if (false == WindowClasss.contains(_ClassName.data()))
+    if (false == WindowClasses.contains(_ClassName.data()))
     {
         MSGASSERT(std::string(_ClassName) + " 등록하지 않은 클래스로 윈도우창을 만들려고 했습니다");
         return;

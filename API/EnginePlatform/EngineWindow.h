@@ -39,7 +39,7 @@ protected:
 
 private:
 	static HINSTANCE hInstance;
-	static std::map<std::string, WNDCLASSEXA> WindowClasss;
+	static std::map<std::string, WNDCLASSEXA> WindowClasses;
 
 	HDC BackBuffer = nullptr;
 	HWND WindowHandle = nullptr;
