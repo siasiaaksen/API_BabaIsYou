@@ -1,22 +1,22 @@
 #pragma once
+#include <EngineCore/Actor.h>
 
-// Ό³Έν :
-class Player
+class APlayer : public AActor
 {
 public:
-	// constrcuter destructer
-	Player();
-	~Player();
+	APlayer();
+	~APlayer();
 
-	// delete Function
-	Player(const Player& _Other) = delete;
-	Player(Player&& _Other) noexcept = delete;
-	Player& operator=(const Player& _Other) = delete;
-	Player& operator=(Player&& _Other) noexcept = delete;
+	APlayer(const APlayer& _Other) = delete;
+	APlayer(APlayer&& _Other) noexcept = delete;
+	APlayer& operator=(const APlayer& _Other) = delete;
+	APlayer& operator=(APlayer&& _Other) noexcept = delete;
+
+	void BeginPlay() override;
+	void Tick() override;
 
 protected:
 
 private:
-
 };
 

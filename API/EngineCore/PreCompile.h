@@ -1,13 +1,7 @@
 #pragma once
 
-// os
-#include <Windows.h>
+#include <EnginePlatform/PreCompile.h>
 
-// std
-#include <list>
-#include <vector>
-#include <map>
-#include <string>
-#include <iostream>
-#include <functional>
+#include "Actor.h"
+#include "Level.h"
 
