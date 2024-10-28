@@ -3,6 +3,7 @@
 #include <string>
 #include <Windows.h>
 #include <EnginePlatform/EngineWindow.h>
+#include <EngineBase/EngineTimer.h>
 
 #pragma comment (lib, "EngineBase.lib")
 #pragma comment (lib, "EnginePlatform.lib")
@@ -58,6 +59,7 @@ private:
 	static UEngineAPICore* MainCore;
 	static UContentsCore* UserCore;
 
+	UEngineTimer DeltaTimer = UEngineTimer();
 	UEngineWindow EngineMainWindow;
 
 	std::map<std::string, class ULevel*> Levels;
