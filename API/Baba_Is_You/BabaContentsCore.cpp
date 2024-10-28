@@ -15,6 +15,8 @@ BabaContentsCore::~BabaContentsCore()
 
 void BabaContentsCore::BeginPlay()
 {
+	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("EduWindow");
+
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
