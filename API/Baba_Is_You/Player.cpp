@@ -2,7 +2,6 @@
 #include "Player.h"
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
-#include "Bullet.h"
 
 APlayer::APlayer()
 {
@@ -46,7 +45,6 @@ void APlayer::Tick(float _DeltaTime)
 {
 	if (3.0f < UEngineInput::GetInst().IsPressTime(VK_LBUTTON))
 	{
-		ABullet* Ptr = GetWorld()->SpawnActor<ABullet>();
-		Ptr->SetActorLocation(GetActorLocation());
+		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 	}
 }
