@@ -13,9 +13,6 @@
     <ClInclude Include="BabaContentsCore.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>ContentsObject</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -29,9 +26,6 @@
     </ClCompile>
     <ClCompile Include="BabaContentsCore.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>ContentsObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
