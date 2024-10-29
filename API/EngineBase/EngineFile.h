@@ -3,13 +3,16 @@
 #include <iostream>
 #include <io.h>
 
+#include "EnginePath.h"
 
 const int MAXPATH = 256;
 
-class UEngineFile
+class UEngineFile : public UEnginePath
 {
 public:
 	UEngineFile();
+	UEngineFile(std::string_view _Path);
+	UEngineFile(std::filesystem::path _Path);
 	~UEngineFile();
 
 	inline void SetPath(const char* _Path)
