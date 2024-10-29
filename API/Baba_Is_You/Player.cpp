@@ -45,5 +45,6 @@ void APlayer::Tick(float _DeltaTime)
 {
 	if (3.0f < UEngineInput::GetInst().IsPressTime(VK_LBUTTON))
 	{
+		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 	}
 }
