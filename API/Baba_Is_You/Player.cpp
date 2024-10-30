@@ -6,7 +6,10 @@
 APlayer::APlayer()
 {
 	SetActorLocation({ 100, 100 });
-	SetActorScale({ 100, 100 });
+	SetActorScale({ 64, 64 }); // <= 여기도 사이즈에 맞춰 변경
+
+	// 이름 넣기
+	SetSprite("Baba.png");
 }
 
 APlayer::~APlayer()
@@ -16,18 +19,6 @@ APlayer::~APlayer()
 void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//UEngineInput::GetInst().BindAction('A', KeyEvent::Press, std::bind(&APlayer::MoveFunction, this, FVector2D::LEFT));
-	//UEngineInput::GetInst().BindAction('D', KeyEvent::Press, std::bind(&APlayer::MoveFunction, this, FVector2D::RIGHT));
-	//UEngineInput::GetInst().BindAction('S', KeyEvent::Press, std::bind(&APlayer::MoveFunction, this, FVector2D::DOWN));
-	//UEngineInput::GetInst().BindAction('W', KeyEvent::Press, std::bind(&APlayer::MoveFunction, this, FVector2D::UP));
-}
-
-void APlayer::MoveFunction(FVector2D _Dir/*, AMonster* Monster*/)
-{
-	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-
-	AddActorLocation(_Dir * DeltaTime * Speed);
 }
 
 void APlayer::Tick(float _DeltaTime)

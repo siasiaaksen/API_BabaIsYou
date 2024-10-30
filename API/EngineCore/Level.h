@@ -52,9 +52,9 @@ private:
 		AllActors.push_back(MainPawn);
 	}
 
-	AGameMode* GameMode = nullptr;
+	class AGameMode* GameMode = nullptr;
 
-	AActor* MainPawn = nullptr;
+	class AActor* MainPawn = nullptr;
 
 	std::list<AActor*> AllActors;
 };
