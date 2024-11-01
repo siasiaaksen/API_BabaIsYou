@@ -26,6 +26,19 @@ ULevel::~ULevel()
 			delete CurActor;
 		}
 	}
+
+	std::list<AActor*>::iterator StartIter = AllActors.begin();
+	std::list<AActor*>::iterator EndIter = AllActors.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AActor* CurActor = *StartIter;
+
+		if (nullptr != CurActor)
+		{
+			delete* StartIter;
+		}
+	}
 }
 
 void ULevel::LevelChangeStart()
@@ -73,7 +86,6 @@ void ULevel::Tick(float _DeltaTime)
 
 		BeginPlayList.clear();
 
-		// todtjdtl 
 		AActor::ComponentBeginPlay();
 	}
 
@@ -125,7 +137,6 @@ void ULevel::ScreenClear()
 	UEngineWinImage* BackBufferImage = MainWindow.GetBackBuffer();
 	FVector2D Size = MainWindow.GetWindowSize();
 
-	//Rectangle(BackBufferImage->GetDC(), 0, 0, Size.iX(), Size.iY());
 	Rectangle(BackBufferImage->GetDC(), -1, -1, Size.iX() + 2, Size.iY() + 2);
 }
 

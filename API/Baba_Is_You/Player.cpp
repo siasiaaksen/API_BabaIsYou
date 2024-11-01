@@ -49,7 +49,7 @@ void APlayer::BeginPlay()
 // ¼öÁ¤ÇØ¾ßµÊ
 void APlayer::Tick(float _DeltaTime)
 {
-	Super::BeginPlay();
+	Super::Tick(_DeltaTime);
 
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
 	UEngineDebug::CoreOutPutString("PlayerPos : " + GetActorLocation().ToString());
