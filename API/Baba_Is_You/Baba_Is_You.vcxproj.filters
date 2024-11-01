@@ -13,6 +13,18 @@
     <ClInclude Include="BabaContentsCore.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsEnum.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleGameMode.h">
+      <Filter>ContentsObject\GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleLogo.h">
+      <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayMap.h">
+      <Filter>Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -27,6 +39,18 @@
     <ClCompile Include="BabaContentsCore.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsEnum.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGameMode.cpp">
+      <Filter>ContentsObject\GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleLogo.cpp">
+      <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayMap.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="_PreCompile">
@@ -40,6 +64,15 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{773a387e-b678-40f7-b4fb-703f62a328cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{63f22391-fade-4a41-a54f-91894492f263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title">
+      <UniqueIdentifier>{ef195361-0492-46f8-b1e3-8dbb80030ea1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play">
+      <UniqueIdentifier>{35f405e9-56d6-4b85-88d2-436ab8f9392c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

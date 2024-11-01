@@ -11,6 +11,7 @@
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="EngineWinImage.h" />
+    <ClInclude Include="EngineWinDebug.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineWindow.cpp">
@@ -23,6 +24,7 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="EngineWinImage.cpp" />
+    <ClCompile Include="EngineWinDebug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Window">

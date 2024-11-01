@@ -21,6 +21,8 @@ public:
 
 	std::string GetFileName();
 
+	std::string GetDirectoryName();
+
 	std::string GetExtension();
 
 	bool MoveParentToDirectory(std::string_view _Path);
@@ -28,6 +30,8 @@ public:
 	bool IsDirectory();
 
 	bool IsFile();
+
+	void Append(std::string_view _AppendName);
 
 protected:
 	std::filesystem::path Path;

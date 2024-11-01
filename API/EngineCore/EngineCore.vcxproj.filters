@@ -22,6 +22,21 @@
     <ClInclude Include="EngineSprite.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Object\Actor\Component\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>Object\Actor\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>Object\Actor\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="2DCollision.h">
+      <Filter>Object\Actor\Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCoreDebug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -45,6 +60,21 @@
     <ClCompile Include="EngineSprite.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Object\Actor\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>Object\Actor\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>Object\Actor\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="2DCollision.cpp">
+      <Filter>Object\Actor\Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCoreDebug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -64,6 +94,18 @@
     </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{34e5daeb-1c25-4273-ba73-e43e4d2e78c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Component">
+      <UniqueIdentifier>{505a9723-687e-481d-83ff-7e6a17f30fdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Component\Collision">
+      <UniqueIdentifier>{4c867de4-7eee-48fe-a7d2-7378223ff310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor\Component\Rendering">
+      <UniqueIdentifier>{5e0227d2-a32f-4f9d-9ca4-9729fa310dcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{e31f9ff4-5ed1-49d9-b401-9db17789119d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 class ULevel
 {
 public:
+	friend class USpriteRenderer;
 	friend class UEngineAPICore;
 
 	ULevel();
@@ -14,8 +15,12 @@ public:
 	ULevel& operator=(const ULevel& _Other) = delete;
 	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 
+	void LevelChangeStart();
+
+	void LevelChangeEnd();
+
 	void Tick(float _DeltaTime);
-	void Render();
+	void Render(float _DeltaTime);
 
 	template<typename ActorType>
 	ActorType* SpawnActor()
@@ -25,9 +30,35 @@ public:
 		AActor* ActorPtr = dynamic_cast<AActor*>(NewActor);
 		ActorPtr->World = this;
 
-		NewActor->BeginPlay();
-		AllActors.push_back(NewActor);
+		BeginPlayList.push_back(ActorPtr);
+		//NewActor->BeginPlay();
+		//AllActors.push_back(NewActor);
 		return NewActor;
+	}
+
+	void SetCameraToMainPawn(bool _IsCameraToMainPawn)
+	{
+		IsCameraToMainPawn = _IsCameraToMainPawn;
+	}
+
+	void SetCameraPivot(FVector2D _Pivot)
+	{
+		CameraPivot = _Pivot;
+	}
+
+	void SetCameraPos(FVector2D _Pos)
+	{
+		CameraPos = _Pos;
+	}
+
+	FVector2D GetCameraPivot()
+	{
+		return CameraPivot;
+	}
+
+	FVector2D GetCameraPos()
+	{
+		return CameraPos;
 	}
 
 protected:
@@ -45,16 +76,31 @@ private:
 		MainPawn->World = this;
 		GameMode->World = this;
 
-		GameMode->BeginPlay();
-		MainPawn->BeginPlay();
+		BeginPlayList.push_back(GameMode);
+		BeginPlayList.push_back(MainPawn);
 
-		AllActors.push_back(GameMode);
-		AllActors.push_back(MainPawn);
+		//GameMode->BeginPlay();
+		//MainPawn->BeginPlay();
+
+		//AllActors.push_back(GameMode);
+		//AllActors.push_back(MainPawn);
 	}
+
+	void PushRenderer(class USpriteRenderer* _Renderer);
+	void ChangeRenderOrder(class USpriteRenderer* _Renderer, int _PrevOrder);
 
 	class AGameMode* GameMode = nullptr;
 
 	class AActor* MainPawn = nullptr;
 
 	std::list<AActor*> AllActors;
+
+	std::list<AActor*> BeginPlayList;
+
+	bool IsCameraToMainPawn = true;
+
+	FVector2D CameraPos;
+	FVector2D CameraPivot;
+
+	std::map<int, std::list<class USpriteRenderer*>> Renderers;
 };
