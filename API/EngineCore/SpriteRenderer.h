@@ -65,6 +65,10 @@ public:
 	
 	void SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function);
 
+	std::string GetCurSpriteName()
+	{
+		return Sprite->GetName();
+	}
 
 protected:
 

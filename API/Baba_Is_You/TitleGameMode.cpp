@@ -5,6 +5,8 @@
 #include <EngineCore/EngineAPICore.h>
 
 #include "TitleLogo.h"
+#include "TitleBackground.h"
+
 
 ATitleGameMode::ATitleGameMode()
 {
@@ -17,6 +19,11 @@ ATitleGameMode::~ATitleGameMode()
 void ATitleGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorld()->SetCameraToMainPawn(false);
+
+	TitleLogo* NewTitleLogo = GetWorld()->SpawnActor<TitleLogo>();
+	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)

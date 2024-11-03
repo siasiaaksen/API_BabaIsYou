@@ -41,14 +41,7 @@ void BabaContentsCore::BeginPlay()
 
 	// 이름, 사이즈 넣어주기
 	UImageManager::GetInst().CuttingSprite("Baba.png", { 54, 54 });
-
-	// 수정해야됨
-	//{
-	//	UEngineDirectory Dir;
-	//	Dir.MoveParentToDirectory("BabaResources");
-
-	//	UImageManager::GetInst().LoadFolder(Dir.GetPathToString());
-	//}
+	UImageManager::GetInst().CuttingSprite("TitleLogo370.png", { 900, 370 });
 
 	// 이름, 사이즈 넣어주기
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("API_BabaIsYou");

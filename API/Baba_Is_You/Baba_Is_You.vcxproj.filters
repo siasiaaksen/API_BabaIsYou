@@ -4,9 +4,6 @@
     <ClInclude Include="PreCompile.h">
       <Filter>_PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ContentsObject</Filter>
-    </ClInclude>
     <ClInclude Include="PlayGameMode.h">
       <Filter>ContentsObject\GameMode</Filter>
     </ClInclude>
@@ -20,18 +17,21 @@
       <Filter>ContentsObject\GameMode</Filter>
     </ClInclude>
     <ClInclude Include="TitleLogo.h">
-      <Filter>Title</Filter>
+      <Filter>ContentsObject\Title</Filter>
     </ClInclude>
     <ClInclude Include="PlayMap.h">
-      <Filter>Play</Filter>
+      <Filter>ContentsObject\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBackground.h">
+      <Filter>ContentsObject\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ContentsObject\Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
       <Filter>_PreCompile</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ContentsObject</Filter>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
       <Filter>ContentsObject\GameMode</Filter>
@@ -46,10 +46,16 @@
       <Filter>ContentsObject\GameMode</Filter>
     </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
-      <Filter>Title</Filter>
+      <Filter>ContentsObject\Title</Filter>
     </ClCompile>
     <ClCompile Include="PlayMap.cpp">
-      <Filter>Play</Filter>
+      <Filter>ContentsObject\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleBackground.cpp">
+      <Filter>ContentsObject\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ContentsObject\Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +74,17 @@
     <Filter Include="Global">
       <UniqueIdentifier>{63f22391-fade-4a41-a54f-91894492f263}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Title">
+    <Filter Include="ContentsObject\Map">
+      <UniqueIdentifier>{e4cb185b-10ed-499f-81ea-08265e5287aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsObject\Play">
+      <UniqueIdentifier>{35f405e9-56d6-4b85-88d2-436ab8f9392c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsObject\Title">
       <UniqueIdentifier>{ef195361-0492-46f8-b1e3-8dbb80030ea1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Play">
-      <UniqueIdentifier>{35f405e9-56d6-4b85-88d2-436ab8f9392c}</UniqueIdentifier>
+    <Filter Include="ContentsObject\Global">
+      <UniqueIdentifier>{d392e23a-ac35-4c60-9e84-0e2726ed7dc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

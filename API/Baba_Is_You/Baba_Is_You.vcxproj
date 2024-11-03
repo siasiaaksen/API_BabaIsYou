@@ -151,6 +151,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="TitleBackground.h" />
     <ClInclude Include="PlayMap.h">
       <SubType>
       </SubType>
@@ -182,6 +183,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TitleBackground.cpp" />
     <ClCompile Include="PlayMap.cpp">
       <SubType>
       </SubType>
