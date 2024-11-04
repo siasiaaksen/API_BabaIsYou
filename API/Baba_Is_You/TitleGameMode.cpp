@@ -22,7 +22,7 @@ void ATitleGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
-	TitleLogo* NewTitleLogo = GetWorld()->SpawnActor<TitleLogo>();
+	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
 	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
 }
 

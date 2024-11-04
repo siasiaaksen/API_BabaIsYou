@@ -1,16 +1,16 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-class TitleLogo : public AActor
+class ATitleLogo : public AActor
 {
 public:
-	TitleLogo();
-	~TitleLogo();
+	ATitleLogo();
+	~ATitleLogo();
 
-	TitleLogo(const TitleLogo& _Other) = delete;
-	TitleLogo(TitleLogo&& _Other) noexcept = delete;
-	TitleLogo& operator=(const TitleLogo& _Other) = delete;
-	TitleLogo& operator=(TitleLogo&& _Other) noexcept = delete;
+	ATitleLogo(const ATitleLogo& _Other) = delete;
+	ATitleLogo(ATitleLogo&& _Other) noexcept = delete;
+	ATitleLogo& operator=(const ATitleLogo& _Other) = delete;
+	ATitleLogo& operator=(ATitleLogo&& _Other) noexcept = delete;
 
 protected:
 
