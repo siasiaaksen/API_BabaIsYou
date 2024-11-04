@@ -1,5 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include "TileMap.h"
+
 
 class APlayGameMode : public AGameMode
 {
@@ -12,10 +14,12 @@ public:
 	APlayGameMode& operator=(const APlayGameMode& _Other) = delete;
 	APlayGameMode& operator=(APlayGameMode&& _Other) noexcept = delete;
 
-	void BeginPlay();
-
 protected:
+	void BeginPlay() override;
+
+	void Tick(float _DeltaTime) override;
 
 private:
+	ATileMap* GroundTileMap = nullptr;
 };
 

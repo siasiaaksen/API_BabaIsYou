@@ -13,7 +13,7 @@ ATitleLogo::ATitleLogo()
 		SpriteRenderer->ChangeAnimation("Logo");
 
 		FVector2D LogoScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({960, 339});
+		SpriteRenderer->SetComponentLocation({960, 340});
 	}
 }
 

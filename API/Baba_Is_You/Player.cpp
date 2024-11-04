@@ -8,6 +8,7 @@
 #include <EngineCore/ImageManager.h>
 #include <EngineBase/EngineDirectory.h>
 
+
 APlayer::APlayer()
 {
 	SetActorLocation({ 100, 100 });
@@ -51,25 +52,25 @@ void APlayer::Tick(float _DeltaTime)
 		UEngineDebug::SwitchIsDebug();
 	}
 
-	if (true == UEngineInput::GetInst().IsPress('D'))
+	if (true == UEngineInput::GetInst().IsDown('D'))
 	{
 		SpriteRenderer->ChangeAnimation("Run_Right");
-		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
+		AddActorLocation(FVector2D::RIGHT * 54);
 	}
-	if (true == UEngineInput::GetInst().IsPress('A'))
+	if (true == UEngineInput::GetInst().IsDown('A'))
 	{
 		SpriteRenderer->ChangeAnimation("Run_Right");
-		AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
+		AddActorLocation(FVector2D::LEFT * 54);
 	}
-	if (true == UEngineInput::GetInst().IsPress('S'))
+	if (true == UEngineInput::GetInst().IsDown('S'))
 	{
 		SpriteRenderer->ChangeAnimation("Run_Right");
-		AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
+		AddActorLocation(FVector2D::DOWN * 54);
 	}
-	if (true == UEngineInput::GetInst().IsPress('W'))
+	if (true == UEngineInput::GetInst().IsDown('W'))
 	{
 		SpriteRenderer->ChangeAnimation("Run_Right");
-		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
+		AddActorLocation(FVector2D::UP * 54);
 	}
 	
 	if (false == UEngineInput::GetInst().IsPress('A') && 

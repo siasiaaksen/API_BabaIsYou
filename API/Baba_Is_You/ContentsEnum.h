@@ -5,5 +5,6 @@ enum class ERenderOrder
 {
 	BACKGROUND = -1000,
 	TITLELOGO = -100,
-	PLAYER = 0,
+	STAGEBG = -50,
+	PLAYER = 1000,
 };

@@ -9,10 +9,9 @@ APlayMap::APlayMap()
 	{
 		USpriteRenderer* SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
-		SpriteRenderer->SetSprite("Background_Gray.png");
-
-		FVector2D MapScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation(MapScale.Half());
+		SpriteRenderer->SetSprite("Background_Black.png");
+		SpriteRenderer->SetComponentScale({ 1782, 972 });
+		SpriteRenderer->SetComponentLocation({960, 500});
 	}
 }
 

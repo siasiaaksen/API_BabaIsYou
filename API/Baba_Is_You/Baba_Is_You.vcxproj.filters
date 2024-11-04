@@ -31,6 +31,9 @@
     <ClInclude Include="TileMap.h">
       <Filter>ContentsObject\TileMap</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>ContentsObject\Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>ContentsObject\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>ContentsObject\Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

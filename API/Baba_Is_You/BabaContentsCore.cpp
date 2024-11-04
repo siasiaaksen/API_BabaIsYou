@@ -42,6 +42,7 @@ void BabaContentsCore::BeginPlay()
 	// 이름, 사이즈 넣어주기
 	UImageManager::GetInst().CuttingSprite("Baba.png", { 54, 54 });
 	UImageManager::GetInst().CuttingSprite("TitleLogo370.png", { 900, 370 });
+	UImageManager::GetInst().CuttingSprite("Tile.png", { 54, 54 });
 
 	// 이름, 사이즈 넣어주기
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("API_BabaIsYou");
@@ -49,7 +50,7 @@ void BabaContentsCore::BeginPlay()
 
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
-	UEngineAPICore::GetCore()->OpenLevel("Title");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void BabaContentsCore::Tick()
