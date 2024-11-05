@@ -21,27 +21,38 @@ public:
 	void MakeTileMap(ATileMap* _TileName, int _Index = 2);
 	void DestroyTileMap(ATileMap* _TileName);
 
+
 protected:
 	void BeginPlay() override;
 
 	void Tick(float _DeltaTime) override;
 private:
-	USpriteRenderer* IsTile = nullptr;
-	USpriteRenderer* YouTile = nullptr;
-	USpriteRenderer* WinTile = nullptr;
-	USpriteRenderer* StopTile = nullptr;
-	USpriteRenderer* PushTile = nullptr;
-	USpriteRenderer* SinkTile = nullptr;
-	USpriteRenderer* MeltTile = nullptr;
-	USpriteRenderer* HotTile = nullptr;
+	ATileMap* IsTileMap = nullptr;
+	ATileMap* YouTileMap = nullptr;
+	ATileMap* WinTileMap = nullptr;
+	ATileMap* StopTileMap = nullptr;
+	ATileMap* PushTileMap = nullptr;
+	ATileMap* SinkTileMap = nullptr;
+	ATileMap* DefeatTileMap = nullptr;
+	ATileMap* MeltTileMap = nullptr;
+	ATileMap* HotTileMap = nullptr;
 
-	USpriteRenderer* BabaTile = nullptr;
-	USpriteRenderer* FlagTile = nullptr;
-	USpriteRenderer* WallTile = nullptr;
-	USpriteRenderer* RockTile = nullptr;
-	USpriteRenderer* WaterTile = nullptr;
-	USpriteRenderer* SkullTile = nullptr;
-	USpriteRenderer* LavaTile = nullptr;
-	USpriteRenderer* GrassTile = nullptr;
+	ATileMap* BabaTileMap = nullptr;
+	ATileMap* FlagTileMap = nullptr;
+	ATileMap* WallTileMap = nullptr;
+	ATileMap* RockTileMap = nullptr;
+	ATileMap* WaterTileMap = nullptr;
+	ATileMap* SkullTileMap = nullptr;
+	ATileMap* LavaTileMap = nullptr;
+	ATileMap* GrassTileMap = nullptr;
+
+	ATileMap* BabaTextTileMap = nullptr;
+	ATileMap* FlagTextTileMap = nullptr;
+	ATileMap* WallTextTileMap = nullptr;
+	ATileMap* RockTextTileMap = nullptr;
+	ATileMap* WaterTextTileMap = nullptr;
+	ATileMap* SkullTextTileMap = nullptr;
+	ATileMap* LavaTextTileMap = nullptr;
+	ATileMap* GrassTextTileMap = nullptr;
 };
 
