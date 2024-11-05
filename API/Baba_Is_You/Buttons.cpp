@@ -8,14 +8,6 @@
 
 AButtons::AButtons()
 {
-	{
-		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("StartButton589_76.png");
-
-		FVector2D StartBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 960, 570 });
-	}
 }
 
 AButtons::~AButtons()
@@ -30,8 +22,8 @@ void AButtons::BeginPlay()
 void AButtons::Tick(float _DeltaTime)
 {
 	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
-	FVector2D ButtonPos = SpriteRenderer->GetComponentLocation();
-	FVector2D ButtonScale = SpriteRenderer->GetComponentScale();
+	FVector2D ButtonPos = _ButtonPos;
+	FVector2D ButtonScale = _ButtonScale;
 	FVector2D ButtonRangeMin = { ButtonPos.X - ButtonScale.Half().X, ButtonPos.Y - ButtonScale.Half().Y };
 	FVector2D ButtonRangeMax = { ButtonPos.X + ButtonScale.Half().X, ButtonPos.Y + ButtonScale.Half().Y };
 

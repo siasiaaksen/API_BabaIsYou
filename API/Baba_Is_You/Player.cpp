@@ -8,14 +8,17 @@
 #include <EngineCore/ImageManager.h>
 #include <EngineBase/EngineDirectory.h>
 
+#include "ContentsEnum.h"
+
 
 APlayer::APlayer()
 {
-	SetActorLocation({ 100, 100 });
+	SetActorLocation({ 162, 162 });
 	
 	{
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetSprite("Baba.png", 18);
+		SpriteRenderer->SetOrder(ERenderOrder::PLAYER);
 		SpriteRenderer->SetComponentScale({ 54, 54 });
 		std::string Name = SpriteRenderer->GetCurSpriteName();
 	}

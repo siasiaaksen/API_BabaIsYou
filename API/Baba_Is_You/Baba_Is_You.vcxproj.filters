@@ -43,6 +43,9 @@
     <ClInclude Include="Map.h">
       <Filter>ContentsObject\Map</Filter>
     </ClInclude>
+    <ClInclude Include="TestGameMode.h">
+      <Filter>ContentsObject\GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>ContentsObject\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TestGameMode.cpp">
+      <Filter>ContentsObject\GameMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

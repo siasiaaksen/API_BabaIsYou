@@ -25,18 +25,18 @@ void APlayGameMode::BeginPlay()
 	ABackground* BG = GetWorld()->SpawnActor<ABackground>();
 	APlayMap* NewActor = GetWorld()->SpawnActor<APlayMap>();
 
-	//{
-	//	GroundTileMap = GetWorld()->SpawnActor<ATileMap>();
-	//	GroundTileMap->Create("Tile.png", { 10, 10 }, { 54, 54 });
+	{
+		GroundTileMap = GetWorld()->SpawnActor<ATileMap>();
+		GroundTileMap->Create("Tile.png", { 10, 10 }, { 54, 54 });
 
-	//	for (int y = 0; y < 20; y++)
-	//	{
-	//		for (int x = 0; x < 20; x++)
-	//		{
-	//			GroundTileMap->SetTileIndex({ y,x }, 0);
-	//		}
-	//	}
-	//}
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				GroundTileMap->SetTileIndex({ y,x }, 0);
+			}
+		}
+	}
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

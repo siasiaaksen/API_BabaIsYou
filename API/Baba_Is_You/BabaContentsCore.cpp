@@ -11,6 +11,7 @@
 #include "TitleGameMode.h"
 #include "MapGameMode.h"
 #include "PlayGameMode.h"
+#include "TestGameMode.h"
 #include "Player.h"
 
 BabaContentsCore::BabaContentsCore()
@@ -42,9 +43,26 @@ void BabaContentsCore::BeginPlay()
 
 	// 이름, 사이즈 넣어주기
 	UImageManager::GetInst().CuttingSprite("Baba.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Flag.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Grass.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Lava.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Rock.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Skull.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Wall.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Water.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Defeat.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Hot.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Is.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Melt.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Push.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Sink.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Stop.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("Win.png", { 54, 54 });
+	UImageManager::GetInst().CuttingSprite("You.png", { 54, 54 });
 	UImageManager::GetInst().CuttingSprite("TitleLogo370.png", { 900, 370 });
 	UImageManager::GetInst().CuttingSprite("Tile.png", { 54, 54 });
 	UImageManager::GetInst().CuttingSprite("StartButton589_76.png", { 589, 76 });
+	UImageManager::GetInst().CuttingSprite("SettingButton589_76.png", { 589, 76 });
 	UImageManager::GetInst().CuttingSprite("ExitButton589_76.png", { 589, 76 });
 	UImageManager::GetInst().CuttingSprite("WorldMap650.png", { 1190, 650 });
 
@@ -55,7 +73,8 @@ void BabaContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
-	UEngineAPICore::GetCore()->OpenLevel("Title");
+	UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
+	UEngineAPICore::GetCore()->OpenLevel("Test");
 }
 
 void BabaContentsCore::Tick()
