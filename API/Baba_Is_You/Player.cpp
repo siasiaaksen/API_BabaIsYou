@@ -15,13 +15,8 @@ APlayer::APlayer()
 	
 	{
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetSprite("Baba.png");
+		SpriteRenderer->SetSprite("Baba.png", 18);
 		SpriteRenderer->SetComponentScale({ 54, 54 });
-
-		SpriteRenderer->CreateAnimation("Run_Right", "Baba.png", 2, 5, 0.1f);
-		SpriteRenderer->CreateAnimation("Idle_Right", "Baba.png", { 18, 40, 62 }, 0.1f);
-		SpriteRenderer->ChangeAnimation("Idle_Right");
-
 		std::string Name = SpriteRenderer->GetCurSpriteName();
 	}
 }
@@ -42,44 +37,60 @@ void APlayer::Tick(float _DeltaTime)
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
 	UEngineDebug::CoreOutPutString("PlayerPos : " + GetActorLocation().ToString());
 
-	if (true == UEngineInput::GetInst().IsDown('R'))
-	{
-		UEngineAPICore::GetCore()->OpenLevel("Title");
-	}
-
 	if (true == UEngineInput::GetInst().IsDown('Q'))
 	{
 		UEngineDebug::SwitchIsDebug();
 	}
 
+	Move();
+}
+
+void APlayer::Move()
+{
 	if (true == UEngineInput::GetInst().IsDown('D'))
 	{
-		SpriteRenderer->ChangeAnimation("Run_Right");
 		AddActorLocation(FVector2D::RIGHT * 54);
 	}
 	if (true == UEngineInput::GetInst().IsDown('A'))
 	{
-		SpriteRenderer->ChangeAnimation("Run_Right");
 		AddActorLocation(FVector2D::LEFT * 54);
 	}
 	if (true == UEngineInput::GetInst().IsDown('S'))
 	{
-		SpriteRenderer->ChangeAnimation("Run_Right");
 		AddActorLocation(FVector2D::DOWN * 54);
 	}
 	if (true == UEngineInput::GetInst().IsDown('W'))
 	{
-		SpriteRenderer->ChangeAnimation("Run_Right");
 		AddActorLocation(FVector2D::UP * 54);
 	}
-	
-	if (false == UEngineInput::GetInst().IsPress('A') && 
-		false == UEngineInput::GetInst().IsPress('D') &&
-		false == UEngineInput::GetInst().IsPress('W') &&
-		false == UEngineInput::GetInst().IsPress('S'))
+
+	if (true == UEngineInput::GetInst().IsDown('A') ||
+		true == UEngineInput::GetInst().IsDown('D') ||
+		true == UEngineInput::GetInst().IsDown('W') ||
+		true == UEngineInput::GetInst().IsDown('S'))
 	{
-		SpriteRenderer->ChangeAnimation("Idle_Right");
+		if (2 >= BabaIndex)
+		{
+			BabaIndex = 2;
+		}
+
+		if (5 < BabaIndex)
+		{
+			BabaIndex = 2;
+		}
+
+		SpriteRenderer->SetSprite("Baba.png", BabaIndex);
+		++BabaIndex;
 	}
+
+	//if (false == UEngineInput::GetInst().IsPress('A') &&
+	//	false == UEngineInput::GetInst().IsPress('D') &&
+	//	false == UEngineInput::GetInst().IsPress('W') &&
+	//	false == UEngineInput::GetInst().IsPress('S'))
+	//{
+	//	//SpriteRenderer->ChangeAnimation("Idle_Right");
+	//	SpriteRenderer->SetSprite("Baba.png", 18);
+	//}
 }
 
 void APlayer::LevelChangeStart()

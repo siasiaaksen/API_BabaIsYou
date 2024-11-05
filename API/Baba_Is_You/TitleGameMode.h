@@ -18,6 +18,6 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-
+	class USpriteRenderer* SpriteRenderer;
 };
 
