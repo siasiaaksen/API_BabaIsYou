@@ -31,12 +31,12 @@ void ATitleGameMode::BeginPlay()
 		AButtons* StartBtn = GetWorld()->SpawnActor<AButtons>();
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("StartButton589_76.png");
+		SpriteRenderer->SetSprite("StartButton784_51.png");
 
 		FVector2D StartBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 960, 570 });
+		SpriteRenderer->SetComponentLocation({ 640, 450 });
 
-		StartBtn->SetButtonPos({ 960, 570 });
+		StartBtn->SetButtonPos({ 640, 367 });
 		StartBtn->SetButtonScale(StartBtnScale);
 	}
 
@@ -44,12 +44,12 @@ void ATitleGameMode::BeginPlay()
 		AButtons* SettingsBtn = GetWorld()->SpawnActor<AButtons>();
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("SettingButton589_76.png");
+		SpriteRenderer->SetSprite("SettingButton786_51.png");
 
 		FVector2D SettingsBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 960, 670 });
+		SpriteRenderer->SetComponentLocation({ 640, 530 });
 
-		SettingsBtn->SetButtonPos({ 960, 670 });
+		SettingsBtn->SetButtonPos({ 640, 467 });
 		SettingsBtn->SetButtonScale(SettingsBtnScale);
 	}
 
@@ -57,12 +57,12 @@ void ATitleGameMode::BeginPlay()
 		AButtons* ExitBtn = GetWorld()->SpawnActor<AButtons>();
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("ExitButton589_76.png");
+		SpriteRenderer->SetSprite("ExitButton786_51.png");
 
 		FVector2D ExitBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 960, 770 });
+		SpriteRenderer->SetComponentLocation({ 640, 610 });
 
-		ExitBtn->SetButtonPos({ 960, 770 });
+		ExitBtn->SetButtonPos({ 640, 567 });
 		ExitBtn->SetButtonScale(ExitBtnScale);
 	}
 

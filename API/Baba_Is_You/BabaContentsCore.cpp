@@ -42,33 +42,46 @@ void BabaContentsCore::BeginPlay()
 	}
 
 	// 이름, 사이즈 넣어주기
-	UImageManager::GetInst().CuttingSprite("Baba.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Flag.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Grass.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Lava.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Rock.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Skull.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Wall.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Water.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Defeat.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Hot.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Is.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Melt.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Push.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Sink.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Stop.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("Win.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("You.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("TitleLogo370.png", { 900, 370 });
-	UImageManager::GetInst().CuttingSprite("Tile.png", { 54, 54 });
-	UImageManager::GetInst().CuttingSprite("StartButton589_76.png", { 589, 76 });
-	UImageManager::GetInst().CuttingSprite("SettingButton589_76.png", { 589, 76 });
-	UImageManager::GetInst().CuttingSprite("ExitButton589_76.png", { 589, 76 });
-	UImageManager::GetInst().CuttingSprite("WorldMap650.png", { 1190, 650 });
+	UImageManager::GetInst().CuttingSprite("BabaObject.png", { 36, 36 });
+	UImageManager::GetInst().CuttingSprite("FlagObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("RockObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("WallObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("GrassObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("SkullObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("LavaObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("WaterObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("TileObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("BrickObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("FlowerObject.png", {36,36});
+
+	UImageManager::GetInst().CuttingSprite("BabaText.png", { 36, 36 });
+	UImageManager::GetInst().CuttingSprite("Is.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("You.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("FlagText.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Win.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("RockText.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("Push.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("WallText.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("GrassText.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Stop.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("SkullText.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("Defeat.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("LavaText.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Hot.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Melt.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("WaterText.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("Sink.png", { 36,36 });
+
+	UImageManager::GetInst().CuttingSprite("TitleLogo1800_247.png", { 600, 247 });
+	UImageManager::GetInst().CuttingSprite("TileObject.png", { 36, 36 });
+	UImageManager::GetInst().CuttingSprite("StartButton784_51.png", { 392, 51 });
+	UImageManager::GetInst().CuttingSprite("SettingButton786_51.png", { 393, 51 });
+	UImageManager::GetInst().CuttingSprite("ExitButton786_51.png", { 393, 51 });
+	UImageManager::GetInst().CuttingSprite("WorldMap3564_649.png", { 1188, 649 });
 
 	// 이름, 사이즈 넣어주기
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("API_BabaIsYou");
-	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, { 1920, 1080 });
+	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, { 1280, 720 });
 
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");

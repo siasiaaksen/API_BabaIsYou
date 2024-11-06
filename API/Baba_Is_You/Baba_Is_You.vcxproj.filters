@@ -46,6 +46,9 @@
     <ClInclude Include="TestGameMode.h">
       <Filter>ContentsObject\GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="BabaMapGameMode.h">
+      <Filter>ContentsObject\GameMode\Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -93,6 +96,9 @@
     <ClCompile Include="TestGameMode.cpp">
       <Filter>ContentsObject\GameMode</Filter>
     </ClCompile>
+    <ClCompile Include="BabaMapGameMode.cpp">
+      <Filter>ContentsObject\GameMode\Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="_PreCompile">
@@ -124,6 +130,9 @@
     </Filter>
     <Filter Include="ContentsObject\TileMap">
       <UniqueIdentifier>{2a1cf923-73a4-4341-816f-f8aa5eb4c55c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsObject\GameMode\Global">
+      <UniqueIdentifier>{6393b40b-dd1d-4d93-b80f-522ea974ad56}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

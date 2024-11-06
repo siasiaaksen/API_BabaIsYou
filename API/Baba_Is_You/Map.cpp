@@ -8,11 +8,11 @@ AMap::AMap()
 	{
 		USpriteRenderer* SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		SpriteRenderer->SetOrder(ERenderOrder::WORLDMAP);
-		SpriteRenderer->SetSprite("WorldMap650.png");
-		SpriteRenderer->CreateAnimation("WorldMap", "WorldMap650.png", 0, 2, 0.3f);
+		SpriteRenderer->SetSprite("WorldMap3564_649.png");
+		SpriteRenderer->CreateAnimation("WorldMap", "WorldMap3564_649.png", 0, 2, 0.3f);
 		SpriteRenderer->ChangeAnimation("WorldMap");
-		SpriteRenderer->SetComponentScale({ 1782, 972 });
-		SpriteRenderer->SetComponentLocation({ 960, 540 });
+		SpriteRenderer->SetComponentScale({ 1188, 649 });
+		SpriteRenderer->SetComponentLocation({ 640, 360 });
 	}
 }
 

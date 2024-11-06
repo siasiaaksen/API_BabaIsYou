@@ -53,12 +53,12 @@ public:
 	ATileMap& operator=(const ATileMap& _Other) = delete;
 	ATileMap& operator=(ATileMap&& _Other) noexcept = delete;
 
-	void Create(std::string_view _Sprite, FIntPoint _Count, FVector2D _TileSize);
+	void Create(FIntPoint _Count, FVector2D _TileSize);
 
-	void SetTileLocation(FVector2D _Location, int _SpriteIndex);
+	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, int _Order);
 
-	void SetTileIndex(FIntPoint _Index, int _SpriteIndex);
-	void SetTileIndex(FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _Order);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _Order);
 
 	Tile* GetTileRef(FIntPoint _Index);
 	Tile* GetTileRef(FVector2D _Location);
@@ -77,8 +77,9 @@ protected:
 
 private:
 	FIntPoint TileCount;
-	std::string SpriteName;
 	FVector2D TileSize;
 	std::vector<std::vector<Tile>> AllTiles;
+
+	std::string_view CurTileMapName;
 };
 

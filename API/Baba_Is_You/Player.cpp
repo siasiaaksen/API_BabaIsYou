@@ -17,9 +17,9 @@ APlayer::APlayer()
 	
 	{
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetSprite("Baba.png", 18);
+		SpriteRenderer->SetSprite("BabaObject.png", 18);
 		SpriteRenderer->SetOrder(ERenderOrder::PLAYER);
-		SpriteRenderer->SetComponentScale({ 54, 54 });
+		SpriteRenderer->SetComponentScale({ 36, 36 });
 		std::string Name = SpriteRenderer->GetCurSpriteName();
 	}
 }
