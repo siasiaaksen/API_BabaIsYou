@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "TileMap.h"
 
+#include <EngineBase/EngineString.h>
+
 ATileMap::ATileMap()
 {
 }
@@ -86,6 +88,7 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 		return;
 	}
 
+	// AllTiles[_Index.Y][_Index.X]에 스프라이트 랜더러 장착
 	if (nullptr == AllTiles[_Index.Y][_Index.X].SpriteRenderer)
 	{
 		USpriteRenderer* NewSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -93,17 +96,51 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 		AllTiles[_Index.Y][_Index.X].SpriteRenderer = NewSpriteRenderer;
 	}
 
+	// AllTiles[_Index.Y][_Index.X]의 스프라이트 랜더러 찾아서 스프라이트 세팅
 	USpriteRenderer* FindSprite = AllTiles[_Index.Y][_Index.X].SpriteRenderer;
 	FindSprite->SetSprite(_Sprite, _SpriteIndex);
-
-	FVector2D TileLocation = IndexToTileLocation(_Index);
 	FindSprite->SetComponentScale(_SpriteScale);
 	FindSprite->SetOrder(_Order);
 
+	// AllTiles[_Index.Y][_Index.X]의 위치, 피봇, 스케일, 스프라이트 인덱스 지정
+	FVector2D TileLocation = IndexToTileLocation(_Index);
 	AllTiles[_Index.Y][_Index.X].SpriteRenderer->SetComponentLocation(TileLocation + TileSize.Half() + _Pivot);
 	AllTiles[_Index.Y][_Index.X].Pivot = _Pivot;
 	AllTiles[_Index.Y][_Index.X].Scale = _SpriteScale;
 	AllTiles[_Index.Y][_Index.X].SpriteIndex = _SpriteIndex;
+	std::string UpperName = UEngineString::ToUpper(_Sprite);
+	AllTiles[_Index.Y][_Index.X].SpriteName = UpperName;
+}
+
+FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
+{
+	FIntPoint Index;
+	std::string UpperName = UEngineString::ToUpper(_Name);
+
+	for (int x = 0; x < TileCount.X; ++x)
+	{
+		for (int y = 0; y < TileCount.Y; ++y)
+		{
+			if (AllTiles[y][x].SpriteName == UpperName)
+			{
+				Index = TileCount;
+				break;
+			}
+
+			continue;
+		}
+	}
+
+	return Index;
+}
+
+void ATileMap::TileMove(std::string_view _Name, FVector2D _Direction)
+{
+	std::string UpperName = UEngineString::ToUpper(_Name);
+
+	FIntPoint TargetIndex = FindTileIndex(UpperName);
+	FVector2D TileLocation = IndexToTileLocation(TargetIndex);
+	TileLocation += _Direction;
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location)

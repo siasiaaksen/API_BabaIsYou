@@ -14,6 +14,7 @@ public:
 	FVector2D Scale;
 	FVector2D Pivot;
 	int SpriteIndex;
+	std::string_view SpriteName;
 
 	void Serialize(UEngineSerializer& _Ser)
 	{
@@ -60,6 +61,10 @@ public:
 	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _Order);
 	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _Order);
 
+	FIntPoint FindTileIndex(std::string_view _Name);
+
+	void TileMove(std::string_view _Name, FVector2D _Direction);
+
 	Tile* GetTileRef(FIntPoint _Index);
 	Tile* GetTileRef(FVector2D _Location);
 
@@ -79,7 +84,5 @@ private:
 	FIntPoint TileCount;
 	FVector2D TileSize;
 	std::vector<std::vector<Tile>> AllTiles;
-
-	std::string_view CurTileMapName;
 };
 

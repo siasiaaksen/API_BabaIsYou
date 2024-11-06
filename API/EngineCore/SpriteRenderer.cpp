@@ -112,8 +112,6 @@ void USpriteRenderer::SetOrder(int _Order)
 
 	Order = _Order;
 
-	// 동적으로 해야할때는 레벨이 세팅되어 있을 것이므로
-	// 레벨이 세팅되어 있다면 즉각 바꿔준다.
 	ULevel* Level = GetActor()->GetWorld();
 
 	if (nullptr != Level)
