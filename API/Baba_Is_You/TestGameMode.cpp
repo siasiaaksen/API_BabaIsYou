@@ -50,7 +50,7 @@ void ATestGameMode::BeginPlay()
 	{
 		ObjectTileMap = GetWorld()->SpawnActor<ATileMap>();
 		ObjectTileMap->Create({ 34, 19 }, { 36, 36 });
-		ObjectTileMap->SetTileIndex("BabaObject.png", { 3, 3 }, 0, static_cast<int>(ERenderOrder::PLAYER));
+		ObjectTileMap->SetTileIndex("BabaObject.png", { 2, 2 }, 0, static_cast<int>(ERenderOrder::PLAYER));
 		ObjectTileMap->SetTileIndex("FlagObject.png", { 6, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("RockObject.png", { 10, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("WallObject.png", { 14, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
@@ -59,34 +59,32 @@ void ATestGameMode::BeginPlay()
 		ObjectTileMap->SetTileIndex("LavaObject.png", { 26, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 	}
-
-	BabaIndex = { 3, 3 };
 }
 
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	FIntPoint TileIndex = ObjectTileMap->FindTileIndex("WaterObject.png");
+	FIntPoint TileIndex = ObjectTileMap->FindTileIndex("BabaObject.png");
 
-	if (true == UEngineInput::GetInst().IsDown('W'))
+	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
-		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 0, -1 }) ;
+		TileIndex = ObjectTileMap->TileMove(TileIndex, FIntPoint::UP);
 	}
 	
-	if (true == UEngineInput::GetInst().IsDown('A'))
+	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
-		BabaIndex = ObjectTileMap->TileMove(TileIndex, { -1, 0 });
+		TileIndex = ObjectTileMap->TileMove(TileIndex, FIntPoint::LEFT);
 	}
 	
-	if (true == UEngineInput::GetInst().IsDown('S'))
+	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
-		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 0, 1 });
+		TileIndex = ObjectTileMap->TileMove(TileIndex, FIntPoint::DOWN);
 	}
 
-	if (true == UEngineInput::GetInst().IsDown('D'))
+	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
-		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 1, 0 });
+		TileIndex = ObjectTileMap->TileMove(TileIndex, FIntPoint::RIGHT);
 	}
 
 	//if (true == UEngineInput::GetInst().IsPress('N'))
@@ -134,20 +132,20 @@ void ATestGameMode::Tick(float _DeltaTime)
 	//}
 }
 
-void ATestGameMode::MakeTileMap(ATileMap* _TileName, int _Index/* = 2*/)
-{
-}
-
-void ATestGameMode::DestroyTileMap(ATileMap* _TileName)
-{
-	if (true == UEngineInput::GetInst().IsPress(VK_RBUTTON))
-	{
-		FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
-		Tile* Tile = _TileName->GetTileRef(MousePos);
-		if (nullptr != Tile->SpriteRenderer)
-		{
-			Tile->SpriteRenderer->Destroy();
-			Tile->SpriteRenderer = nullptr;
-		}
-	}
-}
+//void ATestGameMode::MakeTileMap(ATileMap* _TileName, int _Index/* = 2*/)
+//{
+//}
+//
+//void ATestGameMode::DestroyTileMap(ATileMap* _TileName)
+//{
+//	if (true == UEngineInput::GetInst().IsPress(VK_RBUTTON))
+//	{
+//		FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
+//		Tile* Tile = _TileName->GetTileRef(MousePos);
+//		if (nullptr != Tile->SpriteRenderer)
+//		{
+//			Tile->SpriteRenderer->Destroy();
+//			Tile->SpriteRenderer = nullptr;
+//		}
+//	}
+//}

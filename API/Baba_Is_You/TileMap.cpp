@@ -148,6 +148,17 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
+	FVector2D BGPos;
+	BGPos.X = ((1280 - (TileCount.X * 36)) / 2) + 18;
+	BGPos.Y = ((720 - (TileCount.Y * 36)) / 2) + 18;
+	FIntPoint BGFirstIndex = LocationToIndex(BGPos);
+
+	if (TileCount.X <= NextIndex.X || TileCount.Y <= NextIndex.Y ||
+		BGFirstIndex.X >= NextIndex.X || BGFirstIndex.Y > NextIndex.Y)
+	{
+		return _CurIndex;
+	}
+
 	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
 	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
 	
