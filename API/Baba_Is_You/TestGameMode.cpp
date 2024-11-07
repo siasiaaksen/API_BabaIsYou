@@ -67,23 +67,24 @@ void ATestGameMode::Tick(float _DeltaTime)
 	
 	if (true == UEngineInput::GetInst().IsDown('W'))
 	{
-		ObjectTileMap->TileMove("BabaObject.png", FVector2D::UP * 36);
-	}
-	//
-	//if (true == UEngineInput::GetInst().IsDown('A'))
-	//{
-	//	ObjectTileMap->AddActorLocation(FVector2D::LEFT * 36);
-	//}
-	//
-	//if (true == UEngineInput::GetInst().IsDown('S'))
-	//{
-	//	ObjectTileMap->AddActorLocation(FVector2D::DOWN * 36);
-	//}
 
-	//if (true == UEngineInput::GetInst().IsDown('D'))
-	//{
-	//	ObjectTileMap->AddActorLocation(FVector2D::RIGHT * 36);
-	//}
+		ObjectTileMap->TileMove({ 3, 3 }, { 0, -1 }) ;
+	}
+	
+	if (true == UEngineInput::GetInst().IsDown('A'))
+	{
+		ObjectTileMap->TileMove({ 3, 3 }, { -1, 0 });
+	}
+	
+	if (true == UEngineInput::GetInst().IsDown('S'))
+	{
+		ObjectTileMap->TileMove({ 3, 3 }, { 0, 1 });
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('D'))
+	{
+		ObjectTileMap->TileMove({ 3, 3 }, { 1, 0 });
+	}
 
 	//if (true == UEngineInput::GetInst().IsPress('N'))
 	//{

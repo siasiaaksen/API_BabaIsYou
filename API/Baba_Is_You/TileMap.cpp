@@ -94,6 +94,7 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 		USpriteRenderer* NewSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		NewSpriteRenderer->SetComponentScale(TileSize);
 		AllTiles[_Index.Y][_Index.X].SpriteRenderer = NewSpriteRenderer;
+		//LocationToIndex();
 	}
 
 	// AllTiles[_Index.Y][_Index.X]의 스프라이트 랜더러 찾아서 스프라이트 세팅
@@ -105,42 +106,47 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 	// AllTiles[_Index.Y][_Index.X]의 위치, 피봇, 스케일, 스프라이트 인덱스 지정
 	FVector2D TileLocation = IndexToTileLocation(_Index);
 	AllTiles[_Index.Y][_Index.X].SpriteRenderer->SetComponentLocation(TileLocation + TileSize.Half() + _Pivot);
+
+	FVector2D CurTileLocation = AllTiles[_Index.Y][_Index.X].SpriteRenderer->GetComponentLocation();
+
 	AllTiles[_Index.Y][_Index.X].Pivot = _Pivot;
 	AllTiles[_Index.Y][_Index.X].Scale = _SpriteScale;
 	AllTiles[_Index.Y][_Index.X].SpriteIndex = _SpriteIndex;
+	AllTiles[_Index.Y][_Index.X].SpriteLocation = CurTileLocation;
 	std::string UpperName = UEngineString::ToUpper(_Sprite);
 	AllTiles[_Index.Y][_Index.X].SpriteName = UpperName;
 }
 
-FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
+//FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
+//{
+//	FIntPoint Index;
+//	std::string UpperName = UEngineString::ToUpper(_Name);
+//
+//	for (int x = 0; x < TileCount.X; ++x)
+//	{
+//		for (int y = 0; y < TileCount.Y; ++y)
+//		{
+//			if (AllTiles[y][x].SpriteName == UpperName)
+//			{
+//				Index = TileCount;
+//				break;
+//			}
+//
+//			continue;
+//		}
+//	}
+//
+//	return Index;
+//}
+
+void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
-	FIntPoint Index;
-	std::string UpperName = UEngineString::ToUpper(_Name);
-
-	for (int x = 0; x < TileCount.X; ++x)
-	{
-		for (int y = 0; y < TileCount.Y; ++y)
-		{
-			if (AllTiles[y][x].SpriteName == UpperName)
-			{
-				Index = TileCount;
-				break;
-			}
-
-			continue;
-		}
-	}
-
-	return Index;
-}
-
-void ATileMap::TileMove(std::string_view _Name, FVector2D _Direction)
-{
-	std::string UpperName = UEngineString::ToUpper(_Name);
-
-	FIntPoint TargetIndex = FindTileIndex(UpperName);
-	FVector2D TileLocation = IndexToTileLocation(TargetIndex);
-	TileLocation += _Direction;
+	FVector2D CurTileLocation = IndexToTileLocation(_CurIndex);
+	FVector2D NextTileLocation = IndexToTileLocation(_MoveIndex);
+	FVector2D SpriteLocation = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteLocation;
+	SpriteLocation += NextTileLocation;
+	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer->SetComponentLocation(SpriteLocation);
+	_CurIndex = LocationToIndex(SpriteLocation);
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location)

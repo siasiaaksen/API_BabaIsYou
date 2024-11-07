@@ -50,6 +50,7 @@ public:
 		return Transform.Location;
 	}
 
+	// 컴포넌트 달아주기
 	template<typename ComponentType>
 	ComponentType* CreateDefaultSubObject()
 	{
