@@ -3,6 +3,7 @@
 
 #include <EngineBase/EngineString.h>
 
+
 ATileMap::ATileMap()
 {
 }
@@ -78,7 +79,7 @@ bool ATileMap::IsIndexOver(FIntPoint _Index)
 
 void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _Order)
 {
-	SetTileIndex(_Sprite, _Index, { 0,0 }, TileSize, _SpriteIndex, _Order);
+	SetTileIndex(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, _Order);
 }
 
 void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _Order)
@@ -117,36 +118,48 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 	AllTiles[_Index.Y][_Index.X].SpriteName = UpperName;
 }
 
-//FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
-//{
-//	FIntPoint Index;
-//	std::string UpperName = UEngineString::ToUpper(_Name);
-//
-//	for (int x = 0; x < TileCount.X; ++x)
-//	{
-//		for (int y = 0; y < TileCount.Y; ++y)
-//		{
-//			if (AllTiles[y][x].SpriteName == UpperName)
-//			{
-//				Index = TileCount;
-//				break;
-//			}
-//
-//			continue;
-//		}
-//	}
-//
-//	return Index;
-//}
-
-void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 {
-	FVector2D CurTileLocation = IndexToTileLocation(_CurIndex);
-	FVector2D NextTileLocation = IndexToTileLocation(_MoveIndex);
-	FVector2D SpriteLocation = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteLocation;
-	SpriteLocation += NextTileLocation;
-	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer->SetComponentLocation(SpriteLocation);
-	_CurIndex = LocationToIndex(SpriteLocation);
+	FIntPoint Index;
+	std::string UpperName = UEngineString::ToUpper(_Name);
+
+	for (int x = 0; x < TileCount.X; ++x)
+	{
+		for (int y = 0; y < TileCount.Y; ++y)
+		{
+			if (nullptr == AllTiles[y][x].SpriteRenderer)
+			{
+				continue;
+			}
+
+			if (AllTiles[y][x].SpriteRenderer->GetCurSpriteName() == UpperName)
+			{
+				Index.X = x;
+				Index.Y = y;
+				return Index;
+			}
+
+			continue;
+		}
+	}
+}
+
+FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+{
+	FIntPoint NextIndex = _CurIndex + _MoveIndex;
+
+	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
+	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
+	
+	FVector2D Pos = IndexToTileLocation(NextIndex);
+	CurSprite->SetComponentLocation(Pos + TileSize.Half());
+
+	Sleep(200);
+
+	AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
+	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
+	
+	return NextIndex;
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location)

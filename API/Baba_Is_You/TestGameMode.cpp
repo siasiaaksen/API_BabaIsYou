@@ -27,7 +27,7 @@ void ATestGameMode::BeginPlay()
 
 	{
 		TextTileMap = GetWorld()->SpawnActor<ATileMap>();
-		TextTileMap->Create({ 33, 18 }, { 36, 36 });
+		TextTileMap->Create({ 34, 19 }, { 36, 36 });
 		TextTileMap->SetTileIndex("BabaText.png", { 6, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
 		TextTileMap->SetTileIndex("Is.png", { 7, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
 		TextTileMap->SetTileIndex("You.png", { 8, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
@@ -49,8 +49,8 @@ void ATestGameMode::BeginPlay()
 
 	{
 		ObjectTileMap = GetWorld()->SpawnActor<ATileMap>();
-		ObjectTileMap->Create({ 33, 18 }, { 36, 36 });
-		ObjectTileMap->SetTileIndex("BabaObject.png", { 3, 3 }, 0, static_cast<int>(ERenderOrder::TILE));
+		ObjectTileMap->Create({ 34, 19 }, { 36, 36 });
+		ObjectTileMap->SetTileIndex("BabaObject.png", { 3, 3 }, 0, static_cast<int>(ERenderOrder::PLAYER));
 		ObjectTileMap->SetTileIndex("FlagObject.png", { 6, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("RockObject.png", { 10, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("WallObject.png", { 14, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
@@ -59,31 +59,34 @@ void ATestGameMode::BeginPlay()
 		ObjectTileMap->SetTileIndex("LavaObject.png", { 26, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 		ObjectTileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
 	}
+
+	BabaIndex = { 3, 3 };
 }
 
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-	
+
+	FIntPoint TileIndex = ObjectTileMap->FindTileIndex("WaterObject.png");
+
 	if (true == UEngineInput::GetInst().IsDown('W'))
 	{
-
-		ObjectTileMap->TileMove({ 3, 3 }, { 0, -1 }) ;
+		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 0, -1 }) ;
 	}
 	
 	if (true == UEngineInput::GetInst().IsDown('A'))
 	{
-		ObjectTileMap->TileMove({ 3, 3 }, { -1, 0 });
+		BabaIndex = ObjectTileMap->TileMove(TileIndex, { -1, 0 });
 	}
 	
 	if (true == UEngineInput::GetInst().IsDown('S'))
 	{
-		ObjectTileMap->TileMove({ 3, 3 }, { 0, 1 });
+		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 0, 1 });
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D'))
 	{
-		ObjectTileMap->TileMove({ 3, 3 }, { 1, 0 });
+		BabaIndex = ObjectTileMap->TileMove(TileIndex, { 1, 0 });
 	}
 
 	//if (true == UEngineInput::GetInst().IsPress('N'))

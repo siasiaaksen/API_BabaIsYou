@@ -24,6 +24,9 @@ public:
 protected:
 
 	void Tick(float _DeltaTime) override;
+
+	FIntPoint BabaIndex;
+
 private:
 	ATileMap* TextTileMap = nullptr;
 	ATileMap* ObjectTileMap = nullptr;
