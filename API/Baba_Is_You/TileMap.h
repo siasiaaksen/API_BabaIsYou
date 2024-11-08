@@ -65,6 +65,7 @@ public:
 
 	FIntPoint FindTileIndex(std::string_view _Name);
 
+	//bool TileCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex);
 	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
 
 	Tile* GetTileRef(FIntPoint _Index);

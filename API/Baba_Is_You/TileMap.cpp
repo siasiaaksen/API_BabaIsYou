@@ -16,7 +16,7 @@ void ATileMap::Create(FIntPoint _Count, FVector2D _TileSize)
 {
 	TileSize = _TileSize;
 	TileCount = _Count;
-
+	 
 	AllTiles.resize(_Count.Y);
 
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -144,6 +144,19 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 	}
 }
 
+//bool ATileMap::TileCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+//{
+//	FIntPoint NextIndex = _CurIndex + _MoveIndex;
+//	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
+//
+//	if (nullptr != NextSprite)
+//	{
+//		return true;
+//	}
+//
+//	return false;
+//}
+
 FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
@@ -161,16 +174,19 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
 	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
-	
-	FVector2D Pos = IndexToTileLocation(NextIndex);
-	CurSprite->SetComponentLocation(Pos + TileSize.Half());
 
-	Sleep(200);
+	if (nullptr == NextSprite)
+	{
+		FVector2D Pos = IndexToTileLocation(NextIndex);
+		CurSprite->SetComponentLocation(Pos + TileSize.Half());
 
-	AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
-	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
-	
-	return NextIndex;
+		AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
+		AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
+
+		return NextIndex;
+	}
+
+	return TileMove(NextIndex, _MoveIndex);
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location)
