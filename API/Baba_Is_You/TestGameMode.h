@@ -30,5 +30,6 @@ private:
 	ATileMap* UpperTileMap = nullptr;
 	// 아래에 깔릴수도 있는 타일
 	ATileMap* LowerTileMap = nullptr;
+	FIntPoint CurTileIndex;
 };
 

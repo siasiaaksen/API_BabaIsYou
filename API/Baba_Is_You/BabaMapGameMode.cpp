@@ -23,8 +23,8 @@ void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale)
 {
 	FVector2D BackScale = { _Scale.X * 36, _Scale.Y * 36 };
 
-   CenterPivot.Y  = (720 - (_Scale.Y * 36)) / 2;
    CenterPivot.X = (1280 - (_Scale.X * 36)) / 2;
+   CenterPivot.Y = (720 - (_Scale.Y * 36)) / 2;
 
 	int a = 0;
 	BackgroundMap = GetWorld()->SpawnActor<ATileMap>();
