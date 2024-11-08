@@ -21,17 +21,20 @@ ABabaMapGameMode::~ABabaMapGameMode()
 
 void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale)
 {
-	int PivotY = (1280 - (_Scale.Y * 36)) / 2;
-	int PivotX = (720 - (_Scale.X * 36)) / 2;
+	FVector2D BackScale = { _Scale.X * 36, _Scale.Y * 36 };
+
+   CenterPivot.Y  = (720 - (_Scale.Y * 36)) / 2;
+   CenterPivot.X = (1280 - (_Scale.X * 36)) / 2;
 
 	int a = 0;
 	BackgroundMap = GetWorld()->SpawnActor<ATileMap>();
-	BackgroundMap->Create({ 100, 100 }, {36, 36});
+	BackgroundMap->Create(_Scale, {36, 36});
+	BackgroundMap->SetActorLocation(CenterPivot);
 	for (int y = 0; y < _Scale.Y; y++)
 	{
 		for (int x = 0; x < _Scale.X; x++)
 		{
-			BackgroundMap->SetTileIndex("Background_Black36.png", { y, x }, { PivotY, PivotX }, { 36, 36 }, 0, static_cast<int>(ERenderOrder::STAGEBG));
+			BackgroundMap->SetTileIndex("Background_Black36.png", { x, y }, {0, 0}, { 36, 36 }, 0, static_cast<int>(ERenderOrder::STAGEBG));
 		}
 	}
 }

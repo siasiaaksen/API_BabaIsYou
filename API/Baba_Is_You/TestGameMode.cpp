@@ -23,41 +23,46 @@ void ATestGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CreateStageInit({ 18, 33 });
+	FIntPoint Scale = { 33, 18 };
+
+	CreateStageInit(Scale);
 
 	{
 		UpperTileMap = GetWorld()->SpawnActor<ATileMap>();
-		UpperTileMap->Create({ 34, 19 }, { 36, 36 });
-		UpperTileMap->SetTileIndex("BabaObject.png", { 5, 3 }, 0, static_cast<int>(ERenderOrder::PLAYER));
-		UpperTileMap->SetTileIndex("BabaText.png", { 6, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Is.png", { 7, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("You.png", { 8, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("FlagText.png", { 12, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Win.png", { 18, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("RockText.png", { 24, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Push.png", { 30, 3 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("WallText.png", { 6, 6 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("GrassText.png", { 12, 6 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Stop.png", { 18, 6 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("SkullText.png", { 24, 6 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Defeat.png", { 30, 6 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("LavaText.png", { 6, 9 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Hot.png", { 12, 9 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Melt.png", { 18, 9 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("WaterText.png", { 24, 9 }, 1, static_cast<int>(ERenderOrder::TILE));
-		UpperTileMap->SetTileIndex("Sink.png",{ 30, 9 }, 1, static_cast<int>(ERenderOrder::TILE));
+		UpperTileMap->Create(Scale, { 36, 36 });
+		UpperTileMap->SetActorLocation(CenterPivot);
+		UpperTileMap->SetTileIndex("BabaObject.png", { 0, 0 }, 0, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("BabaText.png", { 4, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Is.png", { 3, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("You.png", { 2, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("FlagText.png", { 12, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Win.png", { 18, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("RockText.png", { 24, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Push.png", { 30, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("WallText.png", { 6, 6 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("GrassText.png", { 12, 6 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Stop.png", { 18, 6 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("SkullText.png", { 24, 6 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Defeat.png", { 30, 6 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("LavaText.png", { 6, 9 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Hot.png", { 12, 9 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Melt.png", { 18, 9 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("WaterText.png", { 24, 9 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Sink.png",{ 30, 9 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
 	}
 
 	{
 		LowerTileMap = GetWorld()->SpawnActor<ATileMap>();
-		LowerTileMap->Create({ 34, 19 }, { 36, 36 });
-		LowerTileMap->SetTileIndex("FlagObject.png", { 6, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("RockObject.png", { 10, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("WallObject.png", { 14, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("GrassObject.png", { 18, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("SkullObject.png", { 22, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("LavaObject.png", { 26, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
-		LowerTileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, static_cast<int>(ERenderOrder::TILE));
+		LowerTileMap->Create(Scale, { 36, 36 });
+		LowerTileMap->SetActorLocation(CenterPivot);
+
+		LowerTileMap->SetTileIndex("FlagObject.png", { 6, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("RockObject.png", { 10, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("WallObject.png", { 14, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("GrassObject.png", { 18, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("SkullObject.png", { 22, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("LavaObject.png", { 26, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
+		LowerTileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, static_cast<int>(ERenderOrder::LOWERTILE));
 	}
  }
 

@@ -18,9 +18,10 @@ public:
 	void CreateStageInit(FIntPoint _Scale);
 
 protected:
-
+	FVector2D CenterPivot;
 private:
 	ATileMap* BackgroundMap = nullptr;
 	USpriteRenderer* Background = nullptr;
+
 };
 
