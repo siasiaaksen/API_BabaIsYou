@@ -156,16 +156,22 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
 	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
 
+	if (nullptr != NextSprite)
+	{
+		TileMove(NextIndex, _MoveIndex);
+
+		FVector2D NextPos = IndexToTileLocation(NextIndex);
+		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
+
+		AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
+		AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
+	}
+
 	FVector2D NextPos = IndexToTileLocation(NextIndex);
 	CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-	if (nullptr != NextSprite)
-	{
-		return TileMove(NextIndex, _MoveIndex);
-	}
-
 	AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
-	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
+	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = nullptr;
 
 	return NextIndex;
 }
