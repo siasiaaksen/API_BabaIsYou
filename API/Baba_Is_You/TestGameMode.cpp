@@ -32,10 +32,10 @@ void ATestGameMode::BeginPlay()
 		UpperTileMap->Create(Scale, { 36, 36 });
 		UpperTileMap->SetActorLocation(CenterPivot);
 
-		UpperTileMap->SetTileIndex("BabaObject.png", { 11, 3 }, 0, static_cast<int>(ERenderOrder::UPPERTILE));
-		UpperTileMap->SetTileIndex("BabaText.png", { 5, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
-		UpperTileMap->SetTileIndex("Is.png", { 6, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
-		UpperTileMap->SetTileIndex("You.png", { 7, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("BabaObject.png", { 4, 3 }, 0, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("BabaText.png", { 0, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("Is.png", { 1, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
+		UpperTileMap->SetTileIndex("You.png", { 3, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
 		UpperTileMap->SetTileIndex("FlagText.png", { 12, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
 		UpperTileMap->SetTileIndex("Win.png", { 18, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
 		UpperTileMap->SetTileIndex("RockText.png", { 24, 3 }, 1, static_cast<int>(ERenderOrder::UPPERTILE));
@@ -75,22 +75,36 @@ void ATestGameMode::Tick(float _DeltaTime)
 
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
-		CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::UP);
+		if (true == UpperTileMap->TileMoveCheck(CurTileIndex, FIntPoint::UP))
+		{
+			CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::UP);
+		}
 	}
 	
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
-		CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::LEFT);
+		if (true == UpperTileMap->TileMoveCheck(CurTileIndex, FIntPoint::LEFT))
+		{
+			CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::LEFT);
+		}
+
 	}
 	
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
-		CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::DOWN);
+		if (true == UpperTileMap->TileMoveCheck(CurTileIndex, FIntPoint::DOWN))
+		{
+			CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::DOWN);
+		}
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
-		CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::RIGHT);
+		if (true == UpperTileMap->TileMoveCheck(CurTileIndex, FIntPoint::RIGHT))
+		{
+
+			CurTileIndex = UpperTileMap->TileMove(CurTileIndex, FIntPoint::RIGHT);
+		}
 	}
 
 	//if (true == UEngineInput::GetInst().IsPress('N'))

@@ -146,7 +146,7 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 
 FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
-	FIntPoint NextIndex = _CurIndex + _MoveIndex;
+	FIntPoint NextIndex = _CurIndex + _MoveIndex; 
 
 	if (true == IsIndexOver(NextIndex))
 	{
@@ -158,13 +158,15 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	if (nullptr != NextSprite)
 	{
-		TileMove(NextIndex, _MoveIndex);
+		FIntPoint LastIndex = TileMove(NextIndex, _MoveIndex);
 
 		FVector2D NextPos = IndexToTileLocation(NextIndex);
 		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
 		AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
-		AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = NextSprite;
+		AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = nullptr;
+
+		return LastIndex;
 	}
 
 	FVector2D NextPos = IndexToTileLocation(NextIndex);
@@ -174,6 +176,26 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = nullptr;
 
 	return NextIndex;
+}
+
+bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+{
+	FIntPoint NextIndex = _CurIndex + _MoveIndex;
+
+	if (true == IsIndexOver(NextIndex))
+	{
+		return false;
+	}
+
+	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
+	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
+
+	if (nullptr != NextSprite)
+	{
+		return TileMoveCheck(NextIndex, _MoveIndex);
+	}
+
+	return true;
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location)

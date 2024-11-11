@@ -169,6 +169,14 @@ public:
 		return Result;
 	}
 
+	FIntPoint operator-(FIntPoint _Other) const
+	{
+		FIntPoint Result;
+		Result.X = X - _Other.X;
+		Result.Y = Y - _Other.Y;
+		return Result;
+	}
+
 	FIntPoint operator/(int _Value) const
 	{
 		FIntPoint Result;
