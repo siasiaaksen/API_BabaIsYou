@@ -22,7 +22,7 @@ void ATestGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FIntPoint Scale = { 33, 18 };
+	Scale = { 33, 18 };
 
 	CreateStageInit(Scale);
 
@@ -93,14 +93,69 @@ void ATestGameMode::Move(std::string _CurSprite)
 	}
 }
 
+void ATestGameMode::TileCheck()
+{
+	for (int y = 0; y < Scale.Y; y++)
+	{
+		for (int x = 0; x < Scale.X; x++)
+		{
+			ELogicType FLogicType = UpperTileMap->GetTileRef(FIntPoint(x, y))->FLogicType;
+			EVLogicType SLogicType = UpperTileMap->GetTileRef(FIntPoint(x, y))->SLogicType;
+			ELogicType TLogicType = UpperTileMap->GetTileRef(FIntPoint(x, y))->TLogicType;
+
+			switch (FLogicType)
+			{
+			case ELogicType::NONE:
+				break;
+			case ELogicType::BABA:
+				break;
+			case ELogicType::YOU:
+				break;
+			case ELogicType::FLAG:
+				break;
+			case ELogicType::WIN:
+				break;
+			case ELogicType::ROCK:
+				break;
+			case ELogicType::PUSH:
+				break;
+			case ELogicType::WALL:
+				break;
+			case ELogicType::GRASS:
+				break;
+			case ELogicType::STOP:
+				break;
+			case ELogicType::SKULL:
+				break;
+			case ELogicType::DEFEAT:
+				break;
+			case ELogicType::LAVA:
+				break;
+			case ELogicType::HOT:
+				break;
+			case ELogicType::MELT:
+				break;
+			case ELogicType::WATER:
+				break;
+			case ELogicType::SINK:
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
 	CurTileIndex = UpperTileMap->FindTileIndex("BabaObject.png");
-	std::string CurSprite = UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->GetCurSpriteName();
+	CurSprite = UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->GetCurSpriteName();
 
 	Move(CurSprite);
+
+	TileCheck();
 
 	//if (true == UEngineInput::GetInst().IsPress('N'))
 	//{

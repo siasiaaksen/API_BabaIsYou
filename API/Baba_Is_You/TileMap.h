@@ -17,8 +17,12 @@ public:
 	FVector2D Pivot;
 	FVector2D SpriteLocation;
 
-	std::string_view SpriteName;
+	std::string SpriteName;
 	int SpriteIndex;
+
+	ELogicType FLogicType = ELogicType::NONE;
+	EVLogicType SLogicType = EVLogicType::NONE;
+	ELogicType TLogicType = ELogicType::NONE;
 
 	void Serialize(UEngineSerializer& _Ser)
 	{

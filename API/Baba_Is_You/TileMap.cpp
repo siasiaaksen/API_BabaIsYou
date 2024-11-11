@@ -109,6 +109,10 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 
 	FVector2D CurTileLocation = AllTiles[_Index.Y][_Index.X].SpriteRenderer->GetComponentLocation();
 
+	AllTiles[_Index.Y][_Index.X].FLogicType = _FLogicType;
+	AllTiles[_Index.Y][_Index.X].SLogicType = _SLogicType;
+	AllTiles[_Index.Y][_Index.X].TLogicType = _TLogicType;
+	AllTiles[_Index.Y][_Index.X].TileType = static_cast<int>(_Order);
 	AllTiles[_Index.Y][_Index.X].Pivot = _Pivot;
 	AllTiles[_Index.Y][_Index.X].Scale = _SpriteScale;
 	AllTiles[_Index.Y][_Index.X].SpriteIndex = _SpriteIndex;

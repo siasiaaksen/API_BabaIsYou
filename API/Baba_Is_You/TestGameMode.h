@@ -17,6 +17,7 @@ public:
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
 	void Move(std::string _CurSprite);
+	void TileCheck();
 
 	//void MakeTileMap(ATileMap* _TileName, int _Index = 2);
 	//void DestroyTileMap(ATileMap* _TileName);
@@ -33,5 +34,7 @@ private:
 	// 아래에 깔릴수도 있는 타일
 	ATileMap* LowerTileMap = nullptr;
 	FIntPoint CurTileIndex;
+	FIntPoint Scale;
+	std::string CurSprite;
 };
 
