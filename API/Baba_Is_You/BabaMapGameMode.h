@@ -22,6 +22,5 @@ protected:
 private:
 	ATileMap* BackgroundMap = nullptr;
 	USpriteRenderer* Background = nullptr;
-
 };
 

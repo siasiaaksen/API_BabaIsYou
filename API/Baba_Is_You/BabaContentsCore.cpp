@@ -43,31 +43,31 @@ void BabaContentsCore::BeginPlay()
 
 	// 이름, 사이즈 넣어주기
 	UImageManager::GetInst().CuttingSprite("BabaObject.png", { 36, 36 });
-	UImageManager::GetInst().CuttingSprite("FlagObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("RockObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("WallObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("GrassObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("SkullObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("LavaObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("WaterObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("TileObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("BrickObject.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("FlowerObject.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("FlagObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("RockObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("WallObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("GrassObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("SkullObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("LavaObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("WaterObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("TileObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("BrickObject.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("FlowerObject.png", { 36,36 });
 
 	UImageManager::GetInst().CuttingSprite("BabaText.png", { 36, 36 });
-	UImageManager::GetInst().CuttingSprite("Is.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Is.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("You.png", { 36,36 });
-	UImageManager::GetInst().CuttingSprite("FlagText.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("FlagText.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("Win.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("RockText.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("Push.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("WallText.png", { 36,36 });
-	UImageManager::GetInst().CuttingSprite("GrassText.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("GrassText.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("Stop.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("SkullText.png", { 36,36 });
-	UImageManager::GetInst().CuttingSprite("Defeat.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("LavaText.png", {36,36});
-	UImageManager::GetInst().CuttingSprite("Hot.png", {36,36});
+	UImageManager::GetInst().CuttingSprite("Defeat.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("LavaText.png", { 36,36 });
+	UImageManager::GetInst().CuttingSprite("Hot.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("Melt.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("WaterText.png", { 36,36 });
 	UImageManager::GetInst().CuttingSprite("Sink.png", { 36,36 });

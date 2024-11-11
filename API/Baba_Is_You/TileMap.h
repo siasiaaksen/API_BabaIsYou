@@ -3,6 +3,8 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineBase/EngineSerializer.h>
 
+#include "ContentsEnum.h"
+
 
 class Tile : public ISerializObject
 {
@@ -58,15 +60,15 @@ public:
 
 	void Create(FIntPoint _Count, FVector2D _TileSize);
 
-	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, int _Order);
+	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
 
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _Order);
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _Order);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
 
 	FIntPoint FindTileIndex(std::string_view _Name);
 
-	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
-	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
+	FIntPoint TileMove(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint _MoveIndex);
+	bool TileMoveCheck(ATileMap* _TileMap, FIntPoint _NextIndex, FIntPoint _MoveIndex);
 
 	Tile* GetTileRef(FIntPoint _Index);
 	Tile* GetTileRef(FVector2D _Location);

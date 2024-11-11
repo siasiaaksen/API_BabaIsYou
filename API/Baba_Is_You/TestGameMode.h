@@ -16,6 +16,8 @@ public:
 	ATestGameMode& operator=(const ATestGameMode& _Other) = delete;
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
+	void Move(std::string _CurSprite);
+
 	//void MakeTileMap(ATileMap* _TileName, int _Index = 2);
 	//void DestroyTileMap(ATileMap* _TileName);
 

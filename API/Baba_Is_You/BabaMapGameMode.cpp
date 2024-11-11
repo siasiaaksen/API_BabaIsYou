@@ -33,7 +33,7 @@ void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale)
 	{
 		for (int x = 0; x < _Scale.X; x++)
 		{
-			BackgroundMap->SetTileIndex("Background_Black36.png", { x, y }, {0, 0}, { 36, 36 }, 0, static_cast<int>(ERenderOrder::STAGEBG));
+			BackgroundMap->SetTileIndex("Background_Black36.png", { x, y }, {0, 0}, { 36, 36 }, 0, ERenderOrder::STAGEBG);
 		}
 	}
 }

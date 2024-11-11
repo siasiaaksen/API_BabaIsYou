@@ -38,7 +38,7 @@ FIntPoint ATileMap::LocationToIndex(FVector2D _Location)
 	return FIntPoint(Location.iX(), Location.iY());
 }
 
-void ATileMap::SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, int _Order)
+void ATileMap::SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
 	FVector2D TilePos = _Location - GetActorLocation();
 
@@ -49,7 +49,7 @@ void ATileMap::SetTileLocation(std::string_view _Sprite, FVector2D _Location, in
 		return;
 	}
 
-	SetTileIndex(_Sprite, Point, _SpriteIndex, _Order);
+	SetTileIndex(_Sprite, Point, _SpriteIndex, _Order, _FLogicType,_SLogicType, _TLogicType);
 }
 
 bool ATileMap::IsIndexOver(FIntPoint _Index)
@@ -77,12 +77,12 @@ bool ATileMap::IsIndexOver(FIntPoint _Index)
 	return false;
 }
 
-void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _Order)
+void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
-	SetTileIndex(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, _Order);
+	SetTileIndex(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, _Order, _FLogicType, _SLogicType, _TLogicType);
 }
 
-void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _Order)
+void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
 	if (true == IsIndexOver(_Index))
 	{
@@ -95,7 +95,6 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 		USpriteRenderer* NewSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		NewSpriteRenderer->SetComponentScale(TileSize);
 		AllTiles[_Index.Y][_Index.X].SpriteRenderer = NewSpriteRenderer;
-		//LocationToIndex();
 	}
 
 	// AllTiles[_Index.Y][_Index.X]의 스프라이트 랜더러 찾아서 스프라이트 세팅
@@ -144,11 +143,11 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 	}
 }
 
-FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+FIntPoint ATileMap::TileMove(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
-	FIntPoint NextIndex = _CurIndex + _MoveIndex; 
+	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
-	if (true == IsIndexOver(NextIndex))
+	if (false == TileMoveCheck(_TileMap, _CurIndex, _MoveIndex))
 	{
 		return _CurIndex;
 	}
@@ -158,7 +157,7 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	if (nullptr != NextSprite)
 	{
-		FIntPoint LastIndex = TileMove(NextIndex, _MoveIndex);
+		FIntPoint LastIndex = TileMove(_TileMap, NextIndex, _MoveIndex);
 
 		FVector2D NextPos = IndexToTileLocation(NextIndex);
 		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
@@ -178,7 +177,7 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	return NextIndex;
 }
 
-bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+bool ATileMap::TileMoveCheck(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
@@ -192,7 +191,7 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	if (nullptr != NextSprite)
 	{
-		return TileMoveCheck(NextIndex, _MoveIndex);
+		return TileMoveCheck(_TileMap, NextIndex, _MoveIndex);
 	}
 
 	return true;
