@@ -147,11 +147,11 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 	}
 }
 
-FIntPoint ATileMap::TileMove(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint _MoveIndex)
+FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
-	if (false == TileMoveCheck(_TileMap, _CurIndex, _MoveIndex))
+	if (false == TileMoveCheck(_CurIndex, _MoveIndex))
 	{
 		return _CurIndex;
 	}
@@ -161,7 +161,7 @@ FIntPoint ATileMap::TileMove(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint 
 
 	if (nullptr != NextSprite)
 	{
-		FIntPoint LastIndex = TileMove(_TileMap, NextIndex, _MoveIndex);
+		FIntPoint LastIndex = TileMove(NextIndex, _MoveIndex);
 
 		FVector2D NextPos = IndexToTileLocation(NextIndex);
 		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
@@ -181,7 +181,7 @@ FIntPoint ATileMap::TileMove(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint 
 	return NextIndex;
 }
 
-bool ATileMap::TileMoveCheck(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint _MoveIndex)
+bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
@@ -195,7 +195,7 @@ bool ATileMap::TileMoveCheck(ATileMap* _TileMap, FIntPoint _CurIndex, FIntPoint 
 
 	if (nullptr != NextSprite)
 	{
-		return TileMoveCheck(_TileMap, NextIndex, _MoveIndex);
+		return TileMoveCheck(NextIndex, _MoveIndex);
 	}
 
 	return true;

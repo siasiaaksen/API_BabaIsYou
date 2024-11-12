@@ -32,6 +32,15 @@ enum class ELogicType
 	MELT,
 	WATER,
 	SINK,
+	MAX,
+	BABAOBJECT,
+	FLAGOBJECT,
+	ROCKOBJECT,
+	WALLOBJECT,
+	GRASSOBJECT,
+	SKULLOBJECT,
+	LAVAOBJECT,
+	WATEROBJECT,
 };
 
 
@@ -39,7 +48,11 @@ enum class EVLogicType
 {
 	NONE,
 	IS,
+	MAX,
 };
+
+
+
 
 
 
