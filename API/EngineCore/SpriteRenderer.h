@@ -3,6 +3,15 @@
 #include "EngineSprite.h"
 #include <EngineBase/EngineDelegate.h>
 #include <map>
+#include <EngineBase/EngineMath.h>
+
+
+enum class PivotType
+{
+	Center,
+	Bot,
+	Top,
+};
 
 class USpriteRenderer : public USceneComponent
 {
@@ -20,6 +29,7 @@ public:
 		int ResultIndex = 0;
 		float CurTime = 0.0f;
 		bool Loop = true;
+		bool IsEnd = false;
 
 		void Reset()
 		{
@@ -60,9 +70,9 @@ public:
 	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, int _Start, int _End, float Time = 0.1f, bool _Loop = true);
 	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, std::vector<float> _Frame, bool _Loop = true);
 	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop = true);
-	
+
 	void ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
-	
+
 	void SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function);
 
 	std::string GetCurSpriteName()
@@ -70,23 +80,49 @@ public:
 		return Sprite->GetName();
 	}
 
-	bool IsActive() override
+	void SetCameraEffect(bool _Value)
 	{
-		return UObject::IsActive() && GetActor()->IsActive();
+		IsCameraEffect = _Value;
 	}
 
-	bool IsDestroy() override
+	void SetPivot(FVector2D _Pivot)
 	{
-		return UObject::IsDestroy() || GetActor()->IsDestroy();
+		Pivot = _Pivot;
 	}
+
+	void SetPivotType(PivotType _Type);
+
+	void SetCameraEffectScale(float _Effect);
 
 	void SetSprite(std::string_view _Name, int _CurIndex = 0);
+
+	bool IsCurAnimationEnd()
+	{
+		return CurAnimation->IsEnd;
+	}
+
+	void SetAlphaChar(unsigned char _Value)
+	{
+		Alpha = _Value;
+	}
+
+	void SetAlphafloat(float _Value)
+	{
+		_Value = UEngineMath::Clamp(_Value, 0.0f, 1.0f);
+		Alpha = static_cast<unsigned char>(_Value * 255.0f);
+	}
 
 protected:
 
 private:
 	int Order = 0;
 	int CurIndex = 0;
+	bool IsCameraEffect = true;
+	float CameraEffectScale = 1.0f;
+
+	unsigned char Alpha = 255;
+
+	FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;
 

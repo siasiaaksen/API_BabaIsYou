@@ -41,37 +41,7 @@ ULevel::~ULevel()
 	}
 }
 
-void ULevel::LevelChangeStart()
-{
-	{
-		std::list<AActor*>::iterator StartIter = AllActors.begin();
-		std::list<AActor*>::iterator EndIter = AllActors.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			AActor* CurActor = *StartIter;
-
-			CurActor->LevelChangeStart();
-		}
-	}
-}
-
-void ULevel::LevelChangeEnd()
-{
-	{
-		std::list<AActor*>::iterator StartIter = AllActors.begin();
-		std::list<AActor*>::iterator EndIter = AllActors.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			AActor* CurActor = *StartIter;
-
-			CurActor->LevelChangeEnd();
-		}
-	}
-}
-
-void ULevel::Tick(float _DeltaTime)
+void ULevel::BeginPlayCheck()
 {
 	{
 		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
@@ -88,6 +58,71 @@ void ULevel::Tick(float _DeltaTime)
 
 		AActor::ComponentBeginPlay();
 	}
+}
+
+void ULevel::LevelChangeStart()
+{
+	BeginPlayCheck();
+
+	{
+		{
+			std::list<AActor*>::iterator StartIter = AllActors.begin();
+			std::list<AActor*>::iterator EndIter = AllActors.end();
+
+			for (; StartIter != EndIter; ++StartIter)
+			{
+				AActor* CurActor = *StartIter;
+
+				CurActor->LevelChangeStart();
+			}
+		}
+
+		{
+			std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
+			std::list<AActor*>::iterator EndIter = BeginPlayList.end();
+
+			for (; StartIter != EndIter; ++StartIter)
+			{
+				AActor* CurActor = *StartIter;
+
+				CurActor->LevelChangeStart();
+			}
+		}
+	}
+}
+
+void ULevel::LevelChangeEnd()
+{
+	{
+		{
+			std::list<AActor*>::iterator StartIter = AllActors.begin();
+			std::list<AActor*>::iterator EndIter = AllActors.end();
+
+			for (; StartIter != EndIter; ++StartIter)
+			{
+				AActor* CurActor = *StartIter;
+
+				CurActor->LevelChangeEnd();
+			}
+		}
+
+		{
+			std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
+			std::list<AActor*>::iterator EndIter = BeginPlayList.end();
+
+			for (; StartIter != EndIter; ++StartIter)
+			{
+				AActor* CurActor = *StartIter;
+
+				CurActor->LevelChangeEnd();
+			}
+		}
+	}
+}
+
+void ULevel::Tick(float _DeltaTime)
+{
+	BeginPlayCheck();
 
 	{
 		std::list<AActor*>::iterator StartIter = AllActors.begin();
@@ -144,33 +179,47 @@ void ULevel::Render(float _DeltaTime)
 
 void ULevel::Release(float _DeltaTime)
 {
-	std::map<int, std::list<class USpriteRenderer*>>::iterator StartOrderIter = Renderers.begin();
-	std::map<int, std::list<class USpriteRenderer*>>::iterator EndOrderIter = Renderers.end();
+	// 릴리즈 순서는 말단부터
+	std::list<AActor*>::iterator StartIter = AllActors.begin();
+	std::list<AActor*>::iterator EndIter = AllActors.end();
 
-	for (; StartOrderIter != EndOrderIter; ++StartOrderIter)
+	for (; StartIter != EndIter; ++StartIter)
 	{
-		std::list<class USpriteRenderer*>& RendererList = StartOrderIter->second;
+		AActor* CurActor = *StartIter;
+		CurActor->ReleaseTimeCheck(_DeltaTime);
+	}
 
-		std::list<class USpriteRenderer*>::iterator RenderStartIter = RendererList.begin();
-		std::list<class USpriteRenderer*>::iterator RenderEndIter = RendererList.end();
+	// 랜더러 제거
+	{
+		std::map<int, std::list<class USpriteRenderer*>>::iterator StartOrderIter = Renderers.begin();
+		std::map<int, std::list<class USpriteRenderer*>>::iterator EndOrderIter = Renderers.end();
 
-		for (; RenderStartIter != RenderEndIter; )
+		for (; StartOrderIter != EndOrderIter; ++StartOrderIter)
 		{
-			if (false == (*RenderStartIter)->IsDestroy())
-			{
-				++RenderStartIter;
-				continue;
-			}
+			std::list<class USpriteRenderer*>& RendererList = StartOrderIter->second;
 
-			RenderStartIter = RendererList.erase(RenderStartIter);
+			std::list<class USpriteRenderer*>::iterator RenderStartIter = RendererList.begin();
+			std::list<class USpriteRenderer*>::iterator RenderEndIter = RendererList.end();
+
+			for (; RenderStartIter != RenderEndIter; )
+			{
+				if (false == (*RenderStartIter)->IsDestroy())
+				{
+					++RenderStartIter;
+					continue;
+				}
+
+				RenderStartIter = RendererList.erase(RenderStartIter);
+			}
 		}
 	}
 
+	// 액터 제거
 	{
 		std::list<AActor*>::iterator StartIter = AllActors.begin();
 		std::list<AActor*>::iterator EndIter = AllActors.end();
 
-		for (; StartIter != EndIter; )
+		for (; StartIter != EndIter;)
 		{
 			AActor* CurActor = *StartIter;
 

@@ -51,13 +51,26 @@ AActor::~AActor()
 	Components.clear();
 }
 
+void AActor::ReleaseTimeCheck(float _DeltaTime)
+{
+	UObject::ReleaseTimeCheck(_DeltaTime);
+
+	std::list<UActorComponent*>::iterator StartIter = Components.begin();
+	std::list<UActorComponent*>::iterator EndIter = Components.end();
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		UActorComponent* Component = *StartIter;
+		Component->ReleaseTimeCheck(_DeltaTime);
+	}
+}
+
 void AActor::ReleaseCheck(float _DeltaTime)
 {
 	UObject::ReleaseCheck(_DeltaTime);
 
 	std::list<UActorComponent*>::iterator StartIter = Components.begin();
 	std::list<UActorComponent*>::iterator EndIter = Components.end();
-	for (; StartIter != EndIter; )
+	for (; StartIter != EndIter;)
 	{
 		UActorComponent* Component = *StartIter;
 

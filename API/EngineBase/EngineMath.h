@@ -1,6 +1,33 @@
 #pragma once
 
 
+class UEngineMath
+{
+public:
+	template <typename DataType>
+	DataType ClampMax(DataType value, DataType maxValue)
+	{
+		return (value > maxValue) ? maxValue : value;
+	}
+
+	template <typename DataType>
+	DataType ClampMin(DataType value, DataType minValue)
+	{
+		return (value < minValue) ? minValue : value;
+	}
+
+	template <typename DataType>
+	static DataType Clamp(DataType value, DataType minValue, DataType maxValue)
+	{
+		if (value < minValue)
+			return minValue;
+		else if (value > maxValue)
+			return maxValue;
+		else
+			return value;
+	}
+};
+
 class FVector2D
 {
 public:
@@ -43,6 +70,16 @@ public:
 		return static_cast<int>(Y);
 	}
 
+	float hX() const
+	{
+		return X * 0.5f;
+	}
+
+	float hY() const
+	{
+		return Y * 0.5f;
+	}
+
 	bool IsZeroed() const
 	{
 		return X == 0.0f || Y == 0.0f;
@@ -53,6 +90,8 @@ public:
 		return { X * 0.5f, Y * 0.5f };
 	}
 
+	class FIntPoint ConvertToPoint() const;
+
 	FVector2D operator*(float _Value) const
 	{
 		FVector2D Result;
@@ -61,7 +100,7 @@ public:
 		return Result;
 	}
 
-	FVector2D operator+(FVector2D _Other) const
+	FVector2D operator+(const FVector2D& _Other) const
 	{
 		FVector2D Result;
 		Result.X = X + _Other.X;
@@ -69,11 +108,26 @@ public:
 		return Result;
 	}
 
-	FVector2D operator-(FVector2D _Other) const
+	FVector2D& operator-=(const FVector2D& _Other)
+	{
+		X -= _Other.X;
+		Y -= _Other.Y;
+		return *this;
+	}
+
+	FVector2D operator-(const FVector2D& _Other) const
 	{
 		FVector2D Result;
 		Result.X = X - _Other.X;
 		Result.Y = Y - _Other.Y;
+		return Result;
+	}
+
+	FVector2D operator-() const
+	{
+		FVector2D Result;
+		Result.X = -X;
+		Result.Y = -Y;
 		return Result;
 	}
 
@@ -93,7 +147,7 @@ public:
 		return Result;
 	}
 
-	bool operator==(FVector2D _Other) const
+	bool operator==(const FVector2D& _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
 	}
@@ -103,10 +157,24 @@ public:
 		return iX() == _Other.iX() && iY() == _Other.iY();
 	}
 
-	FVector2D& operator+=(FVector2D _Other)
+	FVector2D& operator+=(const FVector2D& _Other)
 	{
 		X += _Other.X;
 		Y += _Other.Y;
+		return *this;
+	}
+
+	FVector2D& operator*=(const FVector2D& _Other)
+	{
+		X *= _Other.X;
+		Y *= _Other.Y;
+		return *this;
+	}
+
+	FVector2D& operator*=(float _Other)
+	{
+		X *= _Other;
+		Y *= _Other;
 		return *this;
 	}
 
@@ -134,9 +202,45 @@ public:
 		return Location - Scale.Half();
 	}
 
+	FVector2D CenterLeftBottom() const
+	{
+		FVector2D Location;
+		Location.X = Location.X - Scale.hX();
+		Location.Y = Location.Y + Scale.hY();
+		return Location;
+	}
+
+	float CenterLeft() const
+	{
+		return Location.X - Scale.hX();
+	}
+
+	float CenterTop() const
+	{
+		return Location.Y - Scale.hY();
+	}
+
+	FVector2D CenterRightTop() const
+	{
+		FVector2D Location;
+		Location.X = Location.X + Scale.hX();
+		Location.Y = Location.Y - Scale.hY();
+		return Location;
+	}
+
 	FVector2D CenterRightBottom() const
 	{
 		return Location + Scale.Half();
+	}
+
+	float CenterRight() const
+	{
+		return Location.X + Scale.hX();
+	}
+
+	float CenterBottom() const
+	{
+		return Location.Y + Scale.hY();
 	}
 };
 
@@ -196,10 +300,6 @@ public:
 		Y += _Other.Y;
 		return *this;
 	}
-};
-
-class EngineMath
-{
 };
 
 class UColor

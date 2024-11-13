@@ -52,6 +52,11 @@ public:
 		CameraPos = _Pos;
 	}
 
+	void AddCameraPos(FVector2D _Value)
+	{
+		CameraPos += _Value;
+	}
+
 	FVector2D GetCameraPivot()
 	{
 		return CameraPivot;
@@ -73,11 +78,23 @@ public:
 		return dynamic_cast<ConvertType*>(MainPawn);
 	}
 
+	AActor* GetGameMode()
+	{
+		return GameMode;
+	}
+
+	template<typename ConvertType>
+	ConvertType* GetGameMode()
+	{
+		return dynamic_cast<ConvertType*>(GameMode);
+	}
+
 protected:
 
 private:
 	void ScreenClear();
 	void DoubleBuffering();
+	void BeginPlayCheck();
 
 	template<typename GameModeType, typename MainPawnType>
 	void CreateGameMode()
