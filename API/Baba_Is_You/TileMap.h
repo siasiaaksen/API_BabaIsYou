@@ -79,9 +79,7 @@ public:
 	Tile* GetTileRef(FVector2D _Location);
 
 	FVector2D IndexToTileLocation(FIntPoint _Index);
-
 	FIntPoint LocationToIndex(FVector2D _Location);
-
 
 	bool IsIndexOver(FIntPoint _Index);
 
@@ -95,7 +93,7 @@ private:
 	FVector2D TileSize;
 	std::vector<std::vector<Tile>> AllTiles;
 
-////     Y         X            Ãþ
-//std::vector<std::vector<std::vector<Tile>>> AllTiles;
+	////     Y         X            Ãþ
+	//std::vector<std::vector<std::vector<Tile>>> AllTiles;
 };
 

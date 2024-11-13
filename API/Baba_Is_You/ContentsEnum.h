@@ -8,8 +8,8 @@ enum class ERenderOrder
 	STAGEBG = -50,
 	WORLDMAP = -20,
 	BUTTON = -11,
-	LOWER = -10,
-	UPPER = -9,
+	LOWER = 0,
+	UPPER = 1,
 	PLAYER = 1000,
 };
 

@@ -18,13 +18,14 @@ public:
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
 	void Move();
+
+	bool IsLogicResult();
+
 	void TileCheck();
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir);
 	void LastTileCheck(FIntPoint _Index);
 
 	void BeginPlay() override;
-
-	bool IsLogicResult();
 
 protected:
 	void Tick(float _DeltaTime) override;
@@ -36,9 +37,6 @@ private:
 	ATileMap* LowerTileMap = nullptr;
 
 	FIntPoint Scale;
-	std::string CurSprite;
-	FIntPoint CurIndex;
-	Tile* CurTile = nullptr;
 
 	ELogicType F;
 	EVLogicType S;
