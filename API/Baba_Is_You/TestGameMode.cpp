@@ -37,9 +37,10 @@ void ATestGameMode::BeginPlay()
 		UpperTileMap->SetTileIndex("BabaText.png", { 0, 3 }, 1, ERenderOrder::UPPER, ELogicType::BABA, EVLogicType::NONE, ELogicType::BABA);
 		UpperTileMap->SetTileIndex("Is.png", { 1, 3 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		UpperTileMap->SetTileIndex("You.png", { 2, 3 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
+		UpperTileMap->SetTileIndex("You.png", { 1, 4 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
 		UpperTileMap->SetTileIndex("FlagText.png", { 12, 3 }, 1, ERenderOrder::UPPER, ELogicType::FLAG, EVLogicType::NONE, ELogicType::FLAG);
 		UpperTileMap->SetTileIndex("Win.png", { 18, 3 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
-		UpperTileMap->SetTileIndex("RockText.png", { 24, 3 }, 1, ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
+		UpperTileMap->SetTileIndex("RockText.png", { 1, 2 }, 1, ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
 		UpperTileMap->SetTileIndex("Push.png", { 32, 3 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
 		UpperTileMap->SetTileIndex("WallText.png", { 6, 6 }, 1, ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
 		UpperTileMap->SetTileIndex("GrassText.png", { 12, 6 }, 1, ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
@@ -50,7 +51,7 @@ void ATestGameMode::BeginPlay()
 		UpperTileMap->SetTileIndex("Hot.png", { 12, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
 		UpperTileMap->SetTileIndex("Melt.png", { 18, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::MELT);
 		UpperTileMap->SetTileIndex("WaterText.png", { 24, 9 }, 1, ERenderOrder::UPPER, ELogicType::WATER, EVLogicType::NONE, ELogicType::WATER);
-		UpperTileMap->SetTileIndex("Sink.png",{ 30, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::SINK);
+		UpperTileMap->SetTileIndex("Sink.png", { 30, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::SINK);
 	}
 
 	{
@@ -160,42 +161,91 @@ void ATestGameMode::BeginPlay()
 	}
 
 	TileCheck();
- }
+}
 
-void ATestGameMode::Move(std::vector<ELogicType> _MoveTiles)
+void ATestGameMode::Move()
 {
-	if (!_MoveTiles.size())
+	if (MoveTiles.empty())
 	{
 		return;
 	}
 
-	for (int i = 0; i < _MoveTiles.size(); i++)
+	std::vector<FIntPoint> UpperAllLogicTiles;
+	std::vector<FIntPoint> LowerAllLogicTiles;
+
+
+	for (int i = 0; i < MoveTiles.size(); i++)
 	{
-		_MoveTiles[i];
+		std::vector<FIntPoint> FindLogicTileUpper = UpperTileMap->FindLogicTile(MoveTiles[i]);
+
+		for (int a = 0; a < FindLogicTileUpper.size(); a++)
+		{
+			FIntPoint Index = FindLogicTileUpper[a];
+			UpperAllLogicTiles.push_back(Index);
+		}
+
+		std::vector<FIntPoint> FindLogicTileLower = LowerTileMap->FindLogicTile(MoveTiles[i]);
+		for (int a = 0; a < FindLogicTileLower.size(); a++)
+		{
+			FIntPoint Index = FindLogicTileLower[a];
+			LowerAllLogicTiles.push_back(Index);
+		}
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		//UpperTileMap->GetTileRef(CurIndex)->SpriteRenderer->SetSprite(CurSprite, 4);
-		//CurIndex = UpperTileMap->TileMove(CurIndex, FIntPoint::UP);
+		for (int i = 0; i < UpperAllLogicTiles.size(); i++)
+		{
+			UpperTileMap->TileMove(UpperAllLogicTiles[i], FIntPoint::UP);
+		}
+
+		for (int i = 0; i < LowerAllLogicTiles.size(); i++)
+		{
+			LowerTileMap->TileMove(LowerAllLogicTiles[i], FIntPoint::UP);
+		}
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
 		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 8);
-		//CurIndex = UpperTileMap->TileMove(CurIndex, FIntPoint::LEFT);
+		for (int i = 0; i < UpperAllLogicTiles.size(); i++)
+		{
+			UpperTileMap->TileMove(UpperAllLogicTiles[i], FIntPoint::LEFT);
+		}
+
+		for (int i = 0; i < LowerAllLogicTiles.size(); i++)
+		{
+			LowerTileMap->TileMove(LowerAllLogicTiles[i], FIntPoint::LEFT);
+		}
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 12);
-		//CurIndex = UpperTileMap->TileMove(CurIndex, FIntPoint::DOWN);
+		for (int i = 0; i < UpperAllLogicTiles.size(); i++)
+		{
+			UpperTileMap->TileMove(UpperAllLogicTiles[i], FIntPoint::DOWN);
+		}
+
+		for (int i = 0; i < LowerAllLogicTiles.size(); i++)
+		{
+			LowerTileMap->TileMove(LowerAllLogicTiles[i], FIntPoint::DOWN);
+		}
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
 		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 0);
-		//CurIndex = UpperTileMap->TileMove(CurIndex, FIntPoint::RIGHT);
+		for (int i = 0; i < UpperAllLogicTiles.size(); i++)
+		{
+			UpperTileMap->TileMove(UpperAllLogicTiles[i], FIntPoint::RIGHT);
+		}
+
+		for (int i = 0; i < LowerAllLogicTiles.size(); i++)
+		{
+			LowerTileMap->TileMove(LowerAllLogicTiles[i], FIntPoint::RIGHT);
+		}
 	}
 }
 
@@ -220,6 +270,12 @@ void ATestGameMode::TileCheck()
 void ATestGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir)
 {
 	Tile* CurTile = UpperTileMap->GetTileRef(_Index + _Dir);
+
+	if (true == UpperTileMap->IsIndexOver(_Index + _Dir))
+	{
+		return;
+	}
+
 	S = CurTile->SLogicType;
 	if (S != EVLogicType::NONE)
 	{
@@ -232,12 +288,17 @@ void ATestGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir)
 void ATestGameMode::LastTileCheck(FIntPoint _Index)
 {
 	Tile* CurTile = UpperTileMap->GetTileRef(_Index);
+
+	if (true == UpperTileMap->IsIndexOver(_Index))
+	{
+		return;
+	}
+
 	T = CurTile->TLogicType;
 	if (T != ELogicType::NONE)
 	{
 		//F; S; T;
 		StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]();
-
 		TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
 	}
 
@@ -264,4 +325,6 @@ void ATestGameMode::Tick(float _DeltaTime)
 	{
 		StartIter;
 	}
+
+	Move();
 }

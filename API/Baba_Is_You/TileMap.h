@@ -69,7 +69,8 @@ public:
 	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
 	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
 
-	FIntPoint FindTileIndex(std::string_view _Name);
+	FIntPoint FindTileIndex(int _MoveTiles);
+	std::vector<FIntPoint> FindLogicTile(ELogicType _FLogicType);
 
 	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
 	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
@@ -80,6 +81,7 @@ public:
 	FVector2D IndexToTileLocation(FIntPoint _Index);
 
 	FIntPoint LocationToIndex(FVector2D _Location);
+
 
 	bool IsIndexOver(FIntPoint _Index);
 

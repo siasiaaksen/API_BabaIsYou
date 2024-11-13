@@ -121,10 +121,9 @@ void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2
 	AllTiles[_Index.Y][_Index.X].SpriteName = UpperName;
 }
 
-FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
+FIntPoint ATileMap::FindTileIndex(int _MoveTiles)
 {
 	FIntPoint Index;
-	std::string UpperName = UEngineString::ToUpper(_Name);
 
 	for (int x = 0; x < TileCount.X; ++x)
 	{
@@ -135,7 +134,7 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 				continue;
 			}
 
-			if (AllTiles[y][x].SpriteRenderer->GetCurSpriteName() == UpperName)
+			if (static_cast<int>(AllTiles[y][x].FLogicType) == _MoveTiles)
 			{
 				Index.X = x;
 				Index.Y = y;
@@ -145,6 +144,29 @@ FIntPoint ATileMap::FindTileIndex(std::string_view _Name)
 			continue;
 		}
 	}
+}
+
+std::vector<FIntPoint> ATileMap::FindLogicTile(ELogicType _FLogicType)
+{
+	std::vector<FIntPoint> LogicTiles;
+	FIntPoint Index;
+
+	for (int x = 0; x < TileCount.X; ++x)
+	{
+		for (int y = 0; y < TileCount.Y; ++y)
+		{
+			if (AllTiles[y][x].FLogicType == _FLogicType)
+			{
+				Index.X = x;
+				Index.Y = y;
+				LogicTiles.push_back(Index);
+			}
+
+			continue;
+		}
+	}
+
+	return LogicTiles;
 }
 
 FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
@@ -159,6 +181,9 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer;
 	USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer;
 
+	ELogicType CurFLogicType = AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType;
+	ELogicType NextFLogicType = AllTiles[NextIndex.Y][NextIndex.X].FLogicType;
+
 	if (nullptr != NextSprite)
 	{
 		FIntPoint LastIndex = TileMove(NextIndex, _MoveIndex);
@@ -169,6 +194,9 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
 		AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = nullptr;
 
+		AllTiles[NextIndex.Y][NextIndex.X].FLogicType = CurFLogicType;
+		AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType = ELogicType::NONE;
+
 		return LastIndex;
 	}
 
@@ -177,6 +205,9 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	AllTiles[NextIndex.Y][NextIndex.X].SpriteRenderer = CurSprite;
 	AllTiles[_CurIndex.Y][_CurIndex.X].SpriteRenderer = nullptr;
+
+	AllTiles[NextIndex.Y][NextIndex.X].FLogicType = CurFLogicType;
+	AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType = ELogicType::NONE;
 
 	return NextIndex;
 }

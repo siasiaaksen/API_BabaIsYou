@@ -17,7 +17,7 @@ public:
 	ATestGameMode& operator=(const ATestGameMode& _Other) = delete;
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
-	void Move(std::vector<ELogicType> _MoveTiles);
+	void Move();
 	void TileCheck();
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir);
 	void LastTileCheck(FIntPoint _Index);
@@ -41,6 +41,7 @@ private:
 	ELogicType F;
 	EVLogicType S;
 	ELogicType T;
+
 
 	// 움직일 타일
 	std::vector<ELogicType> MoveTiles;
