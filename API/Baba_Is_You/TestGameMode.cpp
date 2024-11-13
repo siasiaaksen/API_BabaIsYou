@@ -48,7 +48,7 @@ void ATestGameMode::BeginPlay()
 		UpperTileMap->SetTileIndex("SkullText.png", { 24, 6 }, 1, ERenderOrder::UPPER, ELogicType::SKULL, EVLogicType::NONE, ELogicType::SKULL);
 		UpperTileMap->SetTileIndex("Defeat.png", { 30, 6 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
 		UpperTileMap->SetTileIndex("LavaText.png", { 6, 9 }, 1, ERenderOrder::UPPER, ELogicType::LAVA, EVLogicType::NONE, ELogicType::LAVA);
-		UpperTileMap->SetTileIndex("Hot.png", { 12, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
+		UpperTileMap->SetTileIndex("Hot.png", { 11, 14 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
 		UpperTileMap->SetTileIndex("Melt.png", { 18, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::MELT);
 		UpperTileMap->SetTileIndex("WaterText.png", { 24, 9 }, 1, ERenderOrder::UPPER, ELogicType::WATER, EVLogicType::NONE, ELogicType::WATER);
 		UpperTileMap->SetTileIndex("Sink.png", { 30, 9 }, 1, ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::SINK);
@@ -68,6 +68,7 @@ void ATestGameMode::BeginPlay()
 		LowerTileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, ERenderOrder::LOWER, ELogicType::WATEROBJECT, EVLogicType::NONE, ELogicType::NONE);
 	}
 
+	// StartLogic >> 00 IS YOU
 	{
 		StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 			= [this]()
@@ -118,43 +119,138 @@ void ATestGameMode::BeginPlay()
 			};
 	}
 
+	// StartLogic >> 00 IS WIN
+	{
+		StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
+			= [this]()
+			{
+			};
+	}
+
+	// StartLogic >> 00 IS PUSH
+	{
+		StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
+			= [this]()
+			{
+			};
+	}
+
+	// StartLogic >> 00 IS STOP
+	{
+		StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+
+		StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
+			= [this]()
+			{
+			};
+	}
+
+	// UpdateLogic
 	{
 		UpdateLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
-			= [this]()
-			{
-			};
-
-		UpdateLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 			= [this]()
 			{
 			};
@@ -295,11 +391,17 @@ void ATestGameMode::LastTileCheck(FIntPoint _Index)
 	}
 
 	T = CurTile->TLogicType;
-	if (T != ELogicType::NONE)
+	if (T != ELogicType::NONE && true == IsLogicResult())
 	{
-		//F; S; T;
-		StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]();
-		TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
+		if (nullptr != StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
+		{
+			StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]();
+		}
+
+		if (nullptr != UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
+		{
+			TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
+		}
 	}
 
 	return;
@@ -328,3 +430,24 @@ void ATestGameMode::Tick(float _DeltaTime)
 
 	Move();
 }
+
+bool ATestGameMode::IsLogicResult()
+{
+	if (F > ELogicType::MAX)
+	{
+		return false;
+	}
+
+	if (S > EVLogicType::MAX)
+	{
+		return false;
+	}
+
+	if (T > ELogicType::MAX)
+	{
+		return false;
+	}
+
+	return true;
+}
+

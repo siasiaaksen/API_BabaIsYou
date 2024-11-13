@@ -183,6 +183,10 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	ELogicType CurFLogicType = AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType;
 	ELogicType NextFLogicType = AllTiles[NextIndex.Y][NextIndex.X].FLogicType;
+	EVLogicType CurSLogicType = AllTiles[_CurIndex.Y][_CurIndex.X].SLogicType;
+	EVLogicType NextSLogicType = AllTiles[NextIndex.Y][NextIndex.X].SLogicType;
+	ELogicType CurTLogicType = AllTiles[_CurIndex.Y][_CurIndex.X].TLogicType;
+	ELogicType NextTLogicType = AllTiles[NextIndex.Y][NextIndex.X].TLogicType;
 
 	if (nullptr != NextSprite)
 	{
@@ -196,6 +200,10 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 		AllTiles[NextIndex.Y][NextIndex.X].FLogicType = CurFLogicType;
 		AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType = ELogicType::NONE;
+		AllTiles[NextIndex.Y][NextIndex.X].SLogicType = CurSLogicType;
+		AllTiles[_CurIndex.Y][_CurIndex.X].SLogicType = EVLogicType::NONE;
+		AllTiles[NextIndex.Y][NextIndex.X].TLogicType = CurTLogicType;
+		AllTiles[_CurIndex.Y][_CurIndex.X].TLogicType = ELogicType::NONE;
 
 		return LastIndex;
 	}
@@ -208,6 +216,10 @@ FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	AllTiles[NextIndex.Y][NextIndex.X].FLogicType = CurFLogicType;
 	AllTiles[_CurIndex.Y][_CurIndex.X].FLogicType = ELogicType::NONE;
+	AllTiles[NextIndex.Y][NextIndex.X].SLogicType = CurSLogicType;
+	AllTiles[_CurIndex.Y][_CurIndex.X].SLogicType = EVLogicType::NONE;
+	AllTiles[NextIndex.Y][NextIndex.X].TLogicType = CurTLogicType;
+	AllTiles[_CurIndex.Y][_CurIndex.X].TLogicType = ELogicType::NONE;
 
 	return NextIndex;
 }

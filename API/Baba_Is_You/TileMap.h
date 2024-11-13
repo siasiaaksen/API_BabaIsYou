@@ -94,5 +94,8 @@ private:
 	FIntPoint TileCount;
 	FVector2D TileSize;
 	std::vector<std::vector<Tile>> AllTiles;
+
+////     Y         X            Ãþ
+//std::vector<std::vector<std::vector<Tile>>> AllTiles;
 };
 

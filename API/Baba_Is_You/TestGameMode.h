@@ -24,6 +24,8 @@ public:
 
 	void BeginPlay() override;
 
+	bool IsLogicResult();
+
 protected:
 	void Tick(float _DeltaTime) override;
 
