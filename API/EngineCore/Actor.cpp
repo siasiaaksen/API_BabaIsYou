@@ -10,6 +10,7 @@
 #include "EngineSprite.h"
 #include "ImageManager.h"
 #include "ActorComponent.h"
+#include "EngineCoreDebug.h"
 
 
 std::list<UActorComponent*> AActor::ComponentList;

@@ -1,7 +1,8 @@
 #pragma once
 #include "GameMode.h"
 
-class ULevel
+
+class ULevel : public UObject
 {
 public:
 	friend class USpriteRenderer;
@@ -16,7 +17,6 @@ public:
 	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 
 	void LevelChangeStart();
-
 	void LevelChangeEnd();
 
 	void Tick(float _DeltaTime);
