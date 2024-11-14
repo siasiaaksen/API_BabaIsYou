@@ -64,19 +64,18 @@ public:
 
 	void Create(FIntPoint _Count, FVector2D _TileSize);
 
-	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
+	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
 
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
+	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
 
-	FIntPoint FindTileIndex(int _MoveTiles);
-	std::vector<FIntPoint> FindLogicTile(ELogicType _FLogicType);
+	std::vector<FIntPoint> FindMoveTile(ELogicType _FLogicType);
 
-	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
-	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
+	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles);
+	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles);
 
-	Tile* GetTileRef(FIntPoint _Index);
-	Tile* GetTileRef(FVector2D _Location);
+	Tile* GetTileRef(FIntPoint _Index, int _FloorOrder);
+	Tile* GetTileRef(FVector2D _Location, int _FloorOrder);
 
 	FVector2D IndexToTileLocation(FIntPoint _Index);
 	FIntPoint LocationToIndex(FVector2D _Location);
@@ -91,9 +90,8 @@ protected:
 private:
 	FIntPoint TileCount;
 	FVector2D TileSize;
-	std::vector<std::vector<Tile>> AllTiles;
 
 	////     Y         X            Ãþ
-	//std::vector<std::vector<std::vector<Tile>>> AllTiles;
+	std::vector<std::vector<std::map<int, Tile>>> AllTiles;
 };
 

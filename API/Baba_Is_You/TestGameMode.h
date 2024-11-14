@@ -22,8 +22,8 @@ public:
 	bool IsLogicResult();
 
 	void TileCheck();
-	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir);
-	void LastTileCheck(FIntPoint _Index);
+	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
+	void LastTileCheck(FIntPoint _Index, int _Order);
 
 	void BeginPlay() override;
 
@@ -31,10 +31,7 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	// 위에 겹쳐지는 타일
-	ATileMap* UpperTileMap = nullptr;
-	// 아래에 깔릴수도 있는 타일
-	ATileMap* LowerTileMap = nullptr;
+	ATileMap* TileMap = nullptr;
 
 	FIntPoint Scale;
 
@@ -42,9 +39,15 @@ private:
 	EVLogicType S;
 	ELogicType T;
 
-
-	// 움직일 타일
-	std::vector<ELogicType> MoveTiles;
+	// 속성 타일
+	std::vector<ELogicType> YouTiles;
+	std::vector<ELogicType> WinTiles;
+	std::vector<ELogicType> PushTiles;
+	std::vector<ELogicType> StopTiles;
+	std::vector<ELogicType> DefeatTiles;
+	std::vector<ELogicType> HotTiles;
+	std::vector<ELogicType> MeltTiles;
+	std::vector<ELogicType> SinkTiles;
 
 	// 프레임마다 Tick이 돌면서 확인해야하는(ex. Flag Is Win/Baba Is You일 때 바바가 깃발에 닿았나 확인)
 	std::function<void()> UpdateLogic[static_cast<int>(ELogicType::MAX)][static_cast<int>(EVLogicType::MAX)][static_cast<int>(ELogicType::MAX)] =

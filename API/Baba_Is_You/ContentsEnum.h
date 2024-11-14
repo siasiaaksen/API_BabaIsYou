@@ -1,13 +1,14 @@
 #pragma once
 
 
+// 누가 먼저 랜더되는지
 enum class ERenderOrder
 {
 	BACKGROUND = -2000,
 	TITLELOGO = -100,
-	STAGEBG = -50,
 	WORLDMAP = -20,
 	BUTTON = -11,
+	STAGEBG = -1,
 	LOWER = 0,
 	UPPER = 1,
 	PLAYER = 1000,
@@ -43,13 +44,28 @@ enum class ELogicType
 	WATEROBJECT,
 };
 
-
 enum class EVLogicType
 {
 	NONE,
 	IS,
 	MAX,
 };
+
+enum class EFloorOrder
+{
+	NONE,
+	GRASSOBJECT,
+	SKULLOBJECT,
+	LAVAOBJECT,
+	WATEROBJECT,
+	WALLOBJECT,
+	ROCKOBJECT,
+	FLAGOBJECT,
+	TEXT,
+	BABAOBJECT,
+	MAX,
+};
+
 
 
 
