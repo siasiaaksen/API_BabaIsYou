@@ -54,7 +54,7 @@ void USpriteRenderer::BeginPlay()
 	AActor* Actor = GetActor();
 	ULevel* Level = Actor->GetWorld();
 
-	Level->PushRenderer(this);
+	Level->ChangeRenderOrder(this, this->GetOrder());
 }
 
 void USpriteRenderer::ComponentTick(float _DeltaTime)

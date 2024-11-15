@@ -35,12 +35,22 @@ namespace UEngineDebug
 
 	void CoreOutPutString(std::string_view _Text)
 	{
+		if (false == IsDebug)
+		{
+			return;
+		}
+
 		DebugTexts.push_back({ _Text.data(), EngineTextPos });
 		EngineTextPos.Y += 20;
 	}
 
 	void CoreOutPutString(std::string_view _Text, FVector2D _Pos)
 	{
+		if (false == IsDebug)
+		{
+			return;
+		}
+
 		DebugTexts.push_back({ _Text.data(), _Pos });
 	}
 

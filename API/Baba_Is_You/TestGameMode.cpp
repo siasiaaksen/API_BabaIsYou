@@ -24,6 +24,8 @@ void ATestGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	BGMPlayer = UEngineSound::Play("baba.ogg");
+
 	Scale = { 33, 18 };
 
 	CreateStageInit(Scale);
@@ -720,6 +722,12 @@ void ATestGameMode::Tick(float _DeltaTime)
 	}
 
 	Move();
+
+	// 사운드 테스트
+	//if (true == UEngineInput::GetInst().IsDown(VK_F3))
+	//{
+	//	BGMPlayer.OnOffSwtich();
+	//}
 }
 
 

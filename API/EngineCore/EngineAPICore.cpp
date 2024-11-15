@@ -3,6 +3,7 @@
 #include <EnginePlatform/EngineInput.h>
 
 #include <EnginePlatform/EngineWindow.h>
+#include <EnginePlatform/EngineSound.h>
 #include <EngineBase/EngineDelegate.h>
 #include <EngineBase/EngineDebug.h>
 
@@ -32,6 +33,8 @@ UEngineAPICore::~UEngineAPICore()
 	}
 
 	Levels.clear();
+
+	UEngineSound::Release();
 }
 
 int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
@@ -88,6 +91,8 @@ void UEngineAPICore::Tick()
 
 	DeltaTimer.TimeCheck();
 	float DeltaTime = DeltaTimer.GetDeltaTime();
+
+	UEngineSound::Update();
 
 	UEngineInput::GetInst().KeyCheck(DeltaTime);
 

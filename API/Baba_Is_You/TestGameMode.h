@@ -1,6 +1,7 @@
 #pragma once
 #include "BabaMapGameMode.h"
 #include <string>
+#include <EnginePlatform/EngineSound.h>
 
 #include "TileMap.h"
 #include "ContentsEnum.h"
@@ -48,5 +49,8 @@ private:
 	{ nullptr };
 
 	std::list<std::function<void()>> TileCombine;
+
+	// 사운드 테스트
+	//USoundPlayer BGMPlayer;
 };
 
