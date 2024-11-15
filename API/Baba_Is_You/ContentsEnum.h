@@ -14,24 +14,33 @@ enum class ERenderOrder
 	PLAYER = 1000,
 };
 
+enum class EMoveType
+{
+	NONE,
+	YOU,
+	PUSH,
+	STOP,
+	Max,
+};
+
 enum class ELogicType
 {
 	NONE,
 	BABA,
-	YOU,
 	FLAG,
-	WIN,
 	ROCK,
-	PUSH,
 	WALL,
 	GRASS,
-	STOP,
 	SKULL,
-	DEFEAT,
 	LAVA,
+	WATER,
+	YOU,
+	WIN,
+	PUSH,
+	STOP,
+	DEFEAT,
 	HOT,
 	MELT,
-	WATER,
 	SINK,
 	MAX,
 	BABAOBJECT,

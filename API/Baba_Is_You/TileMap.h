@@ -20,6 +20,7 @@ public:
 	std::string SpriteName;
 	int SpriteIndex;
 
+	EMoveType MoveType = EMoveType::NONE;
 	ELogicType FLogicType = ELogicType::NONE;
 	EVLogicType SLogicType = EVLogicType::NONE;
 	ELogicType TLogicType = ELogicType::NONE;
@@ -66,13 +67,16 @@ public:
 
 	void SetTileLocation(std::string_view _Sprite, FVector2D _Location, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
 
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
-	void SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
+	void SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
+	void SetTile(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
 
 	std::vector<FIntPoint> FindMoveTile(ELogicType _FLogicType);
+	std::vector<FIntPoint> FindMoveTile();
 
-	FIntPoint TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles);
-	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles);
+	void AllTileMoveCheck(FIntPoint _MoveIndex);
+
+	void TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
+	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
 
 	Tile* GetTileRef(FIntPoint _Index, int _FloorOrder);
 	Tile* GetTileRef(FVector2D _Location, int _FloorOrder);
@@ -84,6 +88,10 @@ public:
 
 	void Serialize(UEngineSerializer& _Ser);
 	void DeSerialize(UEngineSerializer& _Ser);
+
+	void MoveTileTypeReset();
+
+	void ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType);
 
 protected:
 

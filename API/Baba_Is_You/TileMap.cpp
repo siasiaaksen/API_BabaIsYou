@@ -16,7 +16,7 @@ void ATileMap::Create(FIntPoint _Count, FVector2D _TileSize)
 {
 	TileSize = _TileSize;
 	TileCount = _Count;
-	 
+
 	AllTiles.resize(_Count.Y);
 
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -25,7 +25,6 @@ void ATileMap::Create(FIntPoint _Count, FVector2D _TileSize)
 
 		for (size_t x = 0; x < AllTiles[y].size(); x++)
 		{
-			//AllTiles[y][x].resize(2);
 		}
 	}
 }
@@ -54,7 +53,7 @@ void ATileMap::SetTileLocation(std::string_view _Sprite, FVector2D _Location, in
 		return;
 	}
 
-	SetTileIndex(_Sprite, Point, _SpriteIndex, _FloorOrder, _Order, _FLogicType,_SLogicType, _TLogicType);
+	SetTile(_Sprite, Point, _SpriteIndex, _FloorOrder, _Order, _FLogicType, _SLogicType, _TLogicType);
 }
 
 bool ATileMap::IsIndexOver(FIntPoint _Index)
@@ -82,12 +81,13 @@ bool ATileMap::IsIndexOver(FIntPoint _Index)
 	return false;
 }
 
-void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
+// 이 인덱스의 타일은 이러한 속성을 갖게 해줘
+void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
-	SetTileIndex(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, static_cast<int>(EFloorOrder::NONE), _Order, _FLogicType, _SLogicType, _TLogicType);
+	SetTile(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, static_cast<int>(EFloorOrder::NONE), _Order, _FLogicType, _SLogicType, _TLogicType);
 }
 
-void ATileMap::SetTileIndex(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
+void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
 	if (true == IsIndexOver(_Index))
 	{
@@ -135,7 +135,7 @@ std::vector<FIntPoint> ATileMap::FindMoveTile(ELogicType _FLogicType)
 	{
 		for (int y = 0; y < TileCount.Y; ++y)
 		{
-			for (int a = 0; a < 11; a++)
+			for (int a = 0; a < static_cast<int>(EFloorOrder::MAX); a++)
 			{
 				if (AllTiles[y][x][a].FLogicType == _FLogicType)
 				{
@@ -152,74 +152,155 @@ std::vector<FIntPoint> ATileMap::FindMoveTile(ELogicType _FLogicType)
 	return LogicTiles;
 }
 
-FIntPoint ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles)
+std::vector<FIntPoint> ATileMap::FindMoveTile()
+{
+	std::vector<FIntPoint> MoveTiles;
+
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+
+		for (int x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+				FIntPoint Index = FIntPoint(x, y);
+
+				if (EMoveType::YOU != CurTile.MoveType)
+				{
+					continue;
+				}
+
+				MoveTiles.push_back(Index);
+				return MoveTiles;
+			}
+		}
+	}
+}
+
+void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
+{
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+
+		for (int x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+				FIntPoint Index = FIntPoint(x, y);
+
+				if (EMoveType::YOU != CurTile.MoveType)
+				{
+					continue;
+				}
+
+				TileMove({x, y}, _MoveDir);
+
+			}
+		}
+	}
+}
+
+void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
-	if (false == TileMoveCheck(_CurIndex, _MoveIndex, _Tiles))
+	if (false == TileMoveCheck(_CurIndex, _MoveIndex))
 	{
-		return _CurIndex;
+		return;
 	}
 
-	for (int i = 0; i < _Tiles.size(); i++)
+	std::map<int, Tile>& CurMap = AllTiles[_CurIndex.Y][_CurIndex.X];
+	std::map<int, Tile>& NextMap = AllTiles[NextIndex.Y][NextIndex.X];
+
+	for (size_t i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 	{
-		USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X][i].SpriteRenderer;
-		USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X][i].SpriteRenderer;
+		Tile CurTile = CurMap[i];
+		Tile NextTile = NextMap[i];
 
-		ELogicType CurFLogicType = AllTiles[_CurIndex.Y][_CurIndex.X][i].FLogicType;
-		ELogicType NextFLogicType = AllTiles[NextIndex.Y][NextIndex.X][i].FLogicType;
-		EVLogicType CurSLogicType = AllTiles[_CurIndex.Y][_CurIndex.X][i].SLogicType;
-		EVLogicType NextSLogicType = AllTiles[NextIndex.Y][NextIndex.X][i].SLogicType;
-		ELogicType CurTLogicType = AllTiles[_CurIndex.Y][_CurIndex.X][i].TLogicType;
-		ELogicType NextTLogicType = AllTiles[NextIndex.Y][NextIndex.X][i].TLogicType;
+		USpriteRenderer* CurSprite = CurMap[i].SpriteRenderer;
+		USpriteRenderer* NextSprite = NextMap[i].SpriteRenderer;
 
-		int CurOrder = AllTiles[_CurIndex.Y][_CurIndex.X][i].TileType;
-		int NextOrder = AllTiles[NextIndex.Y][NextIndex.X][i].TileType;
+		if (nullptr == CurSprite)
+		{
+			continue;
+		}
+
+		EMoveType CurMoveType = CurMap[i].MoveType;
+		EMoveType NextMoveType = NextMap[i].MoveType;
+
+		ELogicType CurFLogicType = CurMap[i].FLogicType;
+		ELogicType NextFLogicType = NextMap[i].FLogicType;
+		EVLogicType CurSLogicType = CurMap[i].SLogicType;
+		EVLogicType NextSLogicType = NextMap[i].SLogicType;
+		ELogicType CurTLogicType = CurMap[i].TLogicType;
+		ELogicType NextTLogicType = NextMap[i].TLogicType;
+
+		int CurOrder = CurMap[i].TileType;
+		int NextOrder = NextMap[i].TileType;
 
 		if (nullptr != NextSprite)
 		{
-			FIntPoint LastIndex = TileMove(NextIndex, _MoveIndex, _Tiles);
+			TileMove(NextIndex, _MoveIndex);
 
 			FVector2D NextPos = IndexToTileLocation(NextIndex);
 			CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-			AllTiles[NextIndex.Y][NextIndex.X][i].SpriteRenderer = CurSprite;
-			AllTiles[_CurIndex.Y][_CurIndex.X][i].SpriteRenderer = nullptr;
+			NextMap[i] = CurMap[i];
 
-			AllTiles[NextIndex.Y][NextIndex.X][i].FLogicType = CurFLogicType;
-			AllTiles[_CurIndex.Y][_CurIndex.X][i].FLogicType = ELogicType::NONE;
-			AllTiles[NextIndex.Y][NextIndex.X][i].SLogicType = CurSLogicType;
-			AllTiles[_CurIndex.Y][_CurIndex.X][i].SLogicType = EVLogicType::NONE;
-			AllTiles[NextIndex.Y][NextIndex.X][i].TLogicType = CurTLogicType;
-			AllTiles[_CurIndex.Y][_CurIndex.X][i].TLogicType = ELogicType::NONE;
+			NextMap[i].SpriteRenderer = CurSprite;
+			CurMap[i].SpriteRenderer = nullptr;
 
-			AllTiles[NextIndex.Y][NextIndex.X][i].TileType = CurOrder;
-			AllTiles[_CurIndex.Y][_CurIndex.X][i].TileType = -1;
+			NextMap[i].MoveType = CurMoveType;
+			CurMap[i].MoveType = EMoveType::NONE;
 
-			return LastIndex;
+			NextMap[i].FLogicType = CurFLogicType;
+			CurMap[i].FLogicType = ELogicType::NONE;
+			NextMap[i].SLogicType = CurSLogicType;
+			CurMap[i].SLogicType = EVLogicType::NONE;
+			NextMap[i].TLogicType = CurTLogicType;
+			CurMap[i].TLogicType = ELogicType::NONE;
+
+			NextMap[i].TileType = CurOrder;
+			CurMap[i].TileType = -1;
+
+			return;
 		}
 
 		FVector2D NextPos = IndexToTileLocation(NextIndex);
 		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-		AllTiles[NextIndex.Y][NextIndex.X][i].SpriteRenderer = CurSprite;
-		AllTiles[_CurIndex.Y][_CurIndex.X][i].SpriteRenderer = nullptr;
+		NextMap[i].SpriteRenderer = CurSprite;
+		CurMap[i].SpriteRenderer = nullptr;
 
-		AllTiles[NextIndex.Y][NextIndex.X][i].FLogicType = CurFLogicType;
-		AllTiles[_CurIndex.Y][_CurIndex.X][i].FLogicType = ELogicType::NONE;
-		AllTiles[NextIndex.Y][NextIndex.X][i].SLogicType = CurSLogicType;
-		AllTiles[_CurIndex.Y][_CurIndex.X][i].SLogicType = EVLogicType::NONE;
-		AllTiles[NextIndex.Y][NextIndex.X][i].TLogicType = CurTLogicType;
-		AllTiles[_CurIndex.Y][_CurIndex.X][i].TLogicType = ELogicType::NONE;
+		NextMap[i].FLogicType = CurFLogicType;
+		CurMap[i].FLogicType = ELogicType::NONE;
+		NextMap[i].SLogicType = CurSLogicType;
+		CurMap[i].SLogicType = EVLogicType::NONE;
+		NextMap[i].TLogicType = CurTLogicType;
+		CurMap[i].TLogicType = ELogicType::NONE;
 
-		AllTiles[NextIndex.Y][NextIndex.X][i].TileType = CurOrder;
-		AllTiles[_CurIndex.Y][_CurIndex.X][i].TileType = -1;
+		NextMap[i].TileType = CurOrder;
+		CurMap[i].TileType = -1;
 	}
 
-	return NextIndex;
+	return;
 }
 
-bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex, std::vector<ELogicType> _Tiles)
+bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
@@ -228,14 +309,17 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex, std::vec
 		return false;
 	}
 
-	for (int i = 0; i < _Tiles.size(); i++)
+	std::map<int, Tile>& CurMap = AllTiles[_CurIndex.Y][_CurIndex.X];
+	std::map<int, Tile>& NextMap = AllTiles[_CurIndex.Y][_CurIndex.X];
+
+	for (size_t i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 	{
-		USpriteRenderer* CurSprite = AllTiles[_CurIndex.Y][_CurIndex.X][i].SpriteRenderer;
-		USpriteRenderer* NextSprite = AllTiles[NextIndex.Y][NextIndex.X][i].SpriteRenderer;
+		USpriteRenderer* CurSprite = CurMap[i].SpriteRenderer;
+		USpriteRenderer* NextSprite = NextMap[i].SpriteRenderer;
 
 		if (nullptr != NextSprite)
 		{
-			return TileMoveCheck(NextIndex, _MoveIndex, _Tiles);
+			return TileMoveCheck(NextIndex, _MoveIndex);
 		}
 	}
 
@@ -257,6 +341,56 @@ Tile* ATileMap::GetTileRef(FIntPoint _Index, int _FloorOrder)
 	}
 
 	return &AllTiles[_Index.Y][_Index.X][_FloorOrder];
+}
+
+void ATileMap::MoveTileTypeReset()
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				CurTile.MoveType = EMoveType::NONE;
+			}
+		}
+	}
+}
+
+void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				if (_FLogicType != CurTile.FLogicType)
+				{
+					continue;
+				}
+
+				CurTile.MoveType = _MoveType;
+			}
+		}
+	}
+
 }
 
 void ATileMap::Serialize(UEngineSerializer& _Ser)

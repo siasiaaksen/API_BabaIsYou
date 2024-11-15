@@ -34,88 +34,90 @@ void ATestGameMode::BeginPlay()
 
 	// TextTileMap
 	{
-		TileMap->SetTileIndex("BabaText.png", { 0, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::BABA, EVLogicType::NONE, ELogicType::BABA);
-		TileMap->SetTileIndex("Is.png", { 1, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
-		TileMap->SetTileIndex("You.png", { 2, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
-		TileMap->SetTileIndex("You.png", { 1, 4 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
-		TileMap->SetTileIndex("FlagText.png", { 12, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::FLAG, EVLogicType::NONE, ELogicType::FLAG);
-		TileMap->SetTileIndex("Win.png", { 18, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
-		TileMap->SetTileIndex("RockText.png", { 1, 2 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
-		TileMap->SetTileIndex("Push.png", { 32, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
-		TileMap->SetTileIndex("WallText.png", { 6, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
-		TileMap->SetTileIndex("GrassText.png", { 12, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
-		TileMap->SetTileIndex("Stop.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
-		TileMap->SetTileIndex("SkullText.png", { 24, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::SKULL, EVLogicType::NONE, ELogicType::SKULL);
-		TileMap->SetTileIndex("Defeat.png", { 30, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
-		TileMap->SetTileIndex("LavaText.png", { 6, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::LAVA, EVLogicType::NONE, ELogicType::LAVA);
-		TileMap->SetTileIndex("Hot.png", { 11, 14 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
-		TileMap->SetTileIndex("Melt.png", { 18, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::MELT);
-		TileMap->SetTileIndex("WaterText.png", { 24, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WATER, EVLogicType::NONE, ELogicType::WATER);
-		TileMap->SetTileIndex("Sink.png", { 30, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::SINK);
+		TileMap->SetTile("BabaText.png", { 0, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::BABA, EVLogicType::NONE, ELogicType::BABA);
+		TileMap->SetTile("Is.png", { 1, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
+		TileMap->SetTile("Is.png", { 7, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
+		TileMap->SetTile("You.png", { 2, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
+		TileMap->SetTile("You.png", { 1, 4 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
+		TileMap->SetTile("FlagText.png", { 12, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::FLAG, EVLogicType::NONE, ELogicType::FLAG);
+		TileMap->SetTile("Win.png", { 18, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
+		TileMap->SetTile("RockText.png", { 1, 2 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
+		TileMap->SetTile("Push.png", { 8, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
+		TileMap->SetTile("WallText.png", { 6, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
+		TileMap->SetTile("GrassText.png", { 12, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
+		TileMap->SetTile("Stop.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
+		TileMap->SetTile("SkullText.png", { 24, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::SKULL, EVLogicType::NONE, ELogicType::SKULL);
+		TileMap->SetTile("Defeat.png", { 30, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
+		TileMap->SetTile("LavaText.png", { 6, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::LAVA, EVLogicType::NONE, ELogicType::LAVA);
+		TileMap->SetTile("Hot.png", { 11, 14 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
+		TileMap->SetTile("Melt.png", { 18, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::MELT);
+		TileMap->SetTile("WaterText.png", { 24, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WATER, EVLogicType::NONE, ELogicType::WATER);
+		TileMap->SetTile("Sink.png", { 30, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::SINK);
 	}
 
 	// ObjectTileMap
 	{
-		TileMap->SetTileIndex("BabaObject.png", { 3, 3 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("FlagObject.png", { 6, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("RockObject.png", { 10, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("WallObject.png", { 14, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("GrassObject.png", { 18, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::GRASSOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("SkullObject.png", { 22, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::SKULLOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("LavaObject.png", { 26, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::LAVAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTileIndex("WaterObject.png", { 30, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::WATEROBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 13, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("FlagObject.png", { 6, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("RockObject.png", { 10, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("WallObject.png", { 14, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("GrassObject.png", { 18, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::GRASSOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("SkullObject.png", { 22, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::SKULLOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("LavaObject.png", { 26, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::LAVAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("WaterObject.png", { 30, 14 }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::LOWER, ELogicType::WATEROBJECT, EVLogicType::NONE, ELogicType::NONE);
 	}
 
 	// LogicCombine
 	{
+		// 이러한 로직 조합일 때 이것을 준비해줘
 		// StartLogic >> 00 IS YOU
 		{
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::BABAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::BABAOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::FLAGOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::FLAGOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::ROCKOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::ROCKOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::WALLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::WALLOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::GRASSOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::GRASSOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::SKULLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::SKULLOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::LAVAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::YOU);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::YOU)]
 				= [this]()
 				{
-					this->YouTiles.push_back(ELogicType::WATEROBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::WATEROBJECT, EMoveType::YOU);
 				};
 		}
 
@@ -124,100 +126,119 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::BABAOBJECT);
+					//this->WinTiles.push_back(ELogicType::BABAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::FLAGOBJECT);
+					//this->WinTiles.push_back(ELogicType::FLAGOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::ROCKOBJECT);
+					//this->WinTiles.push_back(ELogicType::ROCKOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::WALLOBJECT);
+					//this->WinTiles.push_back(ELogicType::WALLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::GRASSOBJECT);
+					//this->WinTiles.push_back(ELogicType::GRASSOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::SKULLOBJECT);
+					//this->WinTiles.push_back(ELogicType::SKULLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::LAVAOBJECT);
+					//this->WinTiles.push_back(ELogicType::LAVAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::WIN)]
 				= [this]()
 				{
-					this->WinTiles.push_back(ELogicType::WATEROBJECT);
+					//this->WinTiles.push_back(ELogicType::WATEROBJECT);
 				};
 		}
 
 		// StartLogic >> 00 IS PUSH
 		{
+			//PushTiles.push_back(ELogicType::NONE);
+			//PushTiles.push_back(ELogicType::BABA);
+			//PushTiles.push_back(ELogicType::YOU);
+			//PushTiles.push_back(ELogicType::FLAG);
+			//PushTiles.push_back(ELogicType::WIN);
+			//PushTiles.push_back(ELogicType::ROCK);
+			//PushTiles.push_back(ELogicType::PUSH);
+			//PushTiles.push_back(ELogicType::WALL);
+			//PushTiles.push_back(ELogicType::GRASS);
+			//PushTiles.push_back(ELogicType::STOP);
+			//PushTiles.push_back(ELogicType::SKULL);
+			//PushTiles.push_back(ELogicType::DEFEAT);
+			//PushTiles.push_back(ELogicType::LAVA);
+			//PushTiles.push_back(ELogicType::HOT);
+			//PushTiles.push_back(ELogicType::MELT);
+			//PushTiles.push_back(ELogicType::WATER);
+			//PushTiles.push_back(ELogicType::SINK);
+			//PushTiles.push_back(EVLogicType::IS);
+
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::BABAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::BABAOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::FLAGOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::FLAGOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::ROCKOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::ROCKOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::WALLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::WALLOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::GRASSOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::GRASSOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::SKULLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::SKULLOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::LAVAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::PUSH);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::PUSH)]
 				= [this]()
 				{
-					this->PushTiles.push_back(ELogicType::WATEROBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::WATEROBJECT, EMoveType::PUSH);
 				};
 		}
 
@@ -226,49 +247,50 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::BABAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::FLAGOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
+
 				{
-					this->StopTiles.push_back(ELogicType::ROCKOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::WALLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::GRASSOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::SKULLOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::LAVAOBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::STOP)]
 				= [this]()
 				{
-					this->StopTiles.push_back(ELogicType::WATEROBJECT);
+					this->TileMap->ChangeMoveMode(ELogicType::LAVAOBJECT, EMoveType::STOP);
 				};
 		}
 
@@ -277,49 +299,49 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::BABAOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::BABAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::FLAGOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::FLAGOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::ROCKOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::ROCKOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::WALLOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::WALLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::GRASSOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::GRASSOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::SKULLOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::SKULLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::LAVAOBJECT);
+					//this->DefeatTiles.push_back(ELogicType::LAVAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					this->DefeatTiles.push_back(ELogicType::WATEROBJECT);
+					//this->DefeatTiles.push_back(ELogicType::WATEROBJECT);
 				};
 		}
 
@@ -328,49 +350,49 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::BABAOBJECT);
+					//this->HotTiles.push_back(ELogicType::BABAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::FLAGOBJECT);
+					//this->HotTiles.push_back(ELogicType::FLAGOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::ROCKOBJECT);
+					//this->HotTiles.push_back(ELogicType::ROCKOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::WALLOBJECT);
+					//this->HotTiles.push_back(ELogicType::WALLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::GRASSOBJECT);
+					//this->HotTiles.push_back(ELogicType::GRASSOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::SKULLOBJECT);
+					//this->HotTiles.push_back(ELogicType::SKULLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::LAVAOBJECT);
+					//this->HotTiles.push_back(ELogicType::LAVAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::HOT)]
 				= [this]()
 				{
-					this->HotTiles.push_back(ELogicType::WATEROBJECT);
+					//this->HotTiles.push_back(ELogicType::WATEROBJECT);
 				};
 		}
 
@@ -379,49 +401,49 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::BABAOBJECT);
+					//this->MeltTiles.push_back(ELogicType::BABAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::FLAGOBJECT);
+					//this->MeltTiles.push_back(ELogicType::FLAGOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::ROCKOBJECT);
+					//this->MeltTiles.push_back(ELogicType::ROCKOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::WALLOBJECT);
+					//this->MeltTiles.push_back(ELogicType::WALLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::GRASSOBJECT);
+					//this->MeltTiles.push_back(ELogicType::GRASSOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::SKULLOBJECT);
+					//this->MeltTiles.push_back(ELogicType::SKULLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::LAVAOBJECT);
+					//this->MeltTiles.push_back(ELogicType::LAVAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::MELT)]
 				= [this]()
 				{
-					this->MeltTiles.push_back(ELogicType::WATEROBJECT);
+					//this->MeltTiles.push_back(ELogicType::WATEROBJECT);
 				};
 		}
 
@@ -430,49 +452,49 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::BABAOBJECT);
+					//this->SinkTiles.push_back(ELogicType::BABAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::FLAGOBJECT);
+					//this->SinkTiles.push_back(ELogicType::FLAGOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::ROCKOBJECT);
+					//this->SinkTiles.push_back(ELogicType::ROCKOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::WALLOBJECT);
+					//this->SinkTiles.push_back(ELogicType::WALLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::GRASSOBJECT);
+					//this->SinkTiles.push_back(ELogicType::GRASSOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::SKULLOBJECT);
+					//this->SinkTiles.push_back(ELogicType::SKULLOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::LAVAOBJECT);
+					//this->SinkTiles.push_back(ELogicType::LAVAOBJECT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::SINK)]
 				= [this]()
 				{
-					this->SinkTiles.push_back(ELogicType::WATEROBJECT);
+					//this->SinkTiles.push_back(ELogicType::WATEROBJECT);
 				};
 		}
 
@@ -559,65 +581,31 @@ void ATestGameMode::BeginPlay()
 				{
 				};
 		}
-	}
 
-	TileCheck();
+		TileCheck();
+	}
 }
 
 void ATestGameMode::Move()
 {
-	if (YouTiles.empty())
-	{
-		return;
-	}
-
-	std::vector<FIntPoint> AllLogicTiles;
-
-
-	for (int i = 0; i < YouTiles.size(); i++)
-	{
-		std::vector<FIntPoint> FindLogicTile = TileMap->FindMoveTile(YouTiles[i]);
-
-		for (size_t i = 0; i < FindLogicTile.size(); i++)
-		{
-			AllLogicTiles.push_back(FindLogicTile[i]);
-		}
-	}
-
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
-		//UpperTileMap->GetTileRef(CurIndex)->SpriteRenderer->SetSprite(CurSprite, 4);
-		for (size_t i = 0; i < AllLogicTiles.size(); i++)
-		{
-			TileMap->TileMove(AllLogicTiles[i], FIntPoint::UP, PushTiles);
-		}
+		TileMap->AllTileMoveCheck(FIntPoint::UP);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
-		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 8);
-		for (size_t i = 0; i < AllLogicTiles.size(); i++)
-		{
-			TileMap->TileMove(AllLogicTiles[i], FIntPoint::LEFT, PushTiles);
-		}
+		TileMap->AllTileMoveCheck(FIntPoint::LEFT);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
-		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 12);
-		for (size_t i = 0; i < AllLogicTiles.size(); i++)
-		{
-			TileMap->TileMove(AllLogicTiles[i], FIntPoint::DOWN, PushTiles);
-		}
+		TileMap->AllTileMoveCheck(FIntPoint::DOWN);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
-		//UpperTileMap->GetTileRef(CurTileIndex)->SpriteRenderer->SetSprite(_CurSprite, 0);
-		for (size_t i = 0; i < AllLogicTiles.size(); i++)
-		{
-			TileMap->TileMove(AllLogicTiles[i], FIntPoint::RIGHT, PushTiles);
-		}
+		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
 	}
 }
 
@@ -649,14 +637,14 @@ void ATestGameMode::TileCheck()
 		{
 			FIntPoint CurIndex = { x, y };
 
-			for (int a = 0; a < 11; a++)
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
-				Tile* CurTile = TileMap->GetTileRef(CurIndex, a);
+				Tile* CurTile = TileMap->GetTileRef(CurIndex, i);
 				F = CurTile->FLogicType;
 				if (F != ELogicType::NONE)
 				{
-					NextTileCheck(CurIndex, FIntPoint{ 1, 0 }, a);
-					NextTileCheck(CurIndex, FIntPoint{ 0, 1 }, a);
+					NextTileCheck(CurIndex, FIntPoint{ 1, 0 }, i);
+					NextTileCheck(CurIndex, FIntPoint{ 0, 1 }, i);
 				}
 			}
 		}
@@ -714,8 +702,11 @@ void ATestGameMode::Tick(float _DeltaTime)
 	// 만약 규칙이 깨진 타일이 생길 경우
 	// 따로 제거하지 않고
 	// 매 프레임마다 clear되고
-	YouTiles.clear();
+	//YouTiles.clear();
 	TileCombine.clear();
+
+
+	TileMap->MoveTileTypeReset();
 
 	// 다시 모든 TileCheck
 	TileCheck();
