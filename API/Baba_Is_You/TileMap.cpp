@@ -106,7 +106,7 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	USpriteRenderer* FindSprite = AllTiles[_Index.Y][_Index.X][_FloorOrder].SpriteRenderer;
 	FindSprite->SetSprite(_Sprite, _SpriteIndex);
 	FindSprite->SetComponentScale(_SpriteScale);
-	FindSprite->SetOrder(_Order);
+	FindSprite->SetOrder(_FloorOrder);
 
 	// AllTiles[_Index.Y][_Index.X][static_cast<int>(_Order)]의 위치, 피봇, 스케일, 스프라이트 인덱스 지정
 	FVector2D TileLocation = IndexToTileLocation(_Index);
@@ -208,7 +208,6 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 				}
 
 				TileMove({x, y}, _MoveDir);
-
 			}
 		}
 	}
@@ -226,10 +225,10 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	std::map<int, Tile>& CurMap = AllTiles[_CurIndex.Y][_CurIndex.X];
 	std::map<int, Tile>& NextMap = AllTiles[NextIndex.Y][NextIndex.X];
 
-	for (size_t i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 	{
-		Tile CurTile = CurMap[i];
-		Tile NextTile = NextMap[i];
+		//Tile CurTile = CurMap[i];
+		//Tile NextTile = NextMap[i];
 
 		USpriteRenderer* CurSprite = CurMap[i].SpriteRenderer;
 		USpriteRenderer* NextSprite = NextMap[i].SpriteRenderer;
@@ -252,32 +251,36 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		int CurOrder = CurMap[i].TileType;
 		int NextOrder = NextMap[i].TileType;
 
-		if (nullptr != NextSprite)
+		for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 		{
-			TileMove(NextIndex, _MoveIndex);
+			if (nullptr != NextSprite && EMoveType::PUSH == NextMoveType)
+			{
+				TileMove(NextIndex, _MoveIndex);
 
-			FVector2D NextPos = IndexToTileLocation(NextIndex);
-			CurSprite->SetComponentLocation(NextPos + TileSize.Half());
+				FVector2D NextPos = IndexToTileLocation(NextIndex);
 
-			NextMap[i] = CurMap[i];
+				CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-			NextMap[i].SpriteRenderer = CurSprite;
-			CurMap[i].SpriteRenderer = nullptr;
+				NextMap[i] = CurMap[i];
 
-			NextMap[i].MoveType = CurMoveType;
-			CurMap[i].MoveType = EMoveType::NONE;
+				NextMap[i].SpriteRenderer = CurSprite;
+				CurMap[i].SpriteRenderer = nullptr;
 
-			NextMap[i].FLogicType = CurFLogicType;
-			CurMap[i].FLogicType = ELogicType::NONE;
-			NextMap[i].SLogicType = CurSLogicType;
-			CurMap[i].SLogicType = EVLogicType::NONE;
-			NextMap[i].TLogicType = CurTLogicType;
-			CurMap[i].TLogicType = ELogicType::NONE;
+				NextMap[i].MoveType = CurMoveType;
+				CurMap[i].MoveType = EMoveType::NONE;
 
-			NextMap[i].TileType = CurOrder;
-			CurMap[i].TileType = -1;
+				NextMap[i].FLogicType = CurFLogicType;
+				CurMap[i].FLogicType = ELogicType::NONE;
+				NextMap[i].SLogicType = CurSLogicType;
+				CurMap[i].SLogicType = EVLogicType::NONE;
+				NextMap[i].TLogicType = CurTLogicType;
+				CurMap[i].TLogicType = ELogicType::NONE;
 
-			return;
+				NextMap[i].TileType = CurOrder;
+				CurMap[i].TileType = -1;
+
+				return;
+			}
 		}
 
 		FVector2D NextPos = IndexToTileLocation(NextIndex);
@@ -304,7 +307,7 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
-	if (true == IsIndexOver(NextIndex))
+	if (true == IsIndexOver(_CurIndex))
 	{
 		return false;
 	}

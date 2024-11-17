@@ -24,7 +24,7 @@ void ATestGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BGMPlayer = UEngineSound::Play("baba.ogg");
+	//BGMPlayer = UEngineSound::Play("baba.ogg");
 
 	Scale = { 33, 18 };
 

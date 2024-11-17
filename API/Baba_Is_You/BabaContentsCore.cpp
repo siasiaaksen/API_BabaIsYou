@@ -82,7 +82,7 @@ void BabaContentsCore::BeginPlay()
 		UImageManager::GetInst().CuttingSprite("StartButton784_51.png", { 392, 51 });
 		UImageManager::GetInst().CuttingSprite("SettingButton786_51.png", { 393, 51 });
 		UImageManager::GetInst().CuttingSprite("ExitButton786_51.png", { 393, 51 });
-		UImageManager::GetInst().CuttingSprite("WorldMap3564_649.png", { 1188, 649 });
+		UImageManager::GetInst().CuttingSprite("WorldMap1188_650.png", { 1188, 650 });
 
 		// 이름, 사이즈 넣어주기
 		UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("API_BabaIsYou");
@@ -92,7 +92,7 @@ void BabaContentsCore::BeginPlay()
 		UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
-		UEngineAPICore::GetCore()->OpenLevel("Test");
+		UEngineAPICore::GetCore()->OpenLevel("Title");
 	}
 
 	// 사운드 로드

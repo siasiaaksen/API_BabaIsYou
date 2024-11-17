@@ -25,8 +25,9 @@ void ATitleGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
-	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
 	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
+	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
+
 	{
 		AButtons* StartBtn = GetWorld()->SpawnActor<AButtons>();
 		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -36,7 +37,7 @@ void ATitleGameMode::BeginPlay()
 		FVector2D StartBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
 		SpriteRenderer->SetComponentLocation({ 640, 450 });
 
-		StartBtn->SetButtonPos({ 640, 367 });
+		StartBtn->SetButtonPos({ 640, 450 });
 		StartBtn->SetButtonScale(StartBtnScale);
 	}
 
@@ -49,7 +50,7 @@ void ATitleGameMode::BeginPlay()
 		FVector2D SettingsBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
 		SpriteRenderer->SetComponentLocation({ 640, 530 });
 
-		SettingsBtn->SetButtonPos({ 640, 467 });
+		SettingsBtn->SetButtonPos({ 640, 530 });
 		SettingsBtn->SetButtonScale(SettingsBtnScale);
 	}
 
@@ -62,10 +63,9 @@ void ATitleGameMode::BeginPlay()
 		FVector2D ExitBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
 		SpriteRenderer->SetComponentLocation({ 640, 610 });
 
-		ExitBtn->SetButtonPos({ 640, 567 });
+		ExitBtn->SetButtonPos({ 640, 610 });
 		ExitBtn->SetButtonScale(ExitBtnScale);
 	}
-
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)
