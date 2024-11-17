@@ -92,7 +92,7 @@ void BabaContentsCore::BeginPlay()
 		UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
-		UEngineAPICore::GetCore()->OpenLevel("Title");
+		UEngineAPICore::GetCore()->OpenLevel("Test");
 	}
 
 	// 사운드 로드

@@ -84,7 +84,7 @@ bool ATileMap::IsIndexOver(FIntPoint _Index)
 // 이 인덱스의 타일은 이러한 속성을 갖게 해줘
 void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
 {
-	SetTile(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, static_cast<int>(EFloorOrder::NONE), _Order, _FLogicType, _SLogicType, _TLogicType);
+	SetTile(_Sprite, _Index, { 0, 0 }, TileSize, _SpriteIndex, _FloorOrder, _Order, _FLogicType, _SLogicType, _TLogicType);
 }
 
 void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
