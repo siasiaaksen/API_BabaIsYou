@@ -11,7 +11,7 @@ class Tile : public ISerializObject
 public:
 	USpriteRenderer* SpriteRenderer;
 	bool IsMove = true;
-	int TileType = -1;
+	int FloorOrder = -1;
 
 	FVector2D Scale;
 	FVector2D Pivot;
@@ -34,7 +34,7 @@ public:
 		}
 		_Ser << SpriteName;
 		_Ser << IsMove;
-		_Ser << TileType;
+		_Ser << FloorOrder;
 		_Ser << Scale;
 		_Ser << Pivot;
 		_Ser << SpriteIndex;
@@ -45,7 +45,7 @@ public:
 		std::string SpriteName;
 		_Ser >> SpriteName;
 		_Ser >> IsMove;
-		_Ser >> TileType;
+		_Ser >> FloorOrder;
 		_Ser >> Scale;
 		_Ser >> Pivot;
 		_Ser >> SpriteIndex;
@@ -78,6 +78,11 @@ public:
 	void TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
 	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
 
+	// 다음 인덱스의 스프라이트가 있어? 모든 FloorOrder 체크
+	bool IsVoid(FIntPoint _NextIndex);
+
+	void CurTileToNextTile(Tile& _CurTile, Tile& _NextTile);
+
 	Tile* GetTileRef(FIntPoint _Index, int _FloorOrder);
 	Tile* GetTileRef(FVector2D _Location, int _FloorOrder);
 
@@ -92,6 +97,7 @@ public:
 	void MoveTileTypeReset();
 
 	void ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType);
+
 
 protected:
 
