@@ -328,6 +328,7 @@ void ATileMap::CurTileToNextTile(Tile& _CurTile, Tile& _NextTile)
 {
 	_NextTile = _CurTile;
 	_CurTile.MoveType = EMoveType::NONE;
+	_CurTile.StateType = EStateType::NONE;
 	_CurTile.SpriteRenderer = nullptr;
 	_CurTile.FLogicType = ELogicType::NONE;
 	_CurTile.SLogicType = EVLogicType::NONE;
@@ -404,6 +405,34 @@ void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 				}
 
 				CurTile.MoveType = _MoveType;
+			}
+		}
+	}
+
+}
+
+void  ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				if (_FLogicType != CurTile.FLogicType)
+				{
+					continue;
+				}
+
+				CurTile.StateType = _StateType;
 			}
 		}
 	}

@@ -21,6 +21,7 @@ public:
 	int SpriteIndex;
 
 	EMoveType MoveType = EMoveType::NONE;
+	EStateType StateType = EStateType::NONE;
 	ELogicType FLogicType = ELogicType::NONE;
 	EVLogicType SLogicType = EVLogicType::NONE;
 	ELogicType TLogicType = ELogicType::NONE;
@@ -97,6 +98,7 @@ public:
 	void MoveTileTypeReset();
 
 	void ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType);
+	void ChangeStateMode(ELogicType _FLogicType, EStateType _StateType);
 
 
 protected:

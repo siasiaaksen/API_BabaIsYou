@@ -23,6 +23,17 @@ enum class EMoveType
 	Max,
 };
 
+enum class EStateType
+{
+	NONE,
+	WIN,
+	DEFEAT,
+	HOT,
+	MELT,
+	SINK,
+	Max,
+};
+
 enum class ELogicType
 {
 	NONE,

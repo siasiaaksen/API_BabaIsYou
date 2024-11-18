@@ -38,7 +38,7 @@ void ATestGameMode::BeginPlay()
 	{
 		TileMap->SetTile("BabaText.png", { 0, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::BABA, EVLogicType::NONE, ELogicType::BABA);
 		TileMap->SetTile("Is.png", { 1, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
-		TileMap->SetTile("Is.png", { 7, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
+		TileMap->SetTile("Is.png", { 25, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("Is.png", { 17, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("You.png", { 2, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
 		TileMap->SetTile("You.png", { 1, 4 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
@@ -50,7 +50,7 @@ void ATestGameMode::BeginPlay()
 		TileMap->SetTile("GrassText.png", { 16, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
 		TileMap->SetTile("Stop.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
 		TileMap->SetTile("SkullText.png", { 24, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::SKULL, EVLogicType::NONE, ELogicType::SKULL);
-		TileMap->SetTile("Defeat.png", { 30, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
+		TileMap->SetTile("Defeat.png", { 26, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
 		TileMap->SetTile("LavaText.png", { 6, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::LAVA, EVLogicType::NONE, ELogicType::LAVA);
 		TileMap->SetTile("Hot.png", { 11, 14 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::HOT);
 		TileMap->SetTile("Melt.png", { 18, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::MELT);
@@ -283,49 +283,49 @@ void ATestGameMode::BeginPlay()
 			StartLogic[static_cast<int>(ELogicType::BABA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::BABAOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::BABAOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::FLAG)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::FLAGOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::FLAGOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::ROCK)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::ROCKOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::ROCKOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WALL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::WALLOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::WALLOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::GRASS)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::GRASSOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::GRASSOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::SKULL)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::SKULLOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::SKULLOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::LAVA)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::LAVAOBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::LAVAOBJECT, EStateType::DEFEAT);
 				};
 
 			StartLogic[static_cast<int>(ELogicType::WATER)][static_cast<int>(EVLogicType::IS)][static_cast<int>(ELogicType::DEFEAT)]
 				= [this]()
 				{
-					//this->DefeatTiles.push_back(ELogicType::WATEROBJECT);
+					this->TileMap->ChangeStateMode(ELogicType::WATEROBJECT, EStateType::DEFEAT);
 				};
 		}
 
