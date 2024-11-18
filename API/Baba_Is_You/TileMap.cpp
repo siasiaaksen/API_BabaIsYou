@@ -227,77 +227,90 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 	{
-		//Tile CurTile = CurMap[i];
-		//Tile NextTile = NextMap[i];
+		Tile& CurTile = CurMap[i];
 
-		USpriteRenderer* CurSprite = CurMap[i].SpriteRenderer;
-		USpriteRenderer* NextSprite = NextMap[i].SpriteRenderer;
+		EMoveType CurMoveType = CurTile.MoveType;
+		USpriteRenderer* CurSprite = CurTile.SpriteRenderer;
+		ELogicType CurFLogicType = CurTile.FLogicType;
+		EVLogicType CurSLogicType = CurTile.SLogicType;
+		ELogicType CurTLogicType = CurTile.TLogicType;
+		int CurOrder = CurTile.TileType;
 
 		if (nullptr == CurSprite)
 		{
 			continue;
 		}
 
-		EMoveType CurMoveType = CurMap[i].MoveType;
-		EMoveType NextMoveType = NextMap[i].MoveType;
-
-		ELogicType CurFLogicType = CurMap[i].FLogicType;
-		ELogicType NextFLogicType = NextMap[i].FLogicType;
-		EVLogicType CurSLogicType = CurMap[i].SLogicType;
-		EVLogicType NextSLogicType = NextMap[i].SLogicType;
-		ELogicType CurTLogicType = CurMap[i].TLogicType;
-		ELogicType NextTLogicType = NextMap[i].TLogicType;
-
-		int CurOrder = CurMap[i].TileType;
-		int NextOrder = NextMap[i].TileType;
-
-		for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+		for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 		{
-			if (nullptr != NextSprite && EMoveType::PUSH == NextMoveType)
+			Tile& NextTile = NextMap[j];
+
+			USpriteRenderer* NextSprite = NextTile.SpriteRenderer;
+			EMoveType NextMoveType = NextTile.MoveType;
+			ELogicType NextFLogicType = NextTile.FLogicType;
+			EVLogicType NextSLogicType = NextTile.SLogicType;
+			ELogicType NextTLogicType = NextTile.TLogicType;
+			int NextOrder = NextTile.TileType;
+
+			if (nullptr != NextSprite)
 			{
-				TileMove(NextIndex, _MoveIndex);
+				if (EMoveType::PUSH == NextMoveType)
+				{
+					TileMove(NextIndex, _MoveIndex);
 
-				FVector2D NextPos = IndexToTileLocation(NextIndex);
+					FVector2D NextPos = IndexToTileLocation(NextIndex);
+					CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-				CurSprite->SetComponentLocation(NextPos + TileSize.Half());
+					//NextMap[i] = CurMap[i];
 
-				NextMap[i] = CurMap[i];
+					NextMap[i].SpriteRenderer = CurSprite;
+					CurMap[i].SpriteRenderer = nullptr;
 
-				NextMap[i].SpriteRenderer = CurSprite;
-				CurMap[i].SpriteRenderer = nullptr;
+					NextMap[i].MoveType = CurMoveType;
+					CurMap[i].MoveType = EMoveType::NONE;
 
-				NextMap[i].MoveType = CurMoveType;
-				CurMap[i].MoveType = EMoveType::NONE;
+					NextMap[i].FLogicType = CurFLogicType;
+					CurMap[i].FLogicType = ELogicType::NONE;
+					NextMap[i].SLogicType = CurSLogicType;
+					CurMap[i].SLogicType = EVLogicType::NONE;
+					NextMap[i].TLogicType = CurTLogicType;
+					CurMap[i].TLogicType = ELogicType::NONE;
 
-				NextMap[i].FLogicType = CurFLogicType;
-				CurMap[i].FLogicType = ELogicType::NONE;
-				NextMap[i].SLogicType = CurSLogicType;
-				CurMap[i].SLogicType = EVLogicType::NONE;
-				NextMap[i].TLogicType = CurTLogicType;
-				CurMap[i].TLogicType = ELogicType::NONE;
+					NextMap[i].TileType = CurOrder;
+					CurMap[i].TileType = -1;
 
-				NextMap[i].TileType = CurOrder;
-				CurMap[i].TileType = -1;
-
-				return;
+					return;
+				}
+				else if (EMoveType::STOP == NextMoveType)
+				{
+					return;
+				}
 			}
 		}
 
-		FVector2D NextPos = IndexToTileLocation(NextIndex);
-		CurSprite->SetComponentLocation(NextPos + TileSize.Half());
+		if (EMoveType::PUSH == CurMoveType || EMoveType::YOU == CurMoveType)
+		{
+			FVector2D NextPos = IndexToTileLocation(NextIndex);
+			CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 
-		NextMap[i].SpriteRenderer = CurSprite;
-		CurMap[i].SpriteRenderer = nullptr;
+			NextMap[i].SpriteRenderer = CurSprite;
+			CurMap[i].SpriteRenderer = nullptr;
 
-		NextMap[i].FLogicType = CurFLogicType;
-		CurMap[i].FLogicType = ELogicType::NONE;
-		NextMap[i].SLogicType = CurSLogicType;
-		CurMap[i].SLogicType = EVLogicType::NONE;
-		NextMap[i].TLogicType = CurTLogicType;
-		CurMap[i].TLogicType = ELogicType::NONE;
+			NextMap[i].MoveType = CurMoveType;
+			CurMap[i].MoveType = EMoveType::NONE;
 
-		NextMap[i].TileType = CurOrder;
-		CurMap[i].TileType = -1;
+			NextMap[i].FLogicType = CurFLogicType;
+			CurMap[i].FLogicType = ELogicType::NONE;
+			NextMap[i].SLogicType = CurSLogicType;
+			CurMap[i].SLogicType = EVLogicType::NONE;
+			NextMap[i].TLogicType = CurTLogicType;
+			CurMap[i].TLogicType = ELogicType::NONE;
+
+			NextMap[i].TileType = CurOrder;
+			CurMap[i].TileType = -1;
+
+			return;
+		}
 	}
 
 	return;
@@ -319,6 +332,16 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	{
 		USpriteRenderer* CurSprite = CurMap[i].SpriteRenderer;
 		USpriteRenderer* NextSprite = NextMap[i].SpriteRenderer;
+
+		if (EMoveType::STOP == CurMap[i].MoveType)
+		{
+			return false;
+		}
+
+		if (EMoveType::STOP == NextMap[i].MoveType)
+		{
+			return false;
+		}
 
 		if (nullptr != NextSprite)
 		{
