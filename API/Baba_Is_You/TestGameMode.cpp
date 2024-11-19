@@ -595,7 +595,7 @@ void ATestGameMode::MoveCheck()
 
 	if (true == UEngineInput::GetInst().IsDown('Z'))
 	{
-		SetState(EGameState::UNDO);
+		State = EGameState::UNDO;
 	}
 }
 

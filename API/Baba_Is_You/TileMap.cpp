@@ -93,6 +93,7 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 
 	Tile* NewTilePtr = AllTiles[_Index.Y][_Index.X][_FloorOrder];
 
+	// 해당 인덱스에 타일이 없으면 만들어
 	if (nullptr == NewTilePtr)
 	{
 		NewTilePtr = GetWorld()->SpawnActor<Tile>();
@@ -101,17 +102,16 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 		NewTilePtr->SpriteRenderer->SetComponentScale(TileSize);
 	}
 
-	// AllTiles[_Index.Y][_Index.X][static_cast<int>(_Order)]의 스프라이트 랜더러 찾아서 스프라이트 세팅
+	// 타일의 스프라이트 랜더러 찾아서 스프라이트 세팅
 	USpriteRenderer* FindSprite = NewTilePtr->SpriteRenderer;
 	FindSprite->SetSprite(_Sprite, _SpriteIndex);
 	FindSprite->SetComponentScale(_SpriteScale);
 	FindSprite->SetOrder(_FloorOrder);
 
-	// AllTiles[_Index.Y][_Index.X][static_cast<int>(_Order)]의 위치, 피봇, 스케일, 스프라이트 인덱스 지정
+	// 타일의 위치, 피봇, 스케일, 스프라이트 인덱스 등등 지정
 	FVector2D TileLocation = IndexToTileLocation(_Index);
 	//                                                                    액터기반으로 바뀌면서 타일 각자의 위치를 더해줘야함
 	NewTilePtr->SetActorLocation(TileLocation + TileSize.Half() + _Pivot + GetActorLocation() );
-	// NewTilePtr->SpriteRenderer->SetComponentLocation(TileLocation + TileSize.Half() + _Pivot);
 
 	FVector2D CurTileLocation = NewTilePtr->GetActorLocation();
 
@@ -153,6 +153,7 @@ std::vector<FIntPoint> ATileMap::FindMoveTile(ELogicType _FLogicType)
 	return LogicTiles;
 }
 
+// 인덱스 0, 0부터 EMoveType::YOU인 타일 찾기
 std::vector<FIntPoint> ATileMap::FindMoveTile()
 {
 	std::vector<FIntPoint> MoveTiles;
@@ -194,7 +195,7 @@ std::vector<FIntPoint> ATileMap::FindMoveTile()
 
 void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 {
-	CurHistorys.clear();
+	CurHistories.clear();
 
 	std::vector<FIntPoint> YouTiles = FindMoveTile();
 
@@ -204,11 +205,11 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 	}
 
 	// 이동한 타일이 있으면
-	if (0 != CurHistorys.size())
+	if (0 != CurHistories.size())
 	{
-		LastHistorys = CurHistorys;
+		LastHistories = CurHistories;
 
-		Historys.push_back(CurHistorys);
+		Histories.push_back(CurHistories);
 
 		ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 		TGameMode->SetState(EGameState::ACTION);
@@ -228,8 +229,10 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	std::map<int, Tile*>& CurMap = AllTiles[_CurIndex.Y][_CurIndex.X];
 	std::map<int, Tile*>& NextMap = AllTiles[NextIndex.Y][NextIndex.X];
 
+	// 모든 타일층을 돌면서
 	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 	{
+		// CurMap의 i층에 타일이 있어?
 		if (false == CurMap.contains(i))
 		{
 			continue;
@@ -251,6 +254,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			continue;
 		}
 
+		// 다음 타일이 비어있어?
 		bool IsEmpty = IsVoid(NextIndex);
 
 		if (true == IsEmpty)
@@ -260,7 +264,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			NewH.Prev = _CurIndex;
 			NewH.Next = NextIndex;
 
-			CurHistorys.push_back(NewH);
+			CurHistories.push_back(NewH);
 			// FVector2D NextPos = IndexToTileLocation(NextIndex);
 			// CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 			
@@ -337,6 +341,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	return;
 }
 
+// 다음 인덱스에 타일이 존재해?
 bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
@@ -401,13 +406,13 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 	return true;
 }
 
+// 다음 인덱스에 타일이 존재해?
 bool ATileMap::IsVoid(FIntPoint _NextIndex)
 {
 	std::map<int, Tile*>& NextMap = AllTiles[_NextIndex.Y][_NextIndex.X];
 
 	return NextMap.empty();
 }
-
 
 Tile* ATileMap::GetTileRef(FVector2D _Location, int _FloorOrder)
 {
@@ -431,6 +436,7 @@ Tile* ATileMap::GetTileRef(FIntPoint _Index, int _FloorOrder)
 	return AllTiles[_Index.Y][_Index.X][_FloorOrder];
 }
 
+// 모든 타일의 MoveType 리셋
 void ATileMap::MoveTileTypeReset()
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -467,6 +473,7 @@ void ATileMap::MoveTileTypeReset()
 	}
 }
 
+// 모든 타일의 StateType 리셋
 void ATileMap::MoveTileStateReset()
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -496,6 +503,7 @@ void ATileMap::MoveTileStateReset()
 	}
 }
 
+// 완성된 로직 조합 조건에 따른 해당 타일의 MoveType 변경
 void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -533,6 +541,7 @@ void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 	}
 }
 
+// 완성된 로직 조합 조건에 따른 해당 타일의 StateType 변경
 void  ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
@@ -653,11 +662,11 @@ void ATileMap::Action(float _DeltaTime)
 	if (1.0f <= ActionTime)
 	{
 		ActionTime = 1.0f;
-		LastHistorys.clear();
+		LastHistories.clear();
 	}
 
-	std::list<History>::iterator StartIter = LastHistorys.begin();
-	std::list<History>::iterator EndIter = LastHistorys.end();
+	std::list<History>::iterator StartIter = LastHistories.begin();
+	std::list<History>::iterator EndIter = LastHistories.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
@@ -681,6 +690,15 @@ void ATileMap::Action(float _DeltaTime)
 		// ActionTime 동안 StartPos에서 EndPos로 이동
 		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 		CurTIle->SetActorLocation(CurPos);
+
+		//{
+		//	// 나는 일단 옮겼어
+		//	NextMap[i] = CurMap[i];
+
+		//	// 나는 완전히 삭제되는것
+		//	std::map<int, Tile*>::iterator FindIter = CurMap.find(i);
+		//	CurMap.erase(FindIter);
+		//}
 	}
 }
 
@@ -691,14 +709,16 @@ void ATileMap::Undo(float _DeltaTime)
 	if (1.0f <= ActionTime)
 	{
 		ActionTime = 1.0f;
-		LastHistorys.clear();
+		LastHistories.clear();
 	}
 
-	std::list<History>::iterator StartIter = LastHistorys.begin();
-	std::list<History>::iterator EndIter = LastHistorys.end();
+	std::list<History>::iterator StartIter = LastHistories.end();
+	std::list<History>::iterator EndIter = LastHistories.begin();
 
-	for (; StartIter != EndIter; ++StartIter)
+	for (; StartIter != EndIter;)
 	{
+		--StartIter;
+
 		History& History = *StartIter;
 		Tile* CurTIle = History.Tile;
 
@@ -718,7 +738,7 @@ void ATileMap::Undo(float _DeltaTime)
 		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 		CurTIle->SetActorLocation(CurPos);
 
-		LastHistorys.clear();
+		StartIter = LastHistories.erase(StartIter);
 	}
 }
 

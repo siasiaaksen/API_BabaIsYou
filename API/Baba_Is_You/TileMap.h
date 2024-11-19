@@ -128,11 +128,11 @@ private:
 	////     Y         X            Ãþ
 	std::vector<std::vector<std::map<int, Tile*>>> AllTiles;
 
-	std::list<History> CurHistorys;
+	std::list<History> CurHistories;
 
-	std::list<std::list<History>> Historys;
+	std::list<std::list<History>> Histories;
 
-	std::list<History> LastHistorys;
+	std::list<History> LastHistories;
 
 	float ActionTime = 0.0f;
 };
