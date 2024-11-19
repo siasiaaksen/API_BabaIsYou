@@ -624,6 +624,12 @@ void ATestGameMode::TileCheck()
 			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
 				Tile* CurTile = TileMap->GetTileRef(CurIndex, i);
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
 				F = CurTile->FLogicType;
 				if (F != ELogicType::NONE)
 				{
@@ -638,6 +644,11 @@ void ATestGameMode::TileCheck()
 void ATestGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 {
 	Tile* CurTile = TileMap->GetTileRef(_Index + _Dir, _Order);
+
+	if (nullptr == CurTile)
+	{
+		return;
+	}
 
 	if (true == TileMap->IsIndexOver(_Index + _Dir))
 	{
@@ -656,6 +667,11 @@ void ATestGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 void ATestGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 {
 	Tile* CurTile = TileMap->GetTileRef(_Index, _Order);
+
+	if (nullptr ==CurTile)
+	{
+		return;
+	}
 
 	if (true == TileMap->IsIndexOver(_Index))
 	{

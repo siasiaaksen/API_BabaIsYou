@@ -6,7 +6,7 @@
 #include "ContentsEnum.h"
 
 
-class Tile : public ISerializObject
+class Tile : public AActor, public ISerializObject
 {
 public:
 	USpriteRenderer* SpriteRenderer;
@@ -54,6 +54,14 @@ public:
 	}
 };
 
+//class History
+//{
+//public:
+//	ATile* ATile;
+//	FIntPoint Prev;
+//	FIntPoint Next;
+//};
+
 class ATileMap : public AActor, public ISerializObject
 {
 public:
@@ -83,8 +91,6 @@ public:
 	// 다음 인덱스의 스프라이트가 있어? 모든 FloorOrder 체크
 	bool IsVoid(FIntPoint _NextIndex);
 
-	void CurTileToNextTile(Tile& _CurTile, Tile& _NextTile);
-
 	Tile* GetTileRef(FIntPoint _Index, int _FloorOrder);
 	Tile* GetTileRef(FVector2D _Location, int _FloorOrder);
 
@@ -112,6 +118,6 @@ private:
 	FVector2D TileSize;
 
 	////     Y         X            층
-	std::vector<std::vector<std::map<int, Tile>>> AllTiles;
+	std::vector<std::vector<std::map<int, Tile*>>> AllTiles;
 };
 
