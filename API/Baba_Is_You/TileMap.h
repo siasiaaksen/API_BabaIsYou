@@ -54,13 +54,13 @@ public:
 	}
 };
 
-//class History
-//{
-//public:
-//	ATile* ATile;
-//	FIntPoint Prev;
-//	FIntPoint Next;
-//};
+class History
+{
+public:
+	Tile* Tile;
+	FIntPoint Prev;
+	FIntPoint Next;
+};
 
 class ATileMap : public AActor, public ISerializObject
 {
@@ -111,6 +111,14 @@ public:
 	void DeathTileToAlive();
 	void DeathTile();
 
+	void Action(float _DeltaTime);
+	void Undo(float _DeltaTime);
+
+	bool IsActionEnd()
+	{
+		return ActionTime >= 1.0f;
+	}
+
 protected:
 
 private:
@@ -119,5 +127,13 @@ private:
 
 	////     Y         X            Ãþ
 	std::vector<std::vector<std::map<int, Tile*>>> AllTiles;
+
+	std::list<History> CurHistorys;
+
+	std::list<std::list<History>> Historys;
+
+	std::list<History> LastHistorys;
+
+	float ActionTime = 0.0f;
 };
 

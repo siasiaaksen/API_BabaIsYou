@@ -24,7 +24,7 @@ void ATestGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	State = EGameState::INGAME;
+	State = EGameState::SELECT;
 	Scale = { 33, 18 };
 	CreateStageInit(Scale);
 
@@ -60,7 +60,8 @@ void ATestGameMode::BeginPlay()
 
 	// ObjectTileMap
 	{
-		TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		// TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 0, 1 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 6, 14 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("RockObject.png", { 0, 17 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("WallObject.png", { 14, 14 }, 0, static_cast<int>(EFloorOrder::WALLOBJECT), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);
@@ -570,7 +571,7 @@ void ATestGameMode::BeginPlay()
 	}
 }
 
-void ATestGameMode::Move()
+void ATestGameMode::MoveCheck()
 {
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
@@ -590,6 +591,11 @@ void ATestGameMode::Move()
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('Z'))
+	{
+		SetState(EGameState::UNDO);
 	}
 }
 
@@ -695,13 +701,34 @@ void ATestGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 	return;
 }
 
+void ATestGameMode::Action(float _DeltaTime)
+{
+	TileMap->Action(_DeltaTime);
+	
+	if (true == TileMap->IsActionEnd())
+	{
+		State = EGameState::SELECT;
+	}
+}
+
+void ATestGameMode::Undo(float _DeltaTime)
+{
+	TileMap->Undo(_DeltaTime);
+
+	if (true == TileMap->IsActionEnd())
+	{
+		State = EGameState::SELECT;
+	}
+}
+
 void ATestGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
 	switch (State)
 	{
-	case EGameState::INGAME:
+	case EGameState::SELECT:
+	// 타일 모든 상태 체크, 데이터 옮겨짐
 
 		// 만약 규칙이 깨진 타일이 생길 경우
 		// 따로 제거하지 않고
@@ -714,16 +741,16 @@ void ATestGameMode::Tick(float _DeltaTime)
 
 		// 다시 모든 TileCheck
 		TileCheck();
-		Move();
+		MoveCheck();
 
 		break;
-	case EGameState::DEATH:
-
-		if (true == UEngineInput::GetInst().IsDown('Z'))
-		{
-			TileMap->DeathTileToAlive();
-		}
-
+	case EGameState::ACTION:
+	// 액터, 랜더러 이동(눈에 보이는 것)
+		Action(_DeltaTime);
+		break;
+	case EGameState::UNDO:
+	// 되돌리기
+		Undo(_DeltaTime);
 		break;
 	default:
 		break;

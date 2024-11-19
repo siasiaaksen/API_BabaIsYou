@@ -4,6 +4,11 @@
 class UEngineMath
 {
 public:
+	static float Sqrt(float _Value)
+	{
+		return ::sqrtf(_Value);
+	}
+
 	template <typename DataType>
 	DataType ClampMax(DataType value, DataType maxValue)
 	{
@@ -25,6 +30,12 @@ public:
 			return maxValue;
 		else
 			return value;
+	}
+
+	template <typename DataType>
+	static DataType Lerp(DataType A, DataType B, DataType Alpha)
+	{
+		return A * (1 - Alpha) + B * Alpha;
 	}
 };
 
@@ -90,7 +101,34 @@ public:
 		return { X * 0.5f, Y * 0.5f };
 	}
 
+	float Length() const
+	{
+		return UEngineMath::Sqrt(X * X + Y * Y);
+	}
+
 	class FIntPoint ConvertToPoint() const;
+
+	static FVector2D Normalize(FVector2D _Value)
+	{
+		_Value.Normalize();
+		return _Value;
+	}
+
+	void Normalize()
+	{
+		float Len = Length();
+		if (0.0f < Len && false == isnan(Len))
+		{
+			X = X / Len;
+			Y = Y / Len;
+		}
+		return;
+	}
+
+	float Dot(const FVector2D& other) const
+	{
+		return X * other.X + Y * other.Y;
+	}
 
 	FVector2D operator*(float _Value) const
 	{
@@ -188,6 +226,15 @@ public:
 		Stream += std::to_string(Y);
 		Stream += "]";
 		return Stream;
+	}
+
+	static FVector2D Lerp(FVector2D _A, FVector2D _B, float _Alpha)
+	{
+		FVector2D Result;
+		_Alpha = UEngineMath::Clamp(_Alpha, 0.0f, 1.0f);
+		Result.X = UEngineMath::Lerp(_A.X, _B.X, _Alpha);
+		Result.Y = UEngineMath::Lerp(_A.Y, _B.Y, _Alpha);
+		return Result;
 	}
 };
 
@@ -299,6 +346,11 @@ public:
 		X += _Other.X;
 		Y += _Other.Y;
 		return *this;
+	}
+
+	FVector2D ConvertToVector()
+	{
+		return { static_cast<float>(X),static_cast<float>(Y) };
 	}
 };
 

@@ -10,8 +10,9 @@
 enum class EGameState
 {
 	NONE,
-	INGAME,
-	DEATH,
+	SELECT, // 유저가 뭔가를 하려는 단계
+	ACTION, // 유저가 선택한게 이루어지는 단계 이루어지면서 기록도 한다.
+	UNDO,
 	MAX,
 };
 
@@ -26,7 +27,7 @@ public:
 	ATestGameMode& operator=(const ATestGameMode& _Other) = delete;
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
-	void Move();
+	void MoveCheck();
 
 	bool IsLogicResult();
 
@@ -40,6 +41,9 @@ public:
 	}
 
 	void BeginPlay() override;
+
+	void Action(float _DeltaTime);
+	void Undo(float _DeltaTime);
 
 protected:
 	void Tick(float _DeltaTime) override;
