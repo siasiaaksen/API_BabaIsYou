@@ -1,7 +1,9 @@
 #include "PreCompile.h"
 #include "TileMap.h"
 
+#include <EngineBase/EngineDebug.h>
 #include <EngineBase/EngineString.h>
+#include "TestGameMode.h"
 
 
 ATileMap::ATileMap()
@@ -212,18 +214,14 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		Tile& CurTile = CurMap[i];
 		Tile& NextTile = NextMap[i];
 		
+		EStateType CurStateType = CurTile.StateType;
 		EMoveType CurMoveType = CurTile.MoveType;
+		USpriteRenderer* CurSprite = CurTile.SpriteRenderer;
 
 		if (CurMoveType != EMoveType::YOU && CurMoveType != EMoveType::PUSH)
 		{
 			continue;
 		}
-
-		USpriteRenderer* CurSprite = CurTile.SpriteRenderer;
-		ELogicType CurFLogicType = CurTile.FLogicType;
-		EVLogicType CurSLogicType = CurTile.SLogicType;
-		ELogicType CurTLogicType = CurTile.TLogicType;
-		int CurOrder = CurTile.FloorOrder;
 
 		if (nullptr == CurSprite)
 		{
@@ -241,7 +239,51 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		else
 		{
 			TileMove(NextIndex, _MoveIndex);
-			
+
+			for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
+			{
+				if (EMoveType::YOU == CurMap[i].MoveType && EStateType::DEFEAT == NextMap[j].StateType)
+				{
+					CurMap[i].DeathState = EDeathState::DEATH;
+					DeathTile();
+					ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					TGameMode->SetState(EGameState::DEATH);
+					return;
+				}
+
+				else if (static_cast<int>(EFloorOrder::TEXT) != CurMap[i].FloorOrder && EStateType::SINK == NextMap[j].StateType)
+				{
+					CurMap[i].DeathState = EDeathState::DEATH;
+					DeathTile();
+					ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					TGameMode->SetState(EGameState::DEATH);
+					return;
+				}
+
+				else if (EStateType::MELT == CurMap[i].StateType && EStateType::HOT == NextMap[j].StateType)
+				{
+					CurMap[i].DeathState = EDeathState::DEATH;
+					DeathTile();
+					ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					TGameMode->SetState(EGameState::DEATH);
+					return;
+				}
+
+				else if (EMoveType::YOU == CurMap[i].MoveType && EStateType::WIN == NextMap[j].StateType)
+				{
+					FVector2D NextPos = IndexToTileLocation(NextIndex);
+					CurSprite->SetComponentLocation(NextPos + TileSize.Half());
+					CurTileToNextTile(CurTile, NextTile);
+
+					UEngineDebug::OutPutString("게임 클리어");
+					ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					TGameMode->SetState(EGameState::DEATH);
+					return;
+				}
+
+				continue;
+			}
+
 			FVector2D NextPos = IndexToTileLocation(NextIndex);
 			CurSprite->SetComponentLocation(NextPos + TileSize.Half());
 			CurTileToNextTile(CurTile, NextTile);
@@ -378,6 +420,32 @@ void ATileMap::MoveTileTypeReset()
 				{
 					CurTile.MoveType = EMoveType::PUSH;
 				}
+
+				CurTile.DeathState = EDeathState::ALIVE;
+			}
+		}
+	}
+}
+
+void ATileMap::MoveTileStateReset()
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				CurTile.StateType = EStateType::NONE;
+
+				CurTile.DeathState = EDeathState::ALIVE;
 			}
 		}
 	}
@@ -404,11 +472,15 @@ void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 					continue;
 				}
 
+				if (EMoveType::PUSH == CurTile.MoveType)
+				{
+					continue;
+				}
+
 				CurTile.MoveType = _MoveType;
 			}
 		}
 	}
-
 }
 
 void  ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
@@ -436,7 +508,59 @@ void  ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
 			}
 		}
 	}
+}
 
+void ATileMap::DeathTileToAlive()
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				if (CurTile.DeathState == EDeathState::DEATH)
+				{
+					ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					TGameMode->SetState(EGameState::INGAME);
+					CurTile.DeathState = EDeathState::ALIVE;
+					CurTile.SpriteRenderer->SetActive(true);
+				}
+			}
+		}
+	}
+}
+
+void ATileMap::DeathTile()
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile>& VectorX = VectorY[x];
+
+			std::map<int, Tile>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile& CurTile = StartLeftIter->second;
+
+				if (CurTile.DeathState == EDeathState::DEATH)
+				{
+					CurTile.SpriteRenderer->SetActive(false);
+				}
+			}
+		}
+	}
 }
 
 void ATileMap::Serialize(UEngineSerializer& _Ser)

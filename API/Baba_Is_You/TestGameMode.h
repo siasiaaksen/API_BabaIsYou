@@ -7,6 +7,14 @@
 #include "ContentsEnum.h"
 
 
+enum class EGameState
+{
+	NONE,
+	INGAME,
+	DEATH,
+	MAX,
+};
+
 class ATestGameMode : public ABabaMapGameMode
 {
 public:
@@ -25,6 +33,11 @@ public:
 	void TileCheck();
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
 	void LastTileCheck(FIntPoint _Index, int _Order);
+
+	void SetState(EGameState _State)
+	{
+		State = _State;
+	}
 
 	void BeginPlay() override;
 
@@ -50,6 +63,7 @@ private:
 
 	std::list<std::function<void()>> TileCombine;
 
+	EGameState State;
 	// 사운드 테스트
 	//USoundPlayer BGMPlayer;
 };

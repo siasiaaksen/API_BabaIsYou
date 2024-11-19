@@ -20,7 +20,7 @@ enum class EMoveType
 	YOU,
 	PUSH,
 	STOP,
-	Max,
+	MAX,
 };
 
 enum class EStateType
@@ -31,7 +31,15 @@ enum class EStateType
 	HOT,
 	MELT,
 	SINK,
-	Max,
+	MAX,
+};
+
+enum class EDeathState
+{
+	NONE,
+	DEATH,
+	ALIVE,
+	MAX,
 };
 
 enum class ELogicType
