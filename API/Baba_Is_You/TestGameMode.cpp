@@ -592,10 +592,14 @@ void ATestGameMode::MoveCheck()
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
 	}
+}
 
+void ATestGameMode::UndoCheck()
+{
 	if (true == UEngineInput::GetInst().IsDown('Z'))
 	{
 		State = EGameState::UNDO;
+		TileMap->SetActionTime(0.0f);
 	}
 }
 
@@ -742,6 +746,7 @@ void ATestGameMode::Tick(float _DeltaTime)
 		// 다시 모든 TileCheck
 		TileCheck();
 		MoveCheck();
+		UndoCheck();
 
 		break;
 	case EGameState::ACTION:

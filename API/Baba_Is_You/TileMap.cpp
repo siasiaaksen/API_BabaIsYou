@@ -204,6 +204,8 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
+	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	
 	// 이동한 타일이 있으면
 	if (0 != CurHistories.size())
 	{
@@ -211,7 +213,6 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 
 		Histories.push_back(CurHistories);
 
-		ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 		TGameMode->SetState(EGameState::ACTION);
 		ActionTime = 0.0f;
 	}
@@ -265,22 +266,6 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			NewH.Next = NextIndex;
 
 			CurHistories.push_back(NewH);
-			// FVector2D NextPos = IndexToTileLocation(NextIndex);
-			// CurSprite->SetComponentLocation(NextPos + TileSize.Half());
-			
-			// 이 부분 수정 : Undo할 때 문제 상황 발생할 수 있음
-			// 먼저 옮기는 게 아니라 이동하면서 옮겨지게
-			{
-				// 나는 일단 옮겼어
-				NextMap[i] = CurMap[i];
-
-				// 나는 완전히 삭제되는것
-				std::map<int, Tile*>::iterator FindIter = CurMap.find(i);
-				CurMap.erase(FindIter);
-			}
-
-			// 결과를 통해서 벌어지는
-			// 포인터나 데이터의 변화까지 다 끝나있어
 		}
 		else
 		{
@@ -657,13 +642,36 @@ void ATileMap::DeSerialize(UEngineSerializer& _Ser)
 
 void ATileMap::Action(float _DeltaTime)
 {
-	ActionTime += _DeltaTime * 4.0f;
+	ActionTime += _DeltaTime * 10.0f;
 
+	// ActionTime이 끝난 후
 	if (1.0f <= ActionTime)
 	{
+		std::list<History>::iterator StartIter = LastHistories.begin();
+		std::list<History>::iterator EndIter = LastHistories.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			History& History = *StartIter;
+
+			Tile* CurTile = History.Tile;
+			int CurFloorOrder = CurTile->FloorOrder;
+
+			History.Prev; // 지워
+			History.Next; // 생성
+
+			AllTiles[History.Next.Y][History.Next.X][CurFloorOrder] = AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder];
+
+			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Prev.Y][History.Prev.X].find(CurFloorOrder);
+			AllTiles[History.Prev.Y][History.Prev.X].erase(FindIter);
+		}
+
 		ActionTime = 1.0f;
 		LastHistories.clear();
+		return;
 	}
+
+	// ActionTime동안 이동하면서 벌어지는
 
 	std::list<History>::iterator StartIter = LastHistories.begin();
 	std::list<History>::iterator EndIter = LastHistories.end();
@@ -690,55 +698,84 @@ void ATileMap::Action(float _DeltaTime)
 		// ActionTime 동안 StartPos에서 EndPos로 이동
 		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 		CurTIle->SetActorLocation(CurPos);
-
-		//{
-		//	// 나는 일단 옮겼어
-		//	NextMap[i] = CurMap[i];
-
-		//	// 나는 완전히 삭제되는것
-		//	std::map<int, Tile*>::iterator FindIter = CurMap.find(i);
-		//	CurMap.erase(FindIter);
-		//}
 	}
 }
 
 void ATileMap::Undo(float _DeltaTime)
 {
-	ActionTime += _DeltaTime * 4.0f;
+	ActionTime += _DeltaTime * 10.0f;
 
 	if (1.0f <= ActionTime)
 	{
+		std::list<std::list<History>>::iterator BeginIter = Histories.end();
+
+		if (Histories.empty())
+		{
+			return;
+		}
+
+		--BeginIter;
+		std::list<History> LastHistories = Histories.back();
+		std::list<History>::iterator StartIter = LastHistories.begin();
+		std::list<History>::iterator EndIter = LastHistories.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			History& History = *StartIter;
+
+			Tile* CurTile = History.Tile;
+			int CurFloorOrder = CurTile->FloorOrder;
+
+			History.Next; // 지워
+			History.Prev; // 생성
+
+			AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder] = AllTiles[History.Next.Y][History.Next.X][CurFloorOrder];
+
+			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Next.Y][History.Next.X].find(CurFloorOrder);
+			AllTiles[History.Next.Y][History.Next.X].erase(FindIter);
+		}
+
 		ActionTime = 1.0f;
 		LastHistories.clear();
+		Histories.erase(BeginIter);
+		return;
 	}
 
-	std::list<History>::iterator StartIter = LastHistories.end();
-	std::list<History>::iterator EndIter = LastHistories.begin();
+	std::list<std::list<History>>::iterator StartIter = Histories.end();
+	std::list<std::list<History>>::iterator EndIter = Histories.begin();
 
-	for (; StartIter != EndIter;)
+	if (!Histories.empty())
 	{
 		--StartIter;
 
-		History& History = *StartIter;
-		Tile* CurTIle = History.Tile;
+		std::list<History>& InnerList = *StartIter;
 
-		if (nullptr == CurTIle)
+		std::list<History>::iterator InnerStartIter = InnerList.begin();
+		std::list<History>::iterator InnerEndIter = InnerList.end();
+
+		for (; InnerStartIter != InnerEndIter; ++InnerStartIter)
 		{
-			MSGASSERT("말도 안되는 상황입니다.");
+			History& History = *InnerStartIter;
+			Tile* CurTIle = History.Tile;
+
+			if (nullptr == CurTIle)
+			{
+				MSGASSERT("말도 안되는 상황입니다.");
+			}
+
+			FVector2D StartPos = History.Next.ConvertToVector();
+			FVector2D EndPos = History.Prev.ConvertToVector();
+			StartPos *= TileSize;
+			EndPos *= TileSize;
+
+			StartPos += GetActorLocation() + TileSize.Half();
+			EndPos += GetActorLocation() + TileSize.Half();
+
+			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+			CurTIle->SetActorLocation(CurPos);
 		}
-		
-		FVector2D StartPos = History.Next.ConvertToVector();
-		FVector2D EndPos = History.Prev.ConvertToVector();
-		StartPos *= TileSize;
-		EndPos *= TileSize;
 
-		StartPos += GetActorLocation() + TileSize.Half();
-		EndPos += GetActorLocation() + TileSize.Half();
-
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		CurTIle->SetActorLocation(CurPos);
-
-		StartIter = LastHistories.erase(StartIter);
+		//Histories.erase(StartIter);
 	}
 }
 

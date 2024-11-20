@@ -28,6 +28,7 @@ public:
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
 	void MoveCheck();
+	void UndoCheck();
 
 	bool IsLogicResult();
 
@@ -38,6 +39,11 @@ public:
 	void SetState(EGameState _State)
 	{
 		State = _State;
+	}
+
+	EGameState GetState() const
+	{
+		return State;
 	}
 
 	void BeginPlay() override;

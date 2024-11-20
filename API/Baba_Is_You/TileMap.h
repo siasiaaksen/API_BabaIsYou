@@ -119,6 +119,11 @@ public:
 		return ActionTime >= 1.0f;
 	}
 
+	void SetActionTime(float _ActionTime)
+	{
+		ActionTime = _ActionTime;
+	}
+
 protected:
 
 private:
