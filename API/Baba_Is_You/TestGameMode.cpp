@@ -48,7 +48,7 @@ void ATestGameMode::BeginPlay()
 		TileMap->SetTile("Push.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
 		TileMap->SetTile("WallText.png", { 6, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
 		TileMap->SetTile("GrassText.png", { 16, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
-		TileMap->SetTile("Stop.png", { 16, 8 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
+		TileMap->SetTile("Stop.png", { 22, 15 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
 		TileMap->SetTile("SkullText.png", { 24, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::SKULL, EVLogicType::NONE, ELogicType::SKULL);
 		TileMap->SetTile("Defeat.png", { 26, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::DEFEAT);
 		TileMap->SetTile("LavaText.png", { 6, 9 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::LAVA, EVLogicType::NONE, ELogicType::LAVA);
@@ -61,7 +61,7 @@ void ATestGameMode::BeginPlay()
 	// ObjectTileMap
 	{
 		// TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("BabaObject.png", { 13, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 21, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 6, 14 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("RockObject.png", { 0, 17 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("WallObject.png", { 14, 14 }, 0, static_cast<int>(EFloorOrder::WALLOBJECT), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);
@@ -571,8 +571,41 @@ void ATestGameMode::BeginPlay()
 	}
 }
 
+bool ATestGameMode::IsMove()
+{
+	for (int y = 0; y < Scale.Y; y++)
+	{
+		for (int x = 0; x < Scale.X; x++)
+		{
+			FIntPoint Index = FIntPoint(x, y);
+
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+			{
+				Tile* CurTile = TileMap->GetTileRef(Index, i);
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (EMoveType::YOU != CurTile->MoveType)
+				{
+					continue;
+				}
+
+				return true == CurTile->IsMove;
+			}
+		}
+	}
+}
+
 void ATestGameMode::MoveCheck()
 {
+	if (false == IsMove())
+	{
+		return;
+	}
+	
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::UP);
@@ -708,7 +741,7 @@ void ATestGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 void ATestGameMode::Action(float _DeltaTime)
 {
 	TileMap->Action(_DeltaTime);
-	
+
 	if (true == TileMap->IsActionEnd())
 	{
 		State = EGameState::SELECT;
@@ -745,6 +778,7 @@ void ATestGameMode::Tick(float _DeltaTime)
 
 		// 다시 모든 TileCheck
 		TileCheck();
+
 		MoveCheck();
 		UndoCheck();
 

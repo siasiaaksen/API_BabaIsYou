@@ -2,6 +2,8 @@
 #include "TileMap.h"
 
 #include <EngineBase/EngineDebug.h>
+#include <EngineCore/EngineCoreDebug.h>
+#include <EnginePlatform/EngineInput.h>
 #include <EngineBase/EngineString.h>
 #include "TestGameMode.h"
 
@@ -12,6 +14,51 @@ ATileMap::ATileMap()
 
 ATileMap::~ATileMap()
 {
+}
+
+void ATileMap::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ATileMap::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+
+		for (int x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile*>& VectorX = VectorY[x];
+
+			std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile* CurTile = StartLeftIter->second;
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (EMoveType::YOU == CurTile->MoveType)
+				{
+					UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
+					UEngineDebug::CoreOutPutString("YouTilePos : " + CurTile->GetActorLocation().ToString());
+				}
+			}
+		}
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('Q'))
+	{
+		UEngineDebug::SwitchIsDebug();
+	}
 }
 
 void ATileMap::Create(FIntPoint _Count, FVector2D _TileSize)
@@ -122,7 +169,8 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	NewTilePtr->Pivot = _Pivot;
 	NewTilePtr->Scale = _SpriteScale;
 	NewTilePtr->SpriteIndex = _SpriteIndex;
-	NewTilePtr->SpriteLocation = CurTileLocation;
+	NewTilePtr->Location = CurTileLocation;
+	NewTilePtr->Index = LocationToIndex(CurTileLocation);
 	std::string UpperName = UEngineString::ToUpper(_Sprite);
 	NewTilePtr->SpriteName = UpperName;
 }
@@ -195,7 +243,8 @@ std::vector<FIntPoint> ATileMap::FindMoveTile()
 
 void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 {
-	CurHistories.clear();
+	Histories.push_back(std::list<History>());
+	LastHistories = &Histories.back();
 
 	std::vector<FIntPoint> YouTiles = FindMoveTile();
 
@@ -207,14 +256,13 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 	
 	// 이동한 타일이 있으면
-	if (0 != CurHistories.size())
+	if (0 != LastHistories->size())
 	{
-		LastHistories = CurHistories;
-
-		Histories.push_back(CurHistories);
-
 		TGameMode->SetState(EGameState::ACTION);
 		ActionTime = 0.0f;
+	}
+	else {
+		Histories.pop_back();
 	}
 }
 
@@ -265,7 +313,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			NewH.Prev = _CurIndex;
 			NewH.Next = NextIndex;
 
-			CurHistories.push_back(NewH);
+			LastHistories->push_back(NewH);
 		}
 		else
 		{
@@ -278,37 +326,54 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 					continue;
 				}
 
-				//if (EMoveType::YOU == CurMap[i]->MoveType && EStateType::DEFEAT == NextMap[j]->StateType)
+				if (EMoveType::YOU == CurMap[i]->MoveType && EStateType::DEFEAT == NextMap[j]->StateType)
+				{
+					History NewH;
+					NewH.Tile = CurTile;
+					NewH.Prev = _CurIndex;
+					NewH.Next = NextIndex;
+
+					LastHistories->push_back(NewH);
+
+					return;
+				}
+				//else if (static_cast<int>(EFloorOrder::TEXT) != CurMap[i]->FloorOrder && EStateType::SINK == NextMap[j]->StateType)
 				//{
-				//	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
-				//	TGameMode->SetState(EGameState::ACTION);
+				//	History NewH;
+				//	NewH.Tile = CurTile;
+				//	NewH.Prev = _CurIndex;
+				//	NewH.Next = NextIndex;
+
+				//	LastHistories->push_back(NewH);
+
 				//	return;
 				//}
-			//	else if (static_cast<int>(EFloorOrder::TEXT) != CurMap[i].FloorOrder && EStateType::SINK == NextMap[j].StateType)
-			//	{
-			//		if (EMoveType::YOU == CurMap[i].MoveType)
-			//		{
-			//			ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
-			//			TGameMode->SetState(EGameState::ACTION);
-			//		}
+				//else if (EStateType::MELT == CurMap[i]->StateType && EStateType::HOT == NextMap[j]->StateType)
+				//{
+				//	History NewH;
+				//	NewH.Tile = CurTile;
+				//	NewH.Prev = _CurIndex;
+				//	NewH.Next = NextIndex;
 
-			//		return;
-			//	}
-			//	else if (EStateType::MELT == CurMap[i].StateType && EStateType::HOT == NextMap[j].StateType)
-			//	{
-			//		ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
-			//		TGameMode->SetState(EGameState::ACTION);
-			//		return;
-			//	}
-			//	else if (EMoveType::YOU == CurMap[i].MoveType && EStateType::WIN == NextMap[j].StateType)
-			//	{
-			//		UEngineDebug::OutPutString("게임 클리어");
-			//		ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
-			//		TGameMode->SetState(EGameState::ACTION);
-			//		return;
-			//	}
+				//	LastHistories->push_back(NewH);
 
-			//	continue;
+				//	return;
+				//}
+				//else if (EMoveType::YOU == CurMap[i]->MoveType && EStateType::WIN == NextMap[j]->StateType)
+				//{
+				//	UEngineDebug::OutPutString("게임 클리어");
+
+				//	History NewH;
+				//	NewH.Tile = CurTile;
+				//	NewH.Prev = _CurIndex;
+				//	NewH.Next = NextIndex;
+
+				//	LastHistories->push_back(NewH);
+
+				//	return;
+				//}
+
+				//continue;
 			}
 
 			History NewH;
@@ -316,7 +381,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			NewH.Prev = _CurIndex;
 			NewH.Next = NextIndex;
 
-			CurHistories.push_back(NewH);
+			LastHistories->push_back(NewH);
 		}
 	}
 
@@ -586,13 +651,17 @@ void ATileMap::DeSerialize(UEngineSerializer& _Ser)
 
 void ATileMap::Action(float _DeltaTime)
 {
+	std::list<History>& Last = Histories.back();
+
+	LastHistories = &Last;
+
 	ActionTime += _DeltaTime * 10.0f;
 
 	// ActionTime이 끝난 후
 	if (1.0f <= ActionTime)
 	{
-		std::list<History>::iterator StartIter = LastHistories.begin();
-		std::list<History>::iterator EndIter = LastHistories.end();
+		std::list<History>::iterator StartIter = LastHistories->begin();
+		std::list<History>::iterator EndIter = LastHistories->end();
 
 		for (; StartIter != EndIter; ++StartIter)
 		{
@@ -608,24 +677,42 @@ void ATileMap::Action(float _DeltaTime)
 
 			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Prev.Y][History.Prev.X].find(CurFloorOrder);
 			AllTiles[History.Prev.Y][History.Prev.X].erase(FindIter);
+
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+			{
+				std::map<int, Tile*> OtherTile = AllTiles[History.Next.Y][History.Next.X];
+
+				if (false == OtherTile.contains(i))
+				{
+					continue;
+				}
+
+				if (EMoveType::YOU == CurTile->MoveType && EStateType::DEFEAT == OtherTile[i]->StateType)
+				{
+					History.State = EState::DEFEAT;
+					CurTile->SpriteRenderer->SetActive(false);
+					CurTile->IsMove = false;
+					//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+					//TGameMode->SetState(EGameState::UNDO);
+				}
+			}
 		}
 
 		ActionTime = 1.0f;
-		LastHistories.clear();
 		return;
 	}
 
 	// ActionTime동안 이동하면서 벌어지는
 
-	std::list<History>::iterator StartIter = LastHistories.begin();
-	std::list<History>::iterator EndIter = LastHistories.end();
+	std::list<History>::iterator StartIter = LastHistories->begin();
+	std::list<History>::iterator EndIter = LastHistories->end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		History& History = *StartIter;
-		Tile* CurTIle = History.Tile;
+		Tile* CurTile = History.Tile;
 
-		if (nullptr == CurTIle)
+		if (nullptr == CurTile)
 		{
 			MSGASSERT("말도 안되는 상황입니다.");
 		}
@@ -641,7 +728,8 @@ void ATileMap::Action(float _DeltaTime)
 
 		// ActionTime 동안 StartPos에서 EndPos로 이동
 		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		CurTIle->SetActorLocation(CurPos);
+		CurTile->SetActorLocation(CurPos);
+		CurTile->Location = GetActorLocation();
 	}
 }
 
@@ -659,6 +747,7 @@ void ATileMap::Undo(float _DeltaTime)
 		}
 
 		--BeginIter;
+
 		std::list<History> LastHistories = Histories.back();
 		std::list<History>::iterator StartIter = LastHistories.begin();
 		std::list<History>::iterator EndIter = LastHistories.end();
@@ -677,11 +766,17 @@ void ATileMap::Undo(float _DeltaTime)
 
 			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Next.Y][History.Next.X].find(CurFloorOrder);
 			AllTiles[History.Next.Y][History.Next.X].erase(FindIter);
+
+			if (History.State == EState::DEFEAT)
+			{
+				CurTile->SpriteRenderer->SetActive(true);
+				CurTile->IsMove = true;
+			}
 		}
 
 		ActionTime = 1.0f;
 		LastHistories.clear();
-		Histories.erase(BeginIter);
+		Histories.pop_back();
 		return;
 	}
 
@@ -700,9 +795,9 @@ void ATileMap::Undo(float _DeltaTime)
 		for (; InnerStartIter != InnerEndIter; ++InnerStartIter)
 		{
 			History& History = *InnerStartIter;
-			Tile* CurTIle = History.Tile;
+			Tile* CurTile = History.Tile;
 
-			if (nullptr == CurTIle)
+			if (nullptr == CurTile)
 			{
 				MSGASSERT("말도 안되는 상황입니다.");
 			}
@@ -716,7 +811,8 @@ void ATileMap::Undo(float _DeltaTime)
 			EndPos += GetActorLocation() + TileSize.Half();
 
 			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-			CurTIle->SetActorLocation(CurPos);
+			CurTile->SetActorLocation(CurPos);
+			CurTile->Location = GetActorLocation();
 		}
 	}
 }

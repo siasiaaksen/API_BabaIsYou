@@ -15,7 +15,8 @@ public:
 
 	FVector2D Scale;
 	FVector2D Pivot;
-	FVector2D SpriteLocation;
+	FVector2D Location;
+	FIntPoint Index;
 
 	std::string SpriteName;
 	int SpriteIndex;
@@ -53,12 +54,20 @@ public:
 	}
 };
 
+enum class EState
+{
+	NONE,
+	DEFEAT,
+};
+
 class History
 {
 public:
 	Tile* Tile;
 	FIntPoint Prev;
 	FIntPoint Next;
+	EState State = EState::NONE;
+
 };
 
 class ATileMap : public AActor, public ISerializObject
@@ -120,6 +129,9 @@ public:
 		ActionTime = _ActionTime;
 	}
 
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
+
 protected:
 
 private:
@@ -129,11 +141,9 @@ private:
 	////     Y         X            Ãþ
 	std::vector<std::vector<std::map<int, Tile*>>> AllTiles;
 
-	std::list<History> CurHistories;
-
 	std::list<std::list<History>> Histories;
 
-	std::list<History> LastHistories;
+	std::list<History>* LastHistories;
 
 	float ActionTime = 0.0f;
 };

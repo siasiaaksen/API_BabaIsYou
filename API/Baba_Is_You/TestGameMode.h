@@ -27,6 +27,8 @@ public:
 	ATestGameMode& operator=(const ATestGameMode& _Other) = delete;
 	ATestGameMode& operator=(ATestGameMode&& _Other) noexcept = delete;
 
+	bool IsMove();
+
 	void MoveCheck();
 	void UndoCheck();
 

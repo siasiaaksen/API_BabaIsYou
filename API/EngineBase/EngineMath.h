@@ -352,6 +352,18 @@ public:
 	{
 		return { static_cast<float>(X),static_cast<float>(Y) };
 	}
+
+	std::string ToString()
+	{
+		std::string Stream;
+
+		Stream += "X : [";
+		Stream += std::to_string(X);
+		Stream += "] Y : [";
+		Stream += std::to_string(Y);
+		Stream += "]";
+		return Stream;
+	}
 };
 
 class UColor
