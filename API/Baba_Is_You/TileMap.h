@@ -20,7 +20,6 @@ public:
 	std::string SpriteName;
 	int SpriteIndex;
 
-	EDeathState DeathState = EDeathState::NONE;
 	EMoveType MoveType = EMoveType::NONE;
 	EStateType StateType = EStateType::NONE;
 	ELogicType FLogicType = ELogicType::NONE;
@@ -107,9 +106,6 @@ public:
 
 	void ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType);
 	void ChangeStateMode(ELogicType _FLogicType, EStateType _StateType);
-
-	void DeathTileToAlive();
-	void DeathTile();
 
 	void Action(float _DeltaTime);
 	void Undo(float _DeltaTime);

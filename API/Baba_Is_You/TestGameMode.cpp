@@ -61,7 +61,7 @@ void ATestGameMode::BeginPlay()
 	// ObjectTileMap
 	{
 		// TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("BabaObject.png", { 0, 1 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 13, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 6, 14 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("RockObject.png", { 0, 17 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("WallObject.png", { 14, 14 }, 0, static_cast<int>(EFloorOrder::WALLOBJECT), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);

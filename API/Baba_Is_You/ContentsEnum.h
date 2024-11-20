@@ -34,14 +34,6 @@ enum class EStateType
 	MAX,
 };
 
-enum class EDeathState
-{
-	NONE,
-	DEATH,
-	ALIVE,
-	MAX,
-};
-
 enum class ELogicType
 {
 	NONE,
