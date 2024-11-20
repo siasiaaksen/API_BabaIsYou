@@ -687,11 +687,15 @@ void ATileMap::Action(float _DeltaTime)
 					continue;
 				}
 
-				if (EMoveType::YOU == CurTile->MoveType && EStateType::DEFEAT == OtherTile[i]->StateType)
+				if (/*EMoveType::YOU == CurTile->MoveType && */EStateType::DEFEAT == OtherTile[i]->StateType)
 				{
 					History.State = EState::DEFEAT;
 					CurTile->SpriteRenderer->SetActive(false);
 					CurTile->IsMove = false;
+					//if (EMoveType::PUSH == CurTile->MoveType && static_cast<int>(EFloorOrder::TEXT) != CurTile->FloorOrder)
+					//{
+					//	CurTile->MoveType = EMoveType::NONE;
+					//}
 					//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 					//TGameMode->SetState(EGameState::UNDO);
 				}

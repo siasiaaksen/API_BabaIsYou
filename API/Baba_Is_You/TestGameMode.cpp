@@ -43,9 +43,10 @@ void ATestGameMode::BeginPlay()
 		//TileMap->SetTile("Is.png", { 17, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("You.png", { 2, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::YOU);
 		TileMap->SetTile("FlagText.png", { 12, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::FLAG, EVLogicType::NONE, ELogicType::FLAG);
-		TileMap->SetTile("Win.png", { 14, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
+		//TileMap->SetTile("Win.png", { 14, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
 		//TileMap->SetTile("RockText.png", { 1, 2 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
-		TileMap->SetTile("Push.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
+		TileMap->SetTile("Push.png", { 14, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
+		//TileMap->SetTile("Push.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
 		TileMap->SetTile("WallText.png", { 6, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
 		TileMap->SetTile("GrassText.png", { 16, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
 		TileMap->SetTile("Stop.png", { 22, 15 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
@@ -588,15 +589,25 @@ bool ATestGameMode::IsMove()
 					continue;
 				}
 
-				if (EMoveType::YOU != CurTile->MoveType)
+				if (static_cast<int>(EFloorOrder::TEXT) == CurTile->FloorOrder)
 				{
 					continue;
 				}
 
-				return true == CurTile->IsMove;
+				if (EMoveType::YOU == CurTile->MoveType)
+				{
+					return true == CurTile->IsMove;
+				}
+
+				//if (EMoveType::PUSH == CurTile->MoveType)
+				//{
+				//	return true == CurTile->IsMove;
+				//}
 			}
 		}
 	}
+
+	return false;
 }
 
 void ATestGameMode::MoveCheck()
