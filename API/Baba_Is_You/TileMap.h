@@ -57,7 +57,8 @@ public:
 enum class EState
 {
 	NONE,
-	DEFEAT,
+	DEACTIVEONE,
+	DEACTIVEBOTH,
 };
 
 class History
@@ -146,5 +147,7 @@ private:
 	std::list<History>* LastHistories;
 
 	float ActionTime = 0.0f;
+
+	std::vector<Tile*> DeactiveObject;
 };
 
