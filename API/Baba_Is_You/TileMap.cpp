@@ -606,6 +606,7 @@ void ATileMap::SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite)
 
 				if (CurTile->FLogicType == _CurSprite)
 				{
+					CurTile->IsChange = true;
 					int SpriteIndex = CurTile->SpriteIndex;
 					std::string_view SpriteName = FindSpriteName(_ChangeSprite);
 					std::string UpperName = UEngineString::ToUpper(SpriteName);
@@ -880,13 +881,14 @@ void ATileMap::Undo(float _DeltaTime)
 
 							FIntPoint Index = FIntPoint(x, y);
 
-							if (CurTile->FLogicType == History.NextSprite)
+							if (CurTile->FLogicType == History.NextSprite && CurTile->IsChange == true)
 							{
 								int SpriteIndex = CurTile->SpriteIndex;
 								std::string_view SpriteName = FindSpriteName(History.PrevSprite);
 								std::string UpperName = UEngineString::ToUpper(SpriteName);
 								CurTile->FLogicType = History.PrevSprite;
 								CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
+								CurTile->IsChange = false;
 							}
 						}
 					}

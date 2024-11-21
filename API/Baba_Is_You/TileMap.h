@@ -11,6 +11,7 @@ class Tile : public AActor, public ISerializObject
 public:
 	USpriteRenderer* SpriteRenderer;
 	bool IsMove = true;
+	bool IsChange = false;
 	int FloorOrder = -1;
 
 	FVector2D Scale;

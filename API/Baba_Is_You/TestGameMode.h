@@ -32,6 +32,10 @@ public:
 	void MoveCheck();
 	void UndoCheck();
 
+	void OO_IS_ATTMoveSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, EMoveType _MoveType);
+	void OO_IS_ATTStateSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, EStateType _StateType);
+	void MM_IS_NNSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, ELogicType _ChangeObject);
+
 	bool IsLogicResult();
 
 	void TileCheck();
