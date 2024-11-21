@@ -21,6 +21,8 @@ public:
 	std::string SpriteName;
 	int SpriteIndex;
 
+	ELogicType CurObjectType = ELogicType::NONE;
+
 	EMoveType MoveType = EMoveType::NONE;
 	EStateType StateType = EStateType::NONE;
 	ELogicType FLogicType = ELogicType::NONE;
@@ -67,8 +69,11 @@ public:
 	Tile* Tile;
 	FIntPoint Prev;
 	FIntPoint Next;
+
 	EState State = EState::NONE;
 
+	ELogicType PrevSprite = ELogicType::NONE;
+	ELogicType NextSprite = ELogicType::NONE;
 };
 
 class ATileMap : public AActor, public ISerializObject
@@ -89,7 +94,7 @@ public:
 	void SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pivot, FVector2D _SpriteScale, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicType = ELogicType::NONE);
 	void SetTile(std::string_view _Sprite, FIntPoint _Index, int _SpriteIndex, int _FloorOrder, ERenderOrder _Order, ELogicType _FLogicType = ELogicType::NONE, EVLogicType _SLogicType = EVLogicType::NONE, ELogicType _TLogicTyp = ELogicType::NONE);
 
-	std::vector<FIntPoint> FindMoveTile(ELogicType _FLogicType);
+	std::string_view FindSpriteName(ELogicType _FLogicType);
 	std::vector<FIntPoint> FindMoveTile();
 
 	void AllTileMoveCheck(FIntPoint _MoveIndex);
@@ -116,6 +121,7 @@ public:
 
 	void ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType);
 	void ChangeStateMode(ELogicType _FLogicType, EStateType _StateType);
+	void SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite);
 
 	void Action(float _DeltaTime);
 	void Undo(float _DeltaTime);
@@ -132,6 +138,11 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+
+	void PushHistory(History _History)
+	{
+		Histories.back().push_back(_History);
+	}
 
 protected:
 

@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "TileMap.h"
 
+#include <EngineCore/EngineAPICore.h>
 #include <EngineBase/EngineDebug.h>
 #include <EngineCore/EngineCoreDebug.h>
 #include <EnginePlatform/EngineInput.h>
@@ -175,30 +176,93 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	NewTilePtr->SpriteName = UpperName;
 }
 
-std::vector<FIntPoint> ATileMap::FindMoveTile(ELogicType _FLogicType)
+std::string_view ATileMap::FindSpriteName(ELogicType _FLogicType)
 {
-	std::vector<FIntPoint> LogicTiles;
 	FIntPoint Index;
 
-	for (int x = 0; x < TileCount.X; ++x)
+	switch (_FLogicType)
 	{
-		for (int y = 0; y < TileCount.Y; ++y)
-		{
-			for (int a = 0; a < static_cast<int>(EFloorOrder::MAX); a++)
-			{
-				if (AllTiles[y][x][a]->FLogicType == _FLogicType)
-				{
-					Index.X = x;
-					Index.Y = y;
-					LogicTiles.push_back(Index);
-				}
-
-				continue;
-			}
-		}
+	case ELogicType::NONE:
+		return "NONE";
+		break;
+	case ELogicType::BABA:
+		return "BabaText.png";
+		break;
+	case ELogicType::FLAG:
+		return "FlagText.png";
+		break;
+	case ELogicType::ROCK:
+		return "RockText.png";
+		break;
+	case ELogicType::WALL:
+		return "WallText.png";
+		break;
+	case ELogicType::GRASS:
+		return "GrassText.png";
+		break;
+	case ELogicType::SKULL:
+		return "SkullText.png";
+		break;
+	case ELogicType::LAVA:
+		return "LavaText.png";
+		break;
+	case ELogicType::WATER:
+		return "WaterText.png";
+		break;
+	case ELogicType::YOU:
+		return "You.png";
+		break;
+	case ELogicType::WIN:
+		return "Win.png";
+		break;
+	case ELogicType::PUSH:
+		return "Push.png";
+		break;
+	case ELogicType::STOP:
+		return "Stop.png";
+		break;
+	case ELogicType::DEFEAT:
+		return "Defeat.png";
+		break;
+	case ELogicType::HOT:
+		return "Hot.png";
+		break;
+	case ELogicType::MELT:
+		return "Melt.png";
+		break;
+	case ELogicType::SINK:
+		return "Sink.png";
+		break;
+	case ELogicType::MAX:
+		return "MAX";
+		break;
+	case ELogicType::BABAOBJECT:
+		return "BabaObject.png";
+		break;
+	case ELogicType::FLAGOBJECT:
+		return "FlagObject.png";
+		break;
+	case ELogicType::ROCKOBJECT:
+		return "RockObject.png";
+		break;
+	case ELogicType::WALLOBJECT:
+		return "WallObject.png";
+		break;
+	case ELogicType::GRASSOBJECT:
+		return "GrassObject.png";
+		break;
+	case ELogicType::SKULLOBJECT:
+		return "SkullObject.png";
+		break;
+	case ELogicType::LAVAOBJECT:
+		return "LavaObject.png";
+		break;
+	case ELogicType::WATEROBJECT:
+		return "WaterObject.png";
+		break;
+	default:
+		break;
 	}
-
-	return LogicTiles;
 }
 
 // 인덱스 0, 0부터 EMoveType::YOU인 타일 찾기
@@ -518,8 +582,43 @@ void ATileMap::MoveTileStateReset()
 	}
 }
 
+// MM의 타일 스프라이트 -> NN의 타일 스프라이트로 교체
+void ATileMap::SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite)
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile*>& VectorX = VectorY[x];
+
+			std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile* CurTile = StartLeftIter->second;
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (CurTile->FLogicType == _CurSprite)
+				{
+					int SpriteIndex = CurTile->SpriteIndex;
+					std::string_view SpriteName = FindSpriteName(_ChangeSprite);
+					std::string UpperName = UEngineString::ToUpper(SpriteName);
+					CurTile->FLogicType = _ChangeSprite;
+					CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
+				}
+			}
+		}
+	}
+}
+
 // 완성된 로직 조합 조건에 따른 해당 타일의 MoveType 변경
-void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
+void ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
 	{
@@ -562,7 +661,7 @@ void  ATileMap::ChangeMoveMode(ELogicType _FLogicType, EMoveType _MoveType)
 }
 
 // 완성된 로직 조합 조건에 따른 해당 타일의 StateType 변경
-void  ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
+void ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
 {
 	for (size_t y = 0; y < AllTiles.size(); y++)
 	{
@@ -665,46 +764,21 @@ void ATileMap::Action(float _DeltaTime)
 					continue;
 				}
 
-				if ((OtherTile[i]->StateType == EStateType::NONE) &&
-					false == OtherTile[i]->SpriteRenderer->IsActive())
-				{
-					CurTile->IsMove = true;
-				}
-
 				// DEFEAT
 				if (EMoveType::YOU == CurTile->MoveType && EStateType::DEFEAT == OtherTile[i]->StateType)
 				{
 					History.State = EState::DEACTIVEONE;
 					CurTile->SpriteRenderer->SetActive(false);
-					CurTile->IsMove = false;
 				}
 				// SINK
 				else if (EStateType::SINK == OtherTile[i]->StateType)
 				{
 					History.State = EState::DEACTIVEBOTH;
 
-					if (false == OtherTile[i]->SpriteRenderer->IsActive())
-					{
-						OtherTile[i]->StateType = EStateType::NONE;
-						CurTile->IsMove = true;
-						return;
-					}
-
 					if (OtherTile[i]->StateType == EStateType::SINK)
 					{
 						CurTile->SpriteRenderer->SetActive(false);
 						OtherTile[i]->SpriteRenderer->SetActive(false);
-
-						if (CurTile->MoveType == EMoveType::YOU)
-						{
-							CurTile->IsMove = false;
-						}
-						else
-						{
-							CurTile->MoveType = EMoveType::NONE;
-						}
-
-						OtherTile[i]->StateType = EStateType::NONE;
 					}
 				}
 				// HOT
@@ -712,13 +786,13 @@ void ATileMap::Action(float _DeltaTime)
 				{
 					History.State = EState::DEACTIVEONE;
 					CurTile->SpriteRenderer->SetActive(false);
-					CurTile->IsMove = false;
 				}
 				// WIN
 				else if (EMoveType::YOU == CurTile->MoveType && EStateType::WIN == OtherTile[i]->StateType)
 				{
 					History.State = EState::DEACTIVEONE;
-					CurTile->IsMove = false;
+					// 맵 이동
+					UEngineAPICore::GetCore()->OpenLevel("Map");
 				}
 			}
 		}
@@ -780,12 +854,55 @@ void ATileMap::Undo(float _DeltaTime)
 		for (; StartIter != EndIter; ++StartIter)
 		{
 			History& History = *StartIter;
-
 			Tile* CurTile = History.Tile;
+
+			if (ELogicType::NONE != History.PrevSprite || ELogicType::NONE != History.NextSprite)
+			{
+				for (int y = 0; y < AllTiles.size(); y++)
+				{
+					std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+
+					for (int x = 0; x < VectorY.size(); x++)
+					{
+						std::map<int, Tile*>& VectorX = VectorY[x];
+
+						std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+						std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+						for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+						{
+							Tile* CurTile = StartLeftIter->second;
+
+							if (nullptr == CurTile)
+							{
+								continue;
+							}
+
+							FIntPoint Index = FIntPoint(x, y);
+
+							if (CurTile->FLogicType == History.NextSprite)
+							{
+								int SpriteIndex = CurTile->SpriteIndex;
+								std::string_view SpriteName = FindSpriteName(History.PrevSprite);
+								std::string UpperName = UEngineString::ToUpper(SpriteName);
+								CurTile->FLogicType = History.PrevSprite;
+								CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
+							}
+						}
+					}
+				}
+			}
+
+			if (nullptr == CurTile)
+			{
+				continue;
+			}
+
 			int CurFloorOrder = CurTile->FloorOrder;
 
 			History.Next; // 지워
 			History.Prev; // 생성
+
 
 			AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder] = AllTiles[History.Next.Y][History.Next.X][CurFloorOrder];
 
@@ -802,7 +919,7 @@ void ATileMap::Undo(float _DeltaTime)
 					continue;
 				}
 
-				// DEFEAT, HOT, WIN
+				// DEFEAT, HOT
 				if (History.State == EState::DEACTIVEONE)
 				{
 					if (false == CurTile->SpriteRenderer->IsActive())
@@ -816,21 +933,8 @@ void ATileMap::Undo(float _DeltaTime)
 				else if (History.State == EState::DEACTIVEBOTH)
 				{
 					CurTile->SpriteRenderer->SetActive(true);
-
-					if (CurTile->MoveType == EMoveType::YOU)
-					{
-						CurTile->IsMove = true;
-					}
-					else
-					{
-						CurTile->MoveType = EMoveType::PUSH;
-					}
-
-					if (OtherTile[i]->StateType != EStateType::NONE)
-					{
-						OtherTile[i]->SpriteRenderer->SetActive(true);
-						OtherTile[i]->StateType != EStateType::SINK;
-					}
+					CurTile->IsMove = true;
+					OtherTile[i]->SpriteRenderer->SetActive(true);
 				}
 			}
 		}
@@ -857,6 +961,11 @@ void ATileMap::Undo(float _DeltaTime)
 		{
 			History& History = *InnerStartIter;
 			Tile* CurTile = History.Tile;
+
+			if (ELogicType::NONE != History.PrevSprite || ELogicType::NONE != History.NextSprite)
+			{
+				continue;
+			}
 
 			if (nullptr == CurTile)
 			{

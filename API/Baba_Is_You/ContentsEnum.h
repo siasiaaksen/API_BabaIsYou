@@ -34,6 +34,20 @@ enum class EStateType
 	MAX,
 };
 
+enum class ELinkSprite
+{
+	NONE,
+	BABA,
+	FLAG,
+	ROCK,
+	WALL,
+	GRASS,
+	SKULL,
+	LAVA,
+	WATER,
+	MAX,
+};
+
 enum class ELogicType
 {
 	NONE,
