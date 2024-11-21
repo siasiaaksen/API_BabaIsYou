@@ -49,8 +49,11 @@ void ATileMap::Tick(float _DeltaTime)
 
 				if (EMoveType::YOU == CurTile->MoveType)
 				{
+					int CurTileX = CurTile->GetActorLocation().iX() - TileSize.iX();
+					int CurTileY = CurTile->GetActorLocation().iY() - TileSize.iY();
+					FIntPoint CurTileIndex = LocationToIndex(FVector2D(CurTileX, CurTileY));
 					UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
-					UEngineDebug::CoreOutPutString("YouTilePos : " + CurTile->GetActorLocation().ToString());
+					UEngineDebug::CoreOutPutString("YouTilePos : " + CurTileIndex.ToString());
 				}
 			}
 		}
@@ -171,7 +174,7 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	NewTilePtr->Scale = _SpriteScale;
 	NewTilePtr->SpriteIndex = _SpriteIndex;
 	NewTilePtr->Location = CurTileLocation;
-	NewTilePtr->Index = LocationToIndex(CurTileLocation);
+	NewTilePtr->Index = LocationToIndex(CurTileLocation - TileSize);
 	std::string UpperName = UEngineString::ToUpper(_Sprite);
 	NewTilePtr->SpriteName = UpperName;
 }
@@ -382,6 +385,8 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		else
 		{
 			TileMove(NextIndex, _MoveIndex);
+
+			int a = 0;
 
 			for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 			{
@@ -817,19 +822,42 @@ void ATileMap::Action(float _DeltaTime)
 			MSGASSERT("말도 안되는 상황입니다.");
 		}
 
-		//                   1.0
-		FVector2D StartPos = History.Prev.ConvertToVector();
-		FVector2D EndPos = History.Next.ConvertToVector();
-		StartPos *= TileSize;
-		EndPos *= TileSize;
+		std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
+		Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
+		
+		if (CurTile->MoveType == EMoveType::YOU)
+		{
+			if (CurrentLayer.contains(static_cast<int>(EFloorOrder::TEXT)))
+			{
+				if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
+				{
+					CurTextTile->IsMove = false;
+					CurTextTile->MoveType = EMoveType::NONE;
+				}
+			}
+		}
 
-		StartPos += GetActorLocation() + TileSize.Half();
-		EndPos += GetActorLocation() + TileSize.Half();
+		if (CurTile->MoveType != EMoveType::NONE)
+		{
+			FVector2D StartPos = History.Prev.ConvertToVector();
+			FVector2D EndPos = History.Next.ConvertToVector();
+			StartPos *= TileSize;
+			EndPos *= TileSize;
 
-		// ActionTime 동안 StartPos에서 EndPos로 이동
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		CurTile->SetActorLocation(CurPos);
-		CurTile->Location = GetActorLocation();
+			StartPos += GetActorLocation() + TileSize.Half();
+			EndPos += GetActorLocation() + TileSize.Half();
+
+			// ActionTime 동안 StartPos에서 EndPos로 이동
+			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+			CurTile->SetActorLocation(CurPos);
+			CurTile->Location = GetActorLocation();
+			CurTile->Index = LocationToIndex(GetActorLocation() - TileSize);
+		}
+		else
+		{
+			CurTile->MoveType = EMoveType::PUSH;
+			int a = 0;
+		}
 	}
 }
 
@@ -985,6 +1013,7 @@ void ATileMap::Undo(float _DeltaTime)
 			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 			CurTile->SetActorLocation(CurPos);
 			CurTile->Location = GetActorLocation();
+			CurTile->Index = LocationToIndex(GetActorLocation() - TileSize);
 		}
 	}
 }
