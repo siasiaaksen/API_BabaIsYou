@@ -52,12 +52,41 @@ AActor::~AActor()
 	Components.clear();
 }
 
+void AActor::Tick(float _DeltaTime)
+{
+	if (true == IsDebug())
+	{
+		FVector2D Pos = GetActorLocation();
+		FVector2D CameraPos = GetWorld()->GetCameraPos();
+
+		FTransform Trans;
+		Trans.Location = Pos - CameraPos;
+		Trans.Scale = { 6, 6 };
+	}
+
+	TimeEventer.Update(_DeltaTime);
+
+	std::list<class UActorComponent*>::iterator StartIter = Components.begin();
+	std::list<class UActorComponent*>::iterator EndIter = Components.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (false == (*StartIter)->IsActive())
+		{
+			continue;
+		}
+
+		(*StartIter)->ComponentTick(_DeltaTime);
+	}
+}
+
 void AActor::ReleaseTimeCheck(float _DeltaTime)
 {
 	UObject::ReleaseTimeCheck(_DeltaTime);
 
 	std::list<UActorComponent*>::iterator StartIter = Components.begin();
 	std::list<UActorComponent*>::iterator EndIter = Components.end();
+
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		UActorComponent* Component = *StartIter;
@@ -71,6 +100,7 @@ void AActor::ReleaseCheck(float _DeltaTime)
 
 	std::list<UActorComponent*>::iterator StartIter = Components.begin();
 	std::list<UActorComponent*>::iterator EndIter = Components.end();
+
 	for (; StartIter != EndIter;)
 	{
 		UActorComponent* Component = *StartIter;

@@ -5,14 +5,15 @@
 
 
 std::map<std::string, UEngineSound*> UEngineSound::Sounds;
-
 FMOD::System* SoundSystem = nullptr;
+
 
 #ifdef _DEBUG
 #pragma comment(lib, "fmodL_vc.lib")
 #else
 #pragma comment(lib, "fmod_vc.lib")
 #endif
+
 
 class SoundInit
 {

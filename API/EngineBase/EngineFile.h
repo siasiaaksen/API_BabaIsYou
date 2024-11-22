@@ -5,6 +5,7 @@
 
 #include "EnginePath.h"
 
+
 const int MAXPATH = 256;
 
 class UEngineFile : public UEnginePath

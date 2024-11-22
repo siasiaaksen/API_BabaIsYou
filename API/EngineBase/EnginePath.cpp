@@ -2,6 +2,7 @@
 #include "EnginePath.h"
 #include "EngineDebug.h"
 
+
 UEnginePath::UEnginePath()
 	: Path(std::filesystem::current_path())
 {
@@ -89,9 +90,10 @@ bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 	}
 
 	bool Result = false;
-	std::filesystem::path CurPath = DummyPath.Path;
 
+	std::filesystem::path CurPath = DummyPath.Path;
 	std::filesystem::path Root = CurPath.root_path();
+
 	while (true)
 	{
 		CurPath = DummyPath.Path;

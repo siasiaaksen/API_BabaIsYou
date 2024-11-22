@@ -188,10 +188,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="2DCollision.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="EngineCoreDebug.h">
       <SubType>
       </SubType>
@@ -235,10 +231,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="2DCollision.cpp">
       <SubType>
       </SubType>
     </ClCompile>

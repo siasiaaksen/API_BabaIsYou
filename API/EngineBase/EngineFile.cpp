@@ -11,7 +11,6 @@ UEngineFile::UEngineFile()
 UEngineFile::UEngineFile(const std::string& _Path)
 	: UEnginePath(std::string_view(_Path.c_str()))
 {
-
 }
 
 UEngineFile::UEngineFile(std::string_view _Path)

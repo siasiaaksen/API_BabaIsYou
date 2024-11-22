@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineDebug.h"
 
+
 namespace UEngineDebug
 {
 	void OutPutString(const std::string& Text)

@@ -1,8 +1,10 @@
 #pragma once
 #include <EngineBase/Object.h>
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/TimeEvent.h>
 
 #include "EngineSprite.h"
+
 
 class AActor : public UObject
 {
@@ -20,7 +22,7 @@ public:
 	AActor& operator=(AActor&& _Other) noexcept = delete;
 
 	virtual void BeginPlay() {}
-	virtual void Tick(float _DeltaTime) {}
+	virtual void Tick(float _DeltaTime);
 
 	virtual void LevelChangeStart() {}
 	virtual void LevelChangeEnd() {}
@@ -66,6 +68,7 @@ public:
 	}
 
 protected:
+	UTimeEvent TimeEventer;
 
 private:
 	static void ComponentBeginPlay();
@@ -77,7 +80,6 @@ private:
 	void ReleaseTimeCheck(float _DeltaTime) override;
 
 	class ULevel* World = nullptr;
-
 	FTransform Transform;
 
 	std::list<class UActorComponent*> Components;

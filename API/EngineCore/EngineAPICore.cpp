@@ -92,6 +92,8 @@ void UEngineAPICore::Tick()
 	DeltaTimer.TimeCheck();
 	float DeltaTime = DeltaTimer.GetDeltaTime();
 
+	DeltaTime *= GlobalTimeScale;
+
 	UEngineSound::Update();
 
 	UEngineInput::GetInst().KeyCheck(DeltaTime);

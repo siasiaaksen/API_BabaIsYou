@@ -17,11 +17,13 @@ namespace UEngineDebug
 
 	FVector2D EngineTextPos = FVector2D::ZERO;
 
+
 #ifdef _DEBUG
 	bool IsDebug = true;
 #else
 	bool IsDebug = false;
 #endif
+
 
 	void SetIsDebug(bool _IsDebug)
 	{

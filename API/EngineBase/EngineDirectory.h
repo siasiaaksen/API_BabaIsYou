@@ -2,6 +2,7 @@
 #include <vector>
 #include "EnginePath.h"
 
+
 class UEngineDirectory : public UEnginePath
 {
 public:
@@ -16,7 +17,6 @@ public:
 	//UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
 
 	std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
-
 	std::vector<class UEngineDirectory> GetAllDirectory();
 
 protected:

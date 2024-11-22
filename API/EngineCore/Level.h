@@ -89,6 +89,30 @@ public:
 		return dynamic_cast<ConvertType*>(GameMode);
 	}
 
+	template<typename ActorType>
+	std::list<ActorType*> GetActorsFromClass()
+	{
+		std::list<ActorType*> Result;
+
+		std::list<AActor*>::iterator StartIter = AllActors.begin();
+		std::list<AActor*>::iterator EndIter = AllActors.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AActor* CurActor = *StartIter;
+
+			ActorType* ConvertActor = dynamic_cast<ActorType*>(CurActor);
+
+			if (nullptr == ConvertActor)
+			{
+				continue;
+			}
+
+			Result.push_back(ConvertActor);
+		}
+		return Result;
+	}
+
 protected:
 
 private:
@@ -119,13 +143,10 @@ private:
 	void ChangeRenderOrder(class USpriteRenderer* _Renderer, int _PrevOrder);
 
 	class AGameMode* GameMode = nullptr;
-
 	class AActor* MainPawn = nullptr;
 
 	std::list<AActor*> AllActors;
-
 	std::list<AActor*> DestroyValue;
-
 	std::list<AActor*> BeginPlayList;
 
 	bool IsCameraToMainPawn = true;

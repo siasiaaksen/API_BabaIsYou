@@ -8,6 +8,7 @@
 #include <EngineBase/EngineDirectory.h>
 #include <EngineCore/EngineAPICore.h>
 
+
 UImageManager::UImageManager()
 {
 }
@@ -262,7 +263,8 @@ void UImageManager::CuttingSprite(std::string_view _NewSpriteName, std::string_v
 		Sprite = new UEngineSprite();;
 		Sprites.insert({ SpriteUpperName, Sprite });
 	}
-	else {
+	else 
+	{
 		Sprite = Sprites[SpriteUpperName];
 	}
 
@@ -420,6 +422,7 @@ void UImageManager::CreateCutSprite(std::string_view _SearchKeyName, std::string
 			insertInst.Location = CuttingPos;
 			NewSprite->PushData(NewImage, insertInst);
 		}
+
 		CuttingPos.X = 0.f;
 	}
 }

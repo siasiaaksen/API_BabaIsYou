@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace UEngineDebug
 {
 	void SetIsDebug(bool _IsDebug);

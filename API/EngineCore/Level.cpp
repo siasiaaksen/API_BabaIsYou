@@ -36,7 +36,7 @@ ULevel::~ULevel()
 
 		if (nullptr != CurActor)
 		{
-			delete* StartIter;
+			delete *StartIter;
 		}
 	}
 }
@@ -235,8 +235,6 @@ void ULevel::Release(float _DeltaTime)
 			}
 
 			DestroyValue.push_back(CurActor);
-
-			// delete CurActor;
 			StartIter = AllActors.erase(StartIter);
 		}
 	}

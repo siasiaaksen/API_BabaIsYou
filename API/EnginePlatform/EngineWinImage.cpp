@@ -148,9 +148,7 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 		std::wstring WidePath = UEngineString::AnsiToUnicode(_Path);
 
 		Gdiplus::Image* pImage = Gdiplus::Image::FromFile(WidePath.c_str());
-
 		Gdiplus::Bitmap* pBitMap = reinterpret_cast<Gdiplus::Bitmap*>(pImage->Clone());
-
 		Gdiplus::Status stat = pBitMap->GetHBITMAP(Gdiplus::Color(255, 255, 0, 255), &NewBitmap);
 
 		if (Gdiplus::Status::Ok != stat)
@@ -162,7 +160,6 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 		delete pBitMap;
 		delete pImage;
 	}
-
 	else if (".BMP" == UpperExt)
 	{
 		HANDLE NewHandle = LoadImageA(nullptr, _Path.data(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -184,4 +181,30 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 	ImageDC = NewImageDC;
 
 	GetObject(hBitMap, sizeof(BITMAP), &Info);
+}
+
+UColor UEngineWinImage::GetColor(FIntPoint _Point, UColor _DefaultColor = UColor::WHITE)
+{
+	if (0 > _Point.X)
+	{
+		return _DefaultColor;
+	}
+
+	if (0 > _Point.Y)
+	{
+		return _DefaultColor;
+	}
+
+	if (Info.bmWidth <= _Point.X)
+	{
+		return _DefaultColor;
+	}
+
+	if (Info.bmHeight <= _Point.Y)
+	{
+		return _DefaultColor;
+	}
+
+	UColor ResultColor = ::GetPixel(ImageDC, _Point.X, _Point.Y);
+	return ResultColor;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 
+
 class UEngineTimer
 {
 public:
@@ -25,9 +26,7 @@ public:
 	}
 
 	void TimeStart();
-
 	float End();
-
 	double DEnd();
 
 protected:

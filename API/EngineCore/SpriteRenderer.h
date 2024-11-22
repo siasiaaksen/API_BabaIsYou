@@ -9,8 +9,10 @@
 enum class PivotType
 {
 	Center,
+	Left,
 	Bot,
 	Top,
+	LeftTop,
 };
 
 class USpriteRenderer : public USceneComponent
@@ -86,10 +88,7 @@ public:
 		IsCameraEffect = _Value;
 	}
 
-	void SetPivot(FVector2D _Pivot)
-	{
-		Pivot = _Pivot;
-	}
+	void SetPivotValue(FVector2D _Value);
 
 	void SetPivotType(PivotType _Type);
 
@@ -134,7 +133,8 @@ private:
 
 	unsigned char Alpha = 255;
 
-	FVector2D Pivot = FVector2D::ZERO;
+	FVector2D Pivot = FVector2D(0.5f, 0.5f);
+	//FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;
 

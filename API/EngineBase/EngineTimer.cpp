@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineTimer.h"
 
+
 UEngineTimer::UEngineTimer()
 {
 	QueryPerformanceFrequency(&Count);
@@ -9,8 +10,6 @@ UEngineTimer::UEngineTimer()
 
 	QueryPerformanceCounter(&PrevTime);
 	QueryPerformanceCounter(&CurTime);
-
-	int a = 0;
 }
 
 UEngineTimer::~UEngineTimer()

@@ -60,6 +60,7 @@ public:
 
 	static USoundPlayer Play(std::string_view _Name);
 	static UEngineSound* Find(std::string_view _Name);
+
 	static void Release();
 	static void Update();
 
