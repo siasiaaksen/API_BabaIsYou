@@ -57,6 +57,8 @@ public:
 	void Action(float _DeltaTime);
 	void Undo(float _DeltaTime);
 
+	void GameState(float _DeltaTime);
+
 protected:
 	void Tick(float _DeltaTime) override;
 

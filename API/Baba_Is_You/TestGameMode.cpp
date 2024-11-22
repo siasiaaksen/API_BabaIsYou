@@ -36,7 +36,7 @@ void ATestGameMode::BeginPlay()
 	{
 		TileMap->SetTile("BabaText.png", { 1, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::BABA, EVLogicType::NONE, ELogicType::BABA);
 		TileMap->SetTile("Is.png", { 2, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
-		TileMap->SetTile("Is.png", { 7, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
+		TileMap->SetTile("Is.png", { 17, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("Is.png", { 16, 7 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("Is.png", { 1, 4 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
 		TileMap->SetTile("Is.png", { 13, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::IS, ELogicType::NONE);
@@ -48,7 +48,7 @@ void ATestGameMode::BeginPlay()
 		TileMap->SetTile("Win.png", { 14, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::WIN);
 		TileMap->SetTile("RockText.png", { 12, 1 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::ROCK, EVLogicType::NONE, ELogicType::ROCK);
 		//TileMap->SetTile("Push.png", { 14, 3 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
-		TileMap->SetTile("Push.png", { 8, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
+		TileMap->SetTile("Push.png", { 18, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::PUSH);
 		TileMap->SetTile("WallText.png", { 1, 2 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::WALL, EVLogicType::NONE, ELogicType::WALL);
 		TileMap->SetTile("GrassText.png", { 16, 6 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::GRASS, EVLogicType::NONE, ELogicType::GRASS);
 		TileMap->SetTile("Stop.png", { 16, 14 }, 1, static_cast<int>(EFloorOrder::TEXT), ERenderOrder::UPPER, ELogicType::NONE, EVLogicType::NONE, ELogicType::STOP);
@@ -64,7 +64,7 @@ void ATestGameMode::BeginPlay()
 	// ObjectTileMap
 	{
 		// TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("BabaObject.png", { 1, 1 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 15, 13 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 13, 14 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 13, 15 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("RockObject.png", { 0, 17 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
@@ -504,19 +504,17 @@ void ATestGameMode::Undo(float _DeltaTime)
 	}
 }
 
-void ATestGameMode::Tick(float _DeltaTime)
+void ATestGameMode::GameState(float _DeltaTime)
 {
-	Super::Tick(_DeltaTime);
-
 	switch (State)
 	{
 	case EGameState::SELECT:
-	// 타일 모든 상태 체크, 데이터 옮겨짐
+		// 타일 모든 상태 체크, 데이터 옮겨짐
 
-		// 만약 규칙이 깨진 타일이 생길 경우
-		// 따로 제거하지 않고
-		// 매 프레임마다 clear되고
-		//YouTiles.clear();
+			// 만약 규칙이 깨진 타일이 생길 경우
+			// 따로 제거하지 않고
+			// 매 프레임마다 clear되고
+			//YouTiles.clear();
 		TileCombine.clear();
 
 		TileMap->MoveTileTypeReset();
@@ -530,16 +528,23 @@ void ATestGameMode::Tick(float _DeltaTime)
 
 		break;
 	case EGameState::ACTION:
-	// 액터, 랜더러 이동(눈에 보이는 것)
+		// 액터, 랜더러 이동(눈에 보이는 것)
 		Action(_DeltaTime);
 		break;
 	case EGameState::UNDO:
-	// 되돌리기
+		// 되돌리기
 		Undo(_DeltaTime);
 		break;
 	default:
 		break;
 	}
+}
+
+void ATestGameMode::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	GameState(_DeltaTime);
 }
 
 

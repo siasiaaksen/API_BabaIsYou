@@ -698,7 +698,15 @@ void ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
 					continue;
 				}
 
-				CurTile->StateType = _StateType;
+				if (EMoveType::PUSH == CurTile->MoveType)
+				{
+					CurTile->StateType = EStateType::NONE;
+				}
+				else
+				{
+					CurTile->StateType = _StateType;
+				}
+
 			}
 		}
 	}
