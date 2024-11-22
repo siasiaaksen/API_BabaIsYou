@@ -756,10 +756,13 @@ void ATileMap::Action(float _DeltaTime)
 			History.Prev; // 지워
 			History.Next; // 생성
 
-			AllTiles[History.Next.Y][History.Next.X][CurFloorOrder] = AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder];
+			if (CurTile->MoveType != EMoveType::NONE)
+			{
+				AllTiles[History.Next.Y][History.Next.X][CurFloorOrder] = AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder];
 
-			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Prev.Y][History.Prev.X].find(CurFloorOrder);
-			AllTiles[History.Prev.Y][History.Prev.X].erase(FindIter);
+				std::map<int, Tile*>::iterator FindIter = AllTiles[History.Prev.Y][History.Prev.X].find(CurFloorOrder);
+				AllTiles[History.Prev.Y][History.Prev.X].erase(FindIter);
+			}
 
 			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
@@ -834,6 +837,7 @@ void ATileMap::Action(float _DeltaTime)
 				{
 					CurTextTile->IsMove = false;
 					CurTextTile->MoveType = EMoveType::NONE;
+					int a = 0;
 				}
 			}
 		}
@@ -855,11 +859,6 @@ void ATileMap::Action(float _DeltaTime)
 			CurTile->Location = CurTilePos;
 			FIntPoint TileIndex = LocationToIndex(CurTilePos - TileSize);
 			CurTile->Index = TileIndex;
-		}
-		else
-		{
-			CurTile->MoveType = EMoveType::PUSH;
-			int a = 0;
 		}
 	}
 }
