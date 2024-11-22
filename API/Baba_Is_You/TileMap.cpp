@@ -821,14 +821,15 @@ void ATileMap::Action(float _DeltaTime)
 		{
 			MSGASSERT("말도 안되는 상황입니다.");
 		}
-
-		std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
-		Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
 		
 		if (CurTile->MoveType == EMoveType::YOU)
 		{
+			std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
+			
 			if (CurrentLayer.contains(static_cast<int>(EFloorOrder::TEXT)))
 			{
+				Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
+				
 				if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
 				{
 					CurTextTile->IsMove = false;
@@ -850,8 +851,10 @@ void ATileMap::Action(float _DeltaTime)
 			// ActionTime 동안 StartPos에서 EndPos로 이동
 			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 			CurTile->SetActorLocation(CurPos);
-			CurTile->Location = GetActorLocation();
-			CurTile->Index = LocationToIndex(GetActorLocation() - TileSize);
+			FVector2D CurTilePos = CurTile->GetActorLocation();
+			CurTile->Location = CurTilePos;
+			FIntPoint TileIndex = LocationToIndex(CurTilePos - TileSize);
+			CurTile->Index = TileIndex;
 		}
 		else
 		{
@@ -877,11 +880,13 @@ void ATileMap::Undo(float _DeltaTime)
 		--BeginIter;
 
 		std::list<History> LastHistories = Histories.back();
-		std::list<History>::iterator StartIter = LastHistories.begin();
-		std::list<History>::iterator EndIter = LastHistories.end();
+		std::list<History>::iterator StartIter = LastHistories.end();
+		std::list<History>::iterator EndIter = LastHistories.begin();
 
-		for (; StartIter != EndIter; ++StartIter)
+		for (; StartIter != EndIter;)
 		{
+			--StartIter;
+
 			History& History = *StartIter;
 			Tile* CurTile = History.Tile;
 
@@ -984,11 +989,13 @@ void ATileMap::Undo(float _DeltaTime)
 
 		std::list<History>& InnerList = *StartIter;
 
-		std::list<History>::iterator InnerStartIter = InnerList.begin();
-		std::list<History>::iterator InnerEndIter = InnerList.end();
+		std::list<History>::iterator InnerStartIter = InnerList.end();
+		std::list<History>::iterator InnerEndIter = InnerList.begin();
 
-		for (; InnerStartIter != InnerEndIter; ++InnerStartIter)
+		for (; InnerStartIter != InnerEndIter;)
 		{
+			--InnerStartIter;
+
 			History& History = *InnerStartIter;
 			Tile* CurTile = History.Tile;
 
@@ -1012,8 +1019,11 @@ void ATileMap::Undo(float _DeltaTime)
 
 			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
 			CurTile->SetActorLocation(CurPos);
-			CurTile->Location = GetActorLocation();
-			CurTile->Index = LocationToIndex(GetActorLocation() - TileSize);
+			FVector2D CurTilePos = CurTile->GetActorLocation();
+			CurTile->Location = CurTilePos;
+			FIntPoint TileIndex = LocationToIndex(CurTilePos - TileSize);
+			CurTile->Index = TileIndex;
+			int a = 0;
 		}
 	}
 }
