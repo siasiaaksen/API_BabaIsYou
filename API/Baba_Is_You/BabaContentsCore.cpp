@@ -13,6 +13,7 @@
 #include "MapGameMode.h"
 #include "PlayGameMode.h"
 #include "TestGameMode.h"
+#include "MapEditor.h"
 #include "Player.h"
 
 BabaContentsCore::BabaContentsCore()
@@ -92,7 +93,8 @@ void BabaContentsCore::BeginPlay()
 		UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
-		UEngineAPICore::GetCore()->OpenLevel("Test");
+		UEngineAPICore::GetCore()->CreateLevel<AMapEditor, AActor>("Editor");
+		UEngineAPICore::GetCore()->OpenLevel("Editor");
 	}
 
 	// 사운드 로드

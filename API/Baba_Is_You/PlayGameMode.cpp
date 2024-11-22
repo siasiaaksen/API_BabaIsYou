@@ -21,10 +21,6 @@ void APlayGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorld()->SetCameraToMainPawn(false);
-
-	ABackground* BG = GetWorld()->SpawnActor<ABackground>();
-	APlayMap* NewActor = GetWorld()->SpawnActor<APlayMap>();
-
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

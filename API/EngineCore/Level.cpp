@@ -234,9 +234,24 @@ void ULevel::Release(float _DeltaTime)
 				continue;
 			}
 
-			delete CurActor;
+			DestroyValue.push_back(CurActor);
+
+			// delete CurActor;
 			StartIter = AllActors.erase(StartIter);
 		}
+	}
+
+	{
+		std::list<AActor*>::iterator StartIter = DestroyValue.begin();
+		std::list<AActor*>::iterator EndIter = DestroyValue.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AActor* CurActor = *StartIter;
+			delete CurActor;
+		}
+
+		DestroyValue.clear();
 	}
 }
 

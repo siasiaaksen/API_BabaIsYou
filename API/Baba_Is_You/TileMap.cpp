@@ -15,6 +15,31 @@ ATileMap::ATileMap()
 
 ATileMap::~ATileMap()
 {
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+
+		for (int x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile*>& VectorX = VectorY[x];
+
+			std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile* CurTile = StartLeftIter->second;
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				CurTile->Destroy();
+
+			}
+		}
+	}
 }
 
 void ATileMap::BeginPlay()

@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MapEditor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BabaMapGameMode.h">
       <SubType>
       </SubType>
@@ -211,6 +215,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MapEditor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BabaMapGameMode.cpp">
       <SubType>
       </SubType>

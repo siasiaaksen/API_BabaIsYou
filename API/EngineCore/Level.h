@@ -124,6 +124,8 @@ private:
 
 	std::list<AActor*> AllActors;
 
+	std::list<AActor*> DestroyValue;
+
 	std::list<AActor*> BeginPlayList;
 
 	bool IsCameraToMainPawn = true;

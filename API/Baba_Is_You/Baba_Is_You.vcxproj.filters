@@ -49,6 +49,9 @@
     <ClInclude Include="BabaMapGameMode.h">
       <Filter>ContentsObject\GameMode\Global</Filter>
     </ClInclude>
+    <ClInclude Include="MapEditor.h">
+      <Filter>ContentsObject\GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="BabaMapGameMode.cpp">
       <Filter>ContentsObject\GameMode\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditor.cpp">
+      <Filter>ContentsObject\GameMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

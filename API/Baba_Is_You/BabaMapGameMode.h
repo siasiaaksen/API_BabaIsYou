@@ -15,7 +15,7 @@ public:
 	ABabaMapGameMode& operator=(const ABabaMapGameMode& _Other) = delete;
 	ABabaMapGameMode& operator=(ABabaMapGameMode&& _Other) noexcept = delete;
 
-	void CreateStageInit(FIntPoint _Scale);
+	void CreateStageInit(FIntPoint _Scale, bool _IsDestroy = false);
 
 protected:
 	FVector2D CenterPivot;
