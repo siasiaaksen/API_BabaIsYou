@@ -178,6 +178,12 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 		NewTilePtr->SpriteRenderer->SetComponentScale(TileSize);
 	}
 
+	if (nullptr == NewTilePtr->SpriteRenderer)
+	{
+		NewTilePtr->SpriteRenderer = NewTilePtr->CreateDefaultSubObject<USpriteRenderer>();
+		NewTilePtr->SpriteRenderer->SetComponentScale(TileSize);
+	}
+
 	// 타일의 스프라이트 랜더러 찾아서 스프라이트 세팅
 	USpriteRenderer* FindSprite = NewTilePtr->SpriteRenderer;
 	FindSprite->SetSprite(_Sprite, _SpriteIndex);

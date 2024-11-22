@@ -21,11 +21,6 @@ ABabaMapGameMode::~ABabaMapGameMode()
 
 void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale, bool _IsDestroy/* = false*/)
 {
-	if (_Scale.X > 33 || _Scale.X <= 1 || _Scale.Y > 18 || _Scale.Y <= 1)
-	{
-		return;
-	}
-
 	if (_IsDestroy && nullptr != BackgroundMap)
 	{
 		BackgroundMap->Destroy();
