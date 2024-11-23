@@ -108,11 +108,11 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 					{
 						CurAnimation->Events[CurIndex]();
 					}
-					else
-					{
-						CurAnimation->IsEnd = true;
-						--CurAnimation->CurIndex;
-					}
+				}
+				else
+				{
+					CurAnimation->IsEnd = true;
+					--CurAnimation->CurIndex;
 				}
 			}
 		}

@@ -144,6 +144,11 @@ public:
 	{
 		Histories.back().push_back(_History);
 	}
+	
+	FVector2D GetTileSize()
+	{
+		return TileSize;
+	}
 
 protected:
 

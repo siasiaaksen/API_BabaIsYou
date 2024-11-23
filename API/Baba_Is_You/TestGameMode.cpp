@@ -64,12 +64,12 @@ void ATestGameMode::BeginPlay()
 	// ObjectTileMap
 	{
 		// TileMap->SetTile("BabaObject.png", { 7, 14 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("BabaObject.png", { 15, 13 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("BabaObject.png", { 2, 15 }, 0, static_cast<int>(EFloorOrder::BABAOBJECT), ERenderOrder::UPPER, ELogicType::BABAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 13, 14 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("FlagObject.png", { 13, 15 }, 0, static_cast<int>(EFloorOrder::FLAGOBJECT), ERenderOrder::LOWER, ELogicType::FLAGOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("RockObject.png", { 0, 17 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("RockObject.png", { 0, 15 }, 0, static_cast<int>(EFloorOrder::ROCKOBJECT), ERenderOrder::LOWER, ELogicType::ROCKOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("WallObject.png", { 1, 6 }, 0, static_cast<int>(EFloorOrder::WALLOBJECT), ERenderOrder::LOWER, ELogicType::WALLOBJECT, EVLogicType::NONE, ELogicType::NONE);
-		TileMap->SetTile("GrassObject.png", { 15, 14 }, 0, static_cast<int>(EFloorOrder::GRASSOBJECT), ERenderOrder::LOWER, ELogicType::GRASSOBJECT, EVLogicType::NONE, ELogicType::NONE);
+		TileMap->SetTile("GrassObject.png", { 1, 15 }, 0, static_cast<int>(EFloorOrder::GRASSOBJECT), ERenderOrder::LOWER, ELogicType::GRASSOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("SkullObject.png", { 22, 14 }, 0, static_cast<int>(EFloorOrder::SKULLOBJECT), ERenderOrder::LOWER, ELogicType::SKULLOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("LavaObject.png", { 26, 14 }, 0, static_cast<int>(EFloorOrder::LAVAOBJECT), ERenderOrder::LOWER, ELogicType::LAVAOBJECT, EVLogicType::NONE, ELogicType::NONE);
 		TileMap->SetTile("WaterObject.png", { 30, 14 }, 0, static_cast<int>(EFloorOrder::WATEROBJECT), ERenderOrder::LOWER, ELogicType::WATEROBJECT, EVLogicType::NONE, ELogicType::NONE);

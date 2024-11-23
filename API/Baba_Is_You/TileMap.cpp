@@ -417,8 +417,6 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 		{
 			TileMove(NextIndex, _MoveIndex);
 
-			int a = 0;
-
 			for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 			{
 				if (false == NextMap.contains(j))
@@ -513,6 +511,11 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			if (EMoveType::STOP == NextMap[j]->MoveType)
 			{
 				return false;
+			}
+
+			if (EMoveType::NONE == NextMap[j]->MoveType)
+			{
+				return true;
 			}
 		}
 
