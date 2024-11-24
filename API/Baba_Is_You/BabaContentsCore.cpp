@@ -86,7 +86,26 @@ void BabaContentsCore::BeginPlay()
 			UImageManager::GetInst().CuttingSprite("SettingButton786_51.png", { 393, 51 });
 			UImageManager::GetInst().CuttingSprite("ExitButton786_51.png", { 393, 51 });
 			UImageManager::GetInst().CuttingSprite("WorldMap1188_650.png", { 1188, 650 });
+			UImageManager::GetInst().CuttingSprite("SelectBox.png", { 72, 72 });
+			UImageManager::GetInst().CuttingSprite("WorldMapNumberBack36.png", { 36, 36 });
+			UImageManager::GetInst().CuttingSprite("Line.png", { 36, 36 });
 		}
+	}
+
+	// Fade 스프라이트 로드
+	{
+		UEngineDirectory Dir;
+
+		if (false == Dir.MoveParentToDirectory("BabaResources//Image//Global"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+
+		Dir.Append("Fade");
+
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile();
+		UImageManager::GetInst().LoadFolder(Dir.GetPathToString());
 	}
 
 	// 사운드 로드

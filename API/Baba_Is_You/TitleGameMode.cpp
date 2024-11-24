@@ -8,7 +8,7 @@
 
 #include "TitleLogo.h"
 #include "TitleBackground.h"
-#include "Buttons.h"
+#include "Fade.h"
 
 
 ATitleGameMode::ATitleGameMode()
@@ -28,47 +28,119 @@ void ATitleGameMode::BeginPlay()
 	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
 	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
 
+	// Buttons
 	{
+		// StartBtn
 		AButtons* StartBtn = GetWorld()->SpawnActor<AButtons>();
-		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("StartButton784_51.png");
+		StartBtn->SetButton("StartButton784_51.png", { 640, 450 });
+		Btns.push_back(StartBtn);
 
-		FVector2D StartBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 640, 450 });
-
-		StartBtn->SetButtonPos({ 640, 450 });
-		StartBtn->SetButtonScale(StartBtnScale);
-	}
-
-	{
+		// SettingsBtn
 		AButtons* SettingsBtn = GetWorld()->SpawnActor<AButtons>();
-		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("SettingButton786_51.png");
+		SettingsBtn->SetButton("SettingButton786_51.png", { 640, 530 });
+		Btns.push_back(SettingsBtn);
 
-		FVector2D SettingsBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 640, 530 });
-
-		SettingsBtn->SetButtonPos({ 640, 530 });
-		SettingsBtn->SetButtonScale(SettingsBtnScale);
+		// ExitBtn
+		AButtons* ExitBtn = GetWorld()->SpawnActor<AButtons>();
+		ExitBtn->SetButton("ExitButton786_51.png", { 640, 610 });
+		Btns.push_back(ExitBtn);
 	}
 
+	// Baba
 	{
-		AButtons* ExitBtn = GetWorld()->SpawnActor<AButtons>();
-		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
-		SpriteRenderer->SetSprite("ExitButton786_51.png");
-
-		FVector2D ExitBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
-		SpriteRenderer->SetComponentLocation({ 640, 610 });
-
-		ExitBtn->SetButtonPos({ 640, 610 });
-		ExitBtn->SetButtonScale(ExitBtnScale);
+		// StartBtn
+		{
+			USpriteRenderer* StartBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			StartBabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			StartBabaSprite->SetSprite("BabaObject.png");
+			FVector2D StartBtnScale = StartBabaSprite->SetSpriteScale(1.0f);
+			StartBabaSprite->SetComponentLocation({ 425, 450 });
+			Babas.push_back(StartBabaSprite);
+			StartBabaSprite->SetActive(true);
+		}
+		// SettingsBtn
+		{
+			USpriteRenderer* SettingsBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			SettingsBabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			SettingsBabaSprite->SetSprite("BabaObject.png");
+			FVector2D StartBtnScale = SettingsBabaSprite->SetSpriteScale(1.0f);
+			SettingsBabaSprite->SetComponentLocation({ 425, 530 });
+			Babas.push_back(SettingsBabaSprite);
+			SettingsBabaSprite->SetActive(false);
+		}
+		// ExitBtn
+		{
+			USpriteRenderer* ExitBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			ExitBabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			ExitBabaSprite->SetSprite("BabaObject.png");
+			FVector2D StartBtnScale = ExitBabaSprite->SetSpriteScale(1.0f);
+			ExitBabaSprite->SetComponentLocation({ 425, 610 });
+			Babas.push_back(ExitBabaSprite);
+			ExitBabaSprite->SetActive(false);
+		}
 	}
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	BtnSelect();
+}
+
+void ATitleGameMode::BtnSelect()
+{
+	if (true == UEngineInput::GetInst().IsDown(VK_UP))
+	{
+		--CurBtnIndex;
+
+		if (CurBtnIndex < 0)
+		{
+			CurBtnIndex = Btns.size() - 1;
+		}
+
+		for (int i = 0; i < Babas.size(); i++)
+		{
+			if (i == CurBtnIndex)
+			{
+				Babas[i]->SetActive(true);
+			}
+			else
+			{
+				Babas[i]->SetActive(false);
+			}
+		}
+	}
+
+	if (true == UEngineInput::GetInst().IsDown(VK_DOWN))
+	{
+		++CurBtnIndex;
+
+		if (CurBtnIndex > Btns.size() - 1)
+		{
+			CurBtnIndex = 0;
+		}
+
+		for (int i = 0; i < Babas.size(); i++)
+		{
+			if (i == CurBtnIndex)
+			{
+				Babas[i]->SetActive(true);
+			}
+			else
+			{
+				Babas[i]->SetActive(false);
+			}
+		}
+	}
+
+	if (true == UEngineInput::GetInst().IsDown(VK_SPACE))
+	{
+		if (CurBtnIndex == 0)
+		{
+			AFade* Fade = GetWorld()->SpawnActor<AFade>();
+			Fade->FadeOut();
+			//UEngineAPICore::GetCore()->OpenLevel("Map");
+		}
+	}
 }

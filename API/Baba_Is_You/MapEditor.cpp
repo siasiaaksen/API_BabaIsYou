@@ -17,6 +17,8 @@ void AMapEditor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetWorld()->SetCameraToMainPawn(false);
+
 	Scale = { 33, 18 };
 	CreateStageInit(Scale);
 }
@@ -28,6 +30,7 @@ void AMapEditor::Tick(float _DeltaTime)
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
 	UEngineDebug::CoreOutPutString("BGTileSize : " + Scale.ToString());
 	UEngineDebug::CoreOutPutString("CurTileIndex : " + MouseIndex.ToString());
+	UEngineDebug::CoreOutPutString("ClickNum : " + std::to_string(ClickNum - 1));
 
 	bool IsSizeChange = BGSize();
 
@@ -125,7 +128,21 @@ void AMapEditor::MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _Ma
 
 	MouseIndex = TileMap->LocationToIndex(MousePos - TileMap->GetActorLocation());
 
-	TileMap->SetTile(_Sprite, MouseIndex, _SpriteIndex, static_cast<int>(_FloorOrder), _RenderOrder, _FLogicType, _SLogicType, _TLogicType);
+	if (ClickNum > _MaxCount - 1)
+	{
+		ClickNum = 0;
+	}
+
+	// 같은 인덱스일 경우로 수정, 다른 인덱스일 경우도 생각하기
+	if (true == SpriteName.empty() || SpriteName != _Sprite)
+	{
+		ClickNum = 0;
+		SpriteName = _Sprite;
+	}
+
+	TileMap->SetTile(_Sprite, MouseIndex, ClickNum, static_cast<int>(_FloorOrder), _RenderOrder, _FLogicType, _SLogicType, _TLogicType);
+
+	++ClickNum;
 }
 
 void AMapEditor::MapMaker()

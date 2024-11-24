@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include "Buttons.h"
 
 
 class ATitleGameMode : public AGameMode
@@ -13,12 +14,15 @@ public:
 	ATitleGameMode& operator=(const ATitleGameMode& _Other) = delete;
 	ATitleGameMode& operator=(ATitleGameMode&& _Other) noexcept = delete;
 
+	void BtnSelect();
+
 protected:
 	void BeginPlay() override;
-
 	void Tick(float _DeltaTime) override;
 
 private:
-	class USpriteRenderer* SpriteRenderer;
+	int CurBtnIndex;
+	std::vector<AButtons*> Btns;
+	std::vector<USpriteRenderer*> Babas;
 };
 

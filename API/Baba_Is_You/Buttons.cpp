@@ -6,6 +6,7 @@
 
 #include "ContentsEnum.h"
 
+
 AButtons::AButtons()
 {
 }
@@ -21,20 +22,35 @@ void AButtons::BeginPlay()
 
 void AButtons::Tick(float _DeltaTime)
 {
-	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
-	FVector2D ButtonPos = _ButtonPos;
-	FVector2D ButtonScale = _ButtonScale;
-	FVector2D ButtonRangeMin = { ButtonPos.X - ButtonScale.Half().X, ButtonPos.Y - ButtonScale.Half().Y };
-	FVector2D ButtonRangeMax = { ButtonPos.X + ButtonScale.Half().X, ButtonPos.Y + ButtonScale.Half().Y };
+	Super::Tick(_DeltaTime);
+}
 
-	if (true == UEngineInput::GetInst().IsDown(VK_LBUTTON))
-	{
-		if (MousePos.X > ButtonRangeMin.X &&
-			MousePos.Y > ButtonRangeMin.Y &&
-			MousePos.X < ButtonRangeMax.X &&
-			MousePos.Y < ButtonRangeMax.Y)
-		{
-			UEngineAPICore::GetCore()->OpenLevel("Map");
-		}
-	}
+void AButtons::SetButton(std::string_view _SpriteName, FVector2D _Location)
+{
+	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	SpriteRenderer->SetOrder(ERenderOrder::BUTTON);
+	SpriteRenderer->SetSprite(_SpriteName);
+
+	FVector2D StartBtnScale = SpriteRenderer->SetSpriteScale(1.0f);
+	SpriteRenderer->SetComponentLocation(_Location);
+
+	SetButtonPos(_Location);
+	SetButtonScale(StartBtnScale);
+}
+
+bool AButtons::IsOverPos()
+{
+	//FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
+	//FVector2D ButtonRangeMin = { ButtonPos.X - ButtonScale.Half().X, ButtonPos.Y - ButtonScale.Half().Y };
+	//FVector2D ButtonRangeMax = { ButtonPos.X + ButtonScale.Half().X, ButtonPos.Y + ButtonScale.Half().Y };
+
+	//if (MousePos.X > ButtonRangeMin.X &&
+	//	MousePos.Y > ButtonRangeMin.Y &&
+	//	MousePos.X < ButtonRangeMax.X &&
+	//	MousePos.Y < ButtonRangeMax.Y)
+	//{
+	//	return false;
+	//}
+
+	return true;
 }

@@ -8,11 +8,13 @@ enum class ERenderOrder
 	TITLELOGO = -100,
 	WORLDMAP = -20,
 	BUTTON = -11,
+	BABASELECT = -9,
 	STAGEBG = -2,
 	BGOBJECT = -1,
 	LOWER = 0,
 	UPPER = 1,
 	PLAYER = 1000,
+	FADE = 2000,
 };
 
 enum class EMoveType
@@ -98,6 +100,16 @@ enum class EFloorOrder
 	FLAGOBJECT,
 	TEXT,
 	BABAOBJECT,
+	MAX,
+};
+
+enum class EMapOrder
+{
+	NONE,
+	BGCIRCLE,
+	LINE,
+	NUMBER,
+	SELECTBOX,
 	MAX,
 };
 

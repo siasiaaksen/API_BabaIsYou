@@ -17,13 +17,16 @@ public:
 
 	void SetButtonPos(FVector2D _Pos)
 	{
-		_ButtonPos = _Pos;
+		ButtonPos = _Pos;
 	}
 
 	void SetButtonScale(FVector2D _Scale)
 	{
-		_ButtonScale = _Scale;
+		ButtonScale = _Scale;
 	}
+
+	void SetButton(std::string_view _SpriteName, FVector2D _Location);
+	bool IsOverPos();
 
 protected:
 	void BeginPlay() override;
@@ -31,7 +34,7 @@ protected:
 
 private:
 	USpriteRenderer* SpriteRenderer;
-	FVector2D _ButtonPos;
-	FVector2D _ButtonScale;
+	FVector2D ButtonPos;
+	FVector2D ButtonScale;
 };
 

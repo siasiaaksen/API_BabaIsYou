@@ -25,7 +25,8 @@ public:
 protected:
 
 private:
-	int ClickNum; // 버튼이 눌려있을 때 마우스 클릭할 때마다 횟수를 늘려서 인덱스 변경하기
+	int ClickNum = 0; // 버튼이 눌려있을 때 마우스 클릭할 때마다 횟수를 늘려서 인덱스 변경하기
+	std::string_view SpriteName;
 
 	FIntPoint Scale;
 	ATileMap* TileMap = nullptr;

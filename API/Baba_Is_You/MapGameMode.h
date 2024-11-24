@@ -1,5 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include "TileMap.h"
+
 
 class AMapGameMode : public AGameMode
 {
@@ -18,6 +20,8 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-
+	ATileMap* TileMap = nullptr;
+	FIntPoint Scale;
+	FIntPoint MouseIndex;
 };
 
