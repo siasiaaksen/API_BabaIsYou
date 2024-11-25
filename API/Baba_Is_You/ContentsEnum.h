@@ -4,15 +4,16 @@
 // 누가 먼저 랜더되는지
 enum class ERenderOrder
 {
+	NONE,
 	BACKGROUND = -2000,
 	TITLELOGO = -100,
 	WORLDMAP = -20,
 	BUTTON = -11,
 	BABASELECT = -9,
-	STAGEBG = -2,
-	BGOBJECT = -1,
-	LOWER = 0,
-	UPPER = 1,
+	STAGEBG = -7,
+	BGOBJECT = 0,
+	LOWER = 1,
+	UPPER = 2,
 	PLAYER = 1000,
 	FADE = 2000,
 };
@@ -91,6 +92,7 @@ enum class EVLogicType
 enum class EFloorOrder
 {
 	NONE,
+	BG,
 	GRASSOBJECT,
 	SKULLOBJECT,
 	LAVAOBJECT,

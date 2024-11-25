@@ -90,7 +90,7 @@ void ATitleGameMode::Tick(float _DeltaTime)
 
 void ATitleGameMode::BtnSelect()
 {
-	if (true == UEngineInput::GetInst().IsDown(VK_UP))
+	if (true == UEngineInput::GetInst().IsDown(VK_UP) || true == UEngineInput::GetInst().IsDown('W'))
 	{
 		--CurBtnIndex;
 
@@ -112,7 +112,7 @@ void ATitleGameMode::BtnSelect()
 		}
 	}
 
-	if (true == UEngineInput::GetInst().IsDown(VK_DOWN))
+	if (true == UEngineInput::GetInst().IsDown(VK_DOWN) || true == UEngineInput::GetInst().IsDown('S'))
 	{
 		++CurBtnIndex;
 
@@ -140,6 +140,7 @@ void ATitleGameMode::BtnSelect()
 		{
 			AFade* Fade = GetWorld()->SpawnActor<AFade>();
 			Fade->FadeOut();
+			//Fade->FadeDestroy();
 			//UEngineAPICore::GetCore()->OpenLevel("Map");
 		}
 	}

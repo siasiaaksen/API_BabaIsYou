@@ -19,6 +19,8 @@ public:
 	void FadeIn();
 	void FadeOut();
 
+	void FadeDestroy();
+
 	USpriteRenderer* GetSRenderer()
 	{
 		return SpriteRenderer;
@@ -28,5 +30,6 @@ protected:
 
 private:
 	USpriteRenderer* SpriteRenderer = nullptr;
+	std::function<void()> Function;
 };
 

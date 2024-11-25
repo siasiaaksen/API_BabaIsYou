@@ -6,7 +6,10 @@
 #include <EngineCore/EngineCoreDebug.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineBase/EngineString.h>
+#include <EngineBase/EngineFile.h>
+
 #include "TestGameMode.h"
+#include "BabaMapGameMode.h"
 
 
 ATileMap::ATileMap()
@@ -36,7 +39,6 @@ ATileMap::~ATileMap()
 				}
 
 				CurTile->Destroy();
-
 			}
 		}
 	}
@@ -50,7 +52,6 @@ void ATileMap::BeginPlay()
 void ATileMap::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-
 
 	for (int y = 0; y < AllTiles.size(); y++)
 	{
@@ -746,11 +747,53 @@ void ATileMap::ChangeStateMode(ELogicType _FLogicType, EStateType _StateType)
 	}
 }
 
+void ATileMap::RemoveTile(FIntPoint _Index)
+{
+	std::map<int, Tile*>& CurMap = AllTiles[_Index.Y][_Index.X];
+
+	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+	{
+		std::map<int, Tile*>::iterator StartIter = CurMap.find(i);
+
+		if (false == CurMap.contains(i))
+		{
+			continue;
+		}
+		else
+		{
+			Tile* Tile = StartIter->second;
+			Tile->Destroy();
+			CurMap.erase(StartIter);
+		}
+	}
+}
+
+void ATileMap::RemoveAllTile()
+{
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		for (int x = 0; x < AllTiles[y].size(); x++)
+		{
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+			{
+				if (false == AllTiles[y][x].contains(i))
+				{
+					continue;
+				}
+				else
+				{
+					AllTiles[y][x][i]->Destroy();
+					AllTiles[y][x].erase(i);
+				}
+			}
+		}
+	}
+}
+
 void ATileMap::Serialize(UEngineSerializer& _Ser)
 {
 	//_Ser << TileCount;
 	//_Ser << TileSize;
-	//_Ser << SpriteName;
 	//_Ser << AllTiles;
 }
 
@@ -758,18 +801,34 @@ void ATileMap::DeSerialize(UEngineSerializer& _Ser)
 {
 	//_Ser >> TileCount;
 	//_Ser >> TileSize;
-	//_Ser >> SpriteName;
 
-	//std::vector<std::vector<Tile>> LoadTiles;
+	//std::vector<std::vector<std::map<int, Tile*>>> LoadTiles;
 	//_Ser >> LoadTiles;
 
-	//Create(SpriteName, TileCount, TileSize);
+	//Create(TileCount, TileSize);
 
 	//for (int y = 0; y < LoadTiles.size(); y++)
 	//{
 	//	for (int x = 0; x < LoadTiles[y].size(); x++)
 	//	{
-	//		SetTileIndex({ x, y }, LoadTiles[y][x].Pivot, LoadTiles[y][x].Scale, LoadTiles[y][x].SpriteIndex);
+	//		for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+	//		{
+	//			Tile* CurTile = LoadTiles[y][x][i];
+	//			ERenderOrder Order = ERenderOrder::NONE;
+
+	//			if (CurTile->FloorOrder == 8 || CurTile->FloorOrder == 9)
+	//			{
+	//				Order = ERenderOrder::UPPER;
+	//			}
+	//			else
+	//			{
+	//				Order = ERenderOrder::LOWER;
+	//			}
+
+	//			//SetTile(CurTile->SpriteRenderer, CurTile->Index, CurTile->SpriteIndex, CurTile->FloorOrder, Order,
+	//			//	static_cast<ELogicType>(CurTile->FLogicType), static_cast<EVLogicType>(CurTile->SLogicType),
+	//			//	static_cast<ELogicType>(CurTile->TLogicType));
+	//		}
 	//	}
 	//}
 }
@@ -1066,6 +1125,71 @@ void ATileMap::Undo(float _DeltaTime)
 			CurTile->Index = TileIndex;
 			int a = 0;
 		}
+	}
+}
+
+void ATileMap::TileMapSave(const std::string Path)
+{
+	UEngineSerializer Ser;
+
+	Ser << TileSize;
+	Ser << TileCount;
+
+	std::vector<TileData> TileDatas;
+
+	for (int y = 0; y < AllTiles.size(); y++)
+	{
+		for (int x = 0; x < AllTiles[y].size(); x++)
+		{
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+			{
+				if (false == AllTiles[y][x].contains(i))
+				{
+					continue;
+				}
+
+				Tile* TilePtr = AllTiles[y][x][i];
+
+				TileData Data = TilePtr->GetTileData();
+				TileDatas.push_back(Data);
+			}
+		}
+	}
+
+	Ser << TileDatas;
+
+	UEngineFile FIle = Path;
+	FIle.FileOpen("wb");
+	FIle.Write(Ser);
+}
+
+void ATileMap::TileMapLoad(const std::string Path)
+{
+	RemoveAllTile();
+
+	UEngineFile FIle = Path;
+	FIle.FileOpen("rb");
+
+	UEngineSerializer Ser;
+	FIle.Read(Ser);
+
+	Ser >> TileSize;
+	Ser >> TileCount;
+
+	// Create
+	Create(TileCount, TileSize);
+
+	std::vector<TileData> TileDatas;
+	Ser >> TileDatas;
+
+	// 88개의 타일 데이터
+	// SetTile
+
+	for (int i = 0; i < TileDatas.size(); i++)
+	{
+		TileData& TData = TileDatas[i];
+		SetTile(TData.Sprite, TData.Index, TData.SpriteIndex, TData.FloorOrder, TData.Order,
+			TData.FLogicType, TData.SLogicType, TData.TLogicType);
 	}
 }
 

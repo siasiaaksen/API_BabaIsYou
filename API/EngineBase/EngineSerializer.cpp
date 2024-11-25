@@ -10,7 +10,7 @@ UEngineSerializer::~UEngineSerializer()
 {
 }
 
-void UEngineSerializer::Write(void* _Data, unsigned int _Size)
+void UEngineSerializer::Write(const void* _Data, unsigned int _Size)
 {
 	if (WriteOffset + _Size >= Data.size())
 	{

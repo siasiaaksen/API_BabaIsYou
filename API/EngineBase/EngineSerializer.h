@@ -15,24 +15,24 @@ public:
 	UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
 	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
 
-	void Write(void* _Data, unsigned int _Size);
+	void Write(const void* _Data, unsigned int _Size);
 
-	void operator<<(int& _Data)
+	void operator<<(const int& _Data)
 	{
 		Write(&_Data, sizeof(int));
 	}
 
-	void operator<<(bool& _Data)
+	void operator<<(const bool& _Data)
 	{
 		Write(&_Data, sizeof(bool));
 	}
 
-	void operator<<(FVector2D& _Data)
+	void operator<<(const FVector2D& _Data)
 	{
 		Write(&_Data, sizeof(FVector2D));
 	}
 
-	void operator<<(FIntPoint& _Data)
+	void operator<<(const FIntPoint& _Data)
 	{
 		Write(&_Data, sizeof(FIntPoint));
 	}

@@ -27,6 +27,7 @@ void ATestGameMode::BeginPlay()
 	GetWorld()->SetCameraToMainPawn(false);
 
 	State = EGameState::SELECT;
+
 	Scale = { 33, 18 };
 	CreateStageInit(Scale);
 

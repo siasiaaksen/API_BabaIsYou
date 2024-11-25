@@ -6,7 +6,55 @@
 #include "ContentsEnum.h"
 
 
-class Tile : public AActor, public ISerializObject
+class TileData : public ISerializObject
+{
+public:
+	std::string Sprite;
+	FIntPoint Index;
+	FVector2D Pivot;
+	FVector2D SpriteScale;
+	int SpriteIndex;
+	int FloorOrder;
+	ERenderOrder Order;
+	ELogicType FLogicType = ELogicType::NONE;
+	EVLogicType SLogicType = EVLogicType::NONE;
+	ELogicType TLogicType = ELogicType::NONE;
+
+	void Serialize(UEngineSerializer& _Ser)
+	{
+		_Ser << Sprite;
+		_Ser << Index;
+		_Ser << Pivot;
+		_Ser << SpriteScale;
+		_Ser << SpriteIndex;
+		_Ser << FloorOrder;
+		_Ser << static_cast<int>(Order);
+		_Ser << static_cast<int>(FLogicType);
+		_Ser << static_cast<int>(SLogicType);
+		_Ser << static_cast<int>(TLogicType);
+	}
+
+	void DeSerialize(UEngineSerializer& _Ser)
+	{
+		_Ser >> Sprite;
+		_Ser >> Index;
+		_Ser >> Pivot;
+		_Ser >> SpriteScale;
+		_Ser >> SpriteIndex;
+		_Ser >> FloorOrder;
+		int Value;
+		_Ser >> Value;
+		Order = static_cast<ERenderOrder>(Value);
+		_Ser >> Value;
+		FLogicType = static_cast<ELogicType>(Value);
+		_Ser >> Value;
+		SLogicType = static_cast<EVLogicType>(Value);
+		_Ser >> Value;
+		TLogicType = static_cast<ELogicType>(Value);
+	}
+};
+
+class Tile : public AActor
 {
 public:
 	USpriteRenderer* SpriteRenderer;
@@ -26,34 +74,27 @@ public:
 
 	EMoveType MoveType = EMoveType::NONE;
 	EStateType StateType = EStateType::NONE;
+
 	ELogicType FLogicType = ELogicType::NONE;
 	EVLogicType SLogicType = EVLogicType::NONE;
 	ELogicType TLogicType = ELogicType::NONE;
 
-	void Serialize(UEngineSerializer& _Ser)
+	TileData GetTileData()
 	{
-		std::string SpriteName;
-		if (nullptr != SpriteRenderer)
-		{
-			SpriteName = SpriteRenderer->GetCurSpriteName();
-		}
-		_Ser << SpriteName;
-		_Ser << IsMove;
-		_Ser << FloorOrder;
-		_Ser << Scale;
-		_Ser << Pivot;
-		_Ser << SpriteIndex;
-	}
+		TileData Data;
 
-	void DeSerialize(UEngineSerializer& _Ser)
-	{
-		std::string SpriteName;
-		_Ser >> SpriteName;
-		_Ser >> IsMove;
-		_Ser >> FloorOrder;
-		_Ser >> Scale;
-		_Ser >> Pivot;
-		_Ser >> SpriteIndex;
+		Data.Sprite = SpriteRenderer->GetCurSpriteName();
+		Data.Index = Index;
+		Data.Pivot = Pivot;
+		Data.SpriteScale = Pivot;
+		Data.SpriteIndex = SpriteIndex;
+		Data.FloorOrder = FloorOrder;
+		Data.Order = static_cast<ERenderOrder>(SpriteRenderer->GetOrder());
+		Data.FLogicType = FLogicType;
+		Data.SLogicType = SLogicType;
+		Data.TLogicType = TLogicType;
+
+		return Data;
 	}
 };
 
@@ -124,8 +165,14 @@ public:
 	void ChangeStateMode(ELogicType _FLogicType, EStateType _StateType);
 	void SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite);
 
+	void RemoveTile(FIntPoint _Index);
+	void RemoveAllTile();
+
 	void Action(float _DeltaTime);
 	void Undo(float _DeltaTime);
+
+	void TileMapSave(const std::string Path);
+	void TileMapLoad(const std::string Path);
 
 	bool IsActionEnd()
 	{
@@ -148,6 +195,11 @@ public:
 	FVector2D GetTileSize()
 	{
 		return TileSize;
+	}
+
+	FIntPoint GetTileCount()
+	{
+		return TileCount;
 	}
 
 protected:

@@ -23,7 +23,7 @@ void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale, bool _IsDestroy/* = fal
 {
 	if (_IsDestroy && nullptr != BackgroundMap)
 	{
-		BackgroundMap->Destroy();
+		BackgroundMap->RemoveAllTile();
 	}
 
 	FVector2D BackScale = { _Scale.X * 36, _Scale.Y * 36 };

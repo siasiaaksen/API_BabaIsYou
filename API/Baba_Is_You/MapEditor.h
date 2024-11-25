@@ -21,6 +21,11 @@ public:
 	void TileMapSetting();
 	void MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _MaxCount, EFloorOrder _FloorOrder, ERenderOrder _RenderOrder, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
 	void MapMaker();
+	void CurTileSprite();
+	void MapReset();
+
+	void MapSave();
+	void MapLoad();
 
 protected:
 
