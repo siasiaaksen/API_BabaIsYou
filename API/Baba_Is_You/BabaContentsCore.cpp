@@ -134,10 +134,10 @@ void BabaContentsCore::BeginPlay()
 
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<AMapGameMode, AActor>("Map");
-	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
+	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, AActor>("Play");
 	UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
 	UEngineAPICore::GetCore()->CreateLevel<AMapEditor, AActor>("Editor");
-	UEngineAPICore::GetCore()->OpenLevel("Test");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void BabaContentsCore::Tick()

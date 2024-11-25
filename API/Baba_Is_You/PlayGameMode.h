@@ -1,9 +1,9 @@
 #pragma once
-#include <EngineCore/GameMode.h>
 #include "TileMap.h"
+#include "BabaMapGameMode.h"
 
 
-class APlayGameMode : public AGameMode
+class APlayGameMode : public ABabaMapGameMode
 {
 public:
 	APlayGameMode();
@@ -19,6 +19,6 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	ATileMap* GroundTileMap = nullptr;
+	ATileMap* TileMap = nullptr;
 };
 
