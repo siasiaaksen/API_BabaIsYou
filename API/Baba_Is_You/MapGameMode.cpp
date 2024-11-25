@@ -34,6 +34,7 @@ void AMapGameMode::BeginPlay()
 	TileMap->SetActorLocation(CenterPivot);
 
 	{
+		// NumBG
 		TileMap->SetTile("WorldMapNumberBack36.png", { 9, 15 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 13 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 13 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
@@ -43,22 +44,24 @@ void AMapGameMode::BeginPlay()
 		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		
+		// Line
 		TileMap->SetTile("Line.png", { 10, 15 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		TileMap->SetTile("Line.png", { 10, 14 }, 12, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		TileMap->SetTile("Line.png", { 12, 13 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		TileMap->SetTile("Line.png", { 12, 11 }, 14, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		
+		// SelectBox
 		TileMap->SetTile("SelectBox.png", { 9, 15 }, { 0, 0 }, { 54, 54 }, 0, static_cast<int>(EMapOrder::SELECTBOX), ERenderOrder::UPPER);
 		
 		// NUMBER
-		//TileMap->SetTile("00.png", { 10, 14 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("01.png", { 11, 12 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("02.png", { 11, 11 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("03.png", { 12, 12 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("04.png", { 12, 11 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("05.png", { 10, 11 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("06.png", { 13, 11 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
-		//TileMap->SetTile("07.png", { 12, 10 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 9, 15 }, 0, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 10, 13 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 10, 12 }, 2, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 11, 13 }, 3, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 11, 12 }, 4, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 10, 11 }, 5, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 12, 12 }, 6, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
+		TileMap->SetTile("LevelNum.png", { 11, 11 }, 7, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
 	}
 }
 
@@ -68,28 +71,39 @@ void AMapGameMode::Tick(float _DeltaTime)
 
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
 	UEngineDebug::CoreOutPutString("BGTileSize : " + Scale.ToString());
-	UEngineDebug::CoreOutPutString("CurTileIndex : " + MouseIndex.ToString());
 
-	if (true == UEngineInput::GetInst().IsDown('R'))
+	//if (true == UEngineInput::GetInst().IsDown('R'))
+	//{
+	//	UEngineAPICore::GetCore()->OpenLevel("Title");
+	//}
+
+	//if (true == UEngineInput::GetInst().IsDown('F'))
+	//{
+	//	UEngineAPICore::GetCore()->OpenLevel("Play");
+	//}
+
+	BoxMove();
+}
+
+void AMapGameMode::BoxMove()
+{
+	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
-		UEngineAPICore::GetCore()->OpenLevel("Title");
 	}
 
-	if (true == UEngineInput::GetInst().IsDown('F'))
+	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
-		UEngineAPICore::GetCore()->OpenLevel("Play");
 	}
 
-	if (true == UEngineInput::GetInst().IsDown(VK_LBUTTON))
+	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
-		FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
-
-		if (MousePos.iX() < TileMap->GetActorLocation().iX() ||
-			MousePos.iY() < TileMap->GetActorLocation().iY())
-		{
-			return;
-		}
-
-		MouseIndex = TileMap->LocationToIndex(MousePos - TileMap->GetActorLocation());
 	}
+
+	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
+	{
+	}
+}
+
+void AMapGameMode::IsMovable()
+{
 }

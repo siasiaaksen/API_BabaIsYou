@@ -879,6 +879,11 @@ void ATileMap::Action(float _DeltaTime)
 					continue;
 				}
 
+				//if (EMoveType::YOU == CurTile->MoveType && EMoveType::YOU == OtherTile[i]->MoveType)
+				//{
+				//	continue;
+				//}
+
 				// DEFEAT
 				if (EMoveType::YOU == CurTile->MoveType && EStateType::DEFEAT == OtherTile[i]->StateType)
 				{

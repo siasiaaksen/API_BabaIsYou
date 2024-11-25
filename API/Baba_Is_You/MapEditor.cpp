@@ -140,7 +140,7 @@ void AMapEditor::MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _Ma
 
 void AMapEditor::MapMaker()
 {
-	if (true == UEngineInput::GetInst().IsDown(VK_LBUTTON))
+	if (true == UEngineInput::GetInst().IsPress(VK_LBUTTON))
 	{
 		for (int Key = 'A'; Key <= 'Z'; ++Key)
 		{

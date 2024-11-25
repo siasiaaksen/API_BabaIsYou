@@ -89,6 +89,7 @@ void BabaContentsCore::BeginPlay()
 			UImageManager::GetInst().CuttingSprite("SelectBox.png", { 54, 54 });
 			UImageManager::GetInst().CuttingSprite("WorldMapNumberBack36.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("Line.png", { 36, 36 });
+			UImageManager::GetInst().CuttingSprite("LevelNum.png", { 36, 36 });
 		}
 	}
 
@@ -137,7 +138,7 @@ void BabaContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, AActor>("Play");
 	UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
 	UEngineAPICore::GetCore()->CreateLevel<AMapEditor, AActor>("Editor");
-	UEngineAPICore::GetCore()->OpenLevel("Editor");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void BabaContentsCore::Tick()

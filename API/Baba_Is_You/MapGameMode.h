@@ -14,9 +14,11 @@ public:
 	AMapGameMode& operator=(const AMapGameMode& _Other) = delete;
 	AMapGameMode& operator=(AMapGameMode&& _Other) noexcept = delete;
 
+	void BoxMove();
+	void IsMovable();
+
 protected:
 	void BeginPlay() override;
-
 	void Tick(float _DeltaTime) override;
 
 private:

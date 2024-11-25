@@ -28,7 +28,7 @@ void APlayGameMode::BeginPlay()
 	State = EGameState::SELECT;
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
-	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\Level00.MData");
+	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\Level05.MData");
 	CreateStageInit(TileMap->GetTileCount(), true);
 	Scale = TileMap->GetTileCount();
 
@@ -493,6 +493,11 @@ void APlayGameMode::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	GameState(_DeltaTime);
+
+	if (true == UEngineInput::GetInst().IsDown('P'))
+	{
+		UEngineAPICore::GetCore()->OpenLevel("Map");
+	}
 }
 
 
