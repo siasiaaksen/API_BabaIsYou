@@ -91,8 +91,9 @@ enum class EVLogicType
 
 enum class EFloorOrder
 {
-	NONE,
+	BACKGROUND,
 	BG,
+	NONE,
 	GRASSOBJECT,
 	SKULLOBJECT,
 	LAVAOBJECT,

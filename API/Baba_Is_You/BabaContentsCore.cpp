@@ -85,8 +85,8 @@ void BabaContentsCore::BeginPlay()
 			UImageManager::GetInst().CuttingSprite("StartButton784_51.png", { 392, 51 });
 			UImageManager::GetInst().CuttingSprite("SettingButton786_51.png", { 393, 51 });
 			UImageManager::GetInst().CuttingSprite("ExitButton786_51.png", { 393, 51 });
-			UImageManager::GetInst().CuttingSprite("WorldMap1188_650.png", { 1188, 650 });
-			UImageManager::GetInst().CuttingSprite("SelectBox.png", { 72, 72 });
+			UImageManager::GetInst().CuttingSprite("WorldMap1188_648.png", { 1188, 648 });
+			UImageManager::GetInst().CuttingSprite("SelectBox.png", { 54, 54 });
 			UImageManager::GetInst().CuttingSprite("WorldMapNumberBack36.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("Line.png", { 36, 36 });
 		}

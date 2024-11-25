@@ -118,12 +118,12 @@ void AMapEditor::TileMapSetting()
 	}
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
-	TileMap->Create(Scale, { 36, 36 });
+	TileMap->Create(Scale, {36, 36});
 	TileMap->SetActorLocation(CenterPivot);
 }
 
 void AMapEditor::MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _MaxCount, EFloorOrder _FloorOrder, 
-	ERenderOrder _RenderOrder, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType)
+	ERenderOrder _RenderOrder, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType, FVector2D _SpriteScale)
 {
 	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
 
@@ -135,26 +135,12 @@ void AMapEditor::MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _Ma
 
 	MouseIndex = TileMap->LocationToIndex(MousePos - TileMap->GetActorLocation());
 
-	//if (ClickNum > _MaxCount - 1)
-	//{
-	//	ClickNum = 0;
-	//}
-
-	//if (true == SpriteName.empty() || SpriteName != _Sprite)
-	//{
-	//	ClickNum = 0;
-	//	SpriteName = _Sprite;
-	// 
-	//}
-
-	TileMap->SetTile(_Sprite, MouseIndex, _SpriteIndex, static_cast<int>(_FloorOrder), _RenderOrder, _FLogicType, _SLogicType, _TLogicType);
-
-	//++ClickNum;
+	TileMap->SetTile(_Sprite, MouseIndex, { 0, 0 }, _SpriteScale, _SpriteIndex, static_cast<int>(_FloorOrder), _RenderOrder, _FLogicType, _SLogicType, _TLogicType);
 }
 
 void AMapEditor::MapMaker()
 {
-	if (true == UEngineInput::GetInst().IsPress(VK_LBUTTON))
+	if (true == UEngineInput::GetInst().IsDown(VK_LBUTTON))
 	{
 		for (int Key = 'A'; Key <= 'Z'; ++Key)
 		{
@@ -183,7 +169,7 @@ void AMapEditor::MapMaker()
 					return;
 					break;
 				case 'Y':
-					MapTileEdit("SkullObject.png", 0, 4, EFloorOrder::SKULLOBJECT, ERenderOrder::LOWER, ELogicType::SKULLOBJECT, EVLogicType::NONE, ELogicType::NONE);
+					MapTileEdit("SkullObject.png", 3, 4, EFloorOrder::SKULLOBJECT, ERenderOrder::LOWER, ELogicType::SKULLOBJECT, EVLogicType::NONE, ELogicType::NONE);
 					return;
 					break;
 				case 'U':
@@ -284,6 +270,18 @@ void AMapEditor::MapMaker()
 					break;
 				case '3':
 					MapTileEdit("FlowerObject.png", 0, 1, EFloorOrder::BG, ERenderOrder::BGOBJECT, ELogicType::NONE, EVLogicType::NONE, ELogicType::NONE);
+					return;
+					break;
+				case '4':
+					MapTileEdit("MoveButton116_116.png", 0, 1, EFloorOrder::BG, ERenderOrder::BGOBJECT, ELogicType::NONE, EVLogicType::NONE, ELogicType::NONE, {116, 116});
+					return;
+					break;
+				case '5':
+					MapTileEdit("PauseButton116_77.png", 0, 1, EFloorOrder::BG, ERenderOrder::BGOBJECT, ELogicType::NONE, EVLogicType::NONE, ELogicType::NONE, {116, 77});
+					return;
+					break;
+				case '6':
+					MapTileEdit("UndoButton116_77.png", 0, 1, EFloorOrder::BG, ERenderOrder::BGOBJECT, ELogicType::NONE, EVLogicType::NONE, ELogicType::NONE, {116, 77});
 					return;
 					break;
 				default:
@@ -500,7 +498,6 @@ void AMapEditor::MapLoad()
 		OFN.lpstrFile = lpstrFile;
 		OFN.nMaxFile = 100;
 		OFN.lpstrInitialDir = ".\\..\\BabaResources\\Data";
-
 
 		if (GetOpenFileNameA(&OFN) != 0) 
 		{

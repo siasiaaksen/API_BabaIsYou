@@ -35,20 +35,20 @@ void AMapGameMode::BeginPlay()
 
 	{
 		TileMap->SetTile("WorldMapNumberBack36.png", { 9, 15 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
+		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 13 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
+		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 13 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
+		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 12 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 12 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
-		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		TileMap->SetTile("WorldMapNumberBack36.png", { 12, 12 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
-		TileMap->SetTile("WorldMapNumberBack36.png", { 12, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
-		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 10 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
-		TileMap->SetTile("WorldMapNumberBack36.png", { 13, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
-		TileMap->SetTile("WorldMapNumberBack36.png", { 12, 10 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
+		TileMap->SetTile("WorldMapNumberBack36.png", { 10, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
+		TileMap->SetTile("WorldMapNumberBack36.png", { 11, 11 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::LOWER);
 		
-		TileMap->SetTile("Line.png", { 11, 14 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
-		TileMap->SetTile("Line.png", { 11, 13 }, 12, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
-		TileMap->SetTile("Line.png", { 13, 12 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
-		TileMap->SetTile("Line.png", { 13, 10 }, 14, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
+		TileMap->SetTile("Line.png", { 10, 15 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
+		TileMap->SetTile("Line.png", { 10, 14 }, 12, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
+		TileMap->SetTile("Line.png", { 12, 13 }, 8, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
+		TileMap->SetTile("Line.png", { 12, 11 }, 14, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		
-		//TileMap->SetTile("SelectBox.png", { 10, 14 }, { 36, 36 }, { 72, 72 }, 0, static_cast<int>(EMapOrder::BGCIRCLE), ERenderOrder::UPPER);
+		TileMap->SetTile("SelectBox.png", { 9, 15 }, { 0, 0 }, { 54, 54 }, 0, static_cast<int>(EMapOrder::SELECTBOX), ERenderOrder::UPPER);
 		
 		// NUMBER
 		//TileMap->SetTile("00.png", { 10, 14 }, 1, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);

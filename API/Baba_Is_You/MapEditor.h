@@ -19,7 +19,7 @@ public:
 
 	bool BGSize();
 	void TileMapSetting();
-	void MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _MaxCount, EFloorOrder _FloorOrder, ERenderOrder _RenderOrder, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType);
+	void MapTileEdit(std::string_view _Sprite, int _SpriteIndex, int _MaxCount, EFloorOrder _FloorOrder, ERenderOrder _RenderOrder, ELogicType _FLogicType, EVLogicType _SLogicType, ELogicType _TLogicType, FVector2D _SpriteScale = { 36, 36 });
 	void MapMaker();
 	void CurTileSprite();
 	void MapReset();

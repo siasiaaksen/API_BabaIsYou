@@ -198,6 +198,8 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	NewTilePtr->SetActorLocation(TileLocation + TileSize.Half() + _Pivot + GetActorLocation());
 
 	FVector2D CurTileLocation = NewTilePtr->GetActorLocation();
+	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
+	FIntPoint MouseIndex = LocationToIndex(MousePos - GetActorLocation());
 
 	NewTilePtr->FLogicType = _FLogicType;
 	NewTilePtr->SLogicType = _SLogicType;
@@ -207,7 +209,7 @@ void ATileMap::SetTile(std::string_view _Sprite, FIntPoint _Index, FVector2D _Pi
 	NewTilePtr->Scale = _SpriteScale;
 	NewTilePtr->SpriteIndex = _SpriteIndex;
 	NewTilePtr->Location = CurTileLocation;
-	NewTilePtr->Index = LocationToIndex(CurTileLocation - TileSize);
+	NewTilePtr->Index = MouseIndex;
 	std::string UpperName = UEngineString::ToUpper(_Sprite);
 	NewTilePtr->SpriteName = UpperName;
 }
@@ -1182,16 +1184,20 @@ void ATileMap::TileMapLoad(const std::string Path)
 	// Create
 	Create(TileCount, TileSize);
 
+	FVector2D CenterPivot;
+	CenterPivot.X = (1280 - (TileCount.X * 36)) / 2;
+	CenterPivot.Y = (720 - (TileCount.Y * 36)) / 2;
+	SetActorLocation(CenterPivot);
+
 	std::vector<TileData> TileDatas;
 	Ser >> TileDatas;
 
-	// 88개의 타일 데이터
+	// N개의 타일 데이터
 	// SetTile
-
 	for (int i = 0; i < TileDatas.size(); i++)
 	{
 		TileData& TData = TileDatas[i];
-		SetTile(TData.Sprite, TData.Index, TData.SpriteIndex, TData.FloorOrder, TData.Order,
+		SetTile(TData.Sprite, TData.Index, TData.Pivot = {0, 0}, TData.SpriteScale, TData.SpriteIndex, TData.FloorOrder, TData.Order,
 			TData.FLogicType, TData.SLogicType, TData.TLogicType);
 	}
 }

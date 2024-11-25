@@ -38,7 +38,7 @@ void ABabaMapGameMode::CreateStageInit(FIntPoint _Scale, bool _IsDestroy/* = fal
 	{
 		for (int x = 0; x < _Scale.X; x++)
 		{
-			BackgroundMap->SetTile("Background_Black36.png", { x, y }, 0, static_cast<int>(EFloorOrder::NONE), ERenderOrder::STAGEBG);
+			BackgroundMap->SetTile("Background_Black36.png", { x, y }, 0, static_cast<int>(EFloorOrder::BACKGROUND), ERenderOrder::STAGEBG);
 		}
 	}
 }

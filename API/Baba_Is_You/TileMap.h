@@ -86,7 +86,7 @@ public:
 		Data.Sprite = SpriteRenderer->GetCurSpriteName();
 		Data.Index = Index;
 		Data.Pivot = Pivot;
-		Data.SpriteScale = Pivot;
+		Data.SpriteScale = Scale;
 		Data.SpriteIndex = SpriteIndex;
 		Data.FloorOrder = FloorOrder;
 		Data.Order = static_cast<ERenderOrder>(SpriteRenderer->GetOrder());
