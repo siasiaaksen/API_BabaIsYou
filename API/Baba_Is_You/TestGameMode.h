@@ -7,7 +7,7 @@
 #include "ContentsEnum.h"
 
 
-enum class EGameState
+enum class ETestGameState
 {
 	NONE,
 	SELECT, // 유저가 뭔가를 하려는 단계
@@ -42,12 +42,12 @@ public:
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
 	void LastTileCheck(FIntPoint _Index, int _Order);
 
-	void SetState(EGameState _State)
+	void SetState(ETestGameState _State)
 	{
 		State = _State;
 	}
 
-	EGameState GetState() const
+	ETestGameState GetState() const
 	{
 		return State;
 	}
@@ -81,7 +81,7 @@ private:
 
 	std::list<std::function<void()>> TileCombine;
 
-	EGameState State;
+	ETestGameState State;
 	// 사운드 테스트
 	//USoundPlayer BGMPlayer;
 };

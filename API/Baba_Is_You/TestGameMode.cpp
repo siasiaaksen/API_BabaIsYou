@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "TestGameMode.h"
+
 #include <EngineCore/Level.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineAPICore.h>
@@ -26,7 +27,7 @@ void ATestGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
-	State = EGameState::SELECT;
+	State = ETestGameState::SELECT;
 
 	Scale = { 33, 18 };
 	CreateStageInit(Scale);
@@ -380,7 +381,7 @@ void ATestGameMode::UndoCheck()
 {
 	if (true == UEngineInput::GetInst().IsDown('Z'))
 	{
-		State = EGameState::UNDO;
+		State = ETestGameState::UNDO;
 		TileMap->SetActionTime(0.0f);
 	}
 }
@@ -493,7 +494,7 @@ void ATestGameMode::Action(float _DeltaTime)
 
 	if (true == TileMap->IsActionEnd())
 	{
-		State = EGameState::SELECT;
+		State = ETestGameState::SELECT;
 	}
 }
 
@@ -503,7 +504,7 @@ void ATestGameMode::Undo(float _DeltaTime)
 
 	if (true == TileMap->IsActionEnd())
 	{
-		State = EGameState::SELECT;
+		State = ETestGameState::SELECT;
 	}
 }
 
@@ -511,7 +512,7 @@ void ATestGameMode::GameState(float _DeltaTime)
 {
 	switch (State)
 	{
-	case EGameState::SELECT:
+	case ETestGameState::SELECT:
 		// 타일 모든 상태 체크, 데이터 옮겨짐
 
 			// 만약 규칙이 깨진 타일이 생길 경우
@@ -530,11 +531,11 @@ void ATestGameMode::GameState(float _DeltaTime)
 		UndoCheck();
 
 		break;
-	case EGameState::ACTION:
+	case ETestGameState::ACTION:
 		// 액터, 랜더러 이동(눈에 보이는 것)
 		Action(_DeltaTime);
 		break;
-	case EGameState::UNDO:
+	case ETestGameState::UNDO:
 		// 되돌리기
 		Undo(_DeltaTime);
 		break;

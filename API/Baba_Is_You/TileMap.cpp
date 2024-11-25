@@ -8,7 +8,8 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-#include "TestGameMode.h"
+//#include "TestGameMode.h"
+#include "PlayGameMode.h"
 #include "BabaMapGameMode.h"
 
 
@@ -352,15 +353,17 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		TGameMode->SetState(EGameState::ACTION);
+		PGameMode->SetState(EGameState::ACTION);
 		ActionTime = 0.0f;
 	}
-	else {
+	else 
+	{
 		Histories.pop_back();
 	}
 }
