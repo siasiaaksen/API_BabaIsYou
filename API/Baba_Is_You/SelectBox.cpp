@@ -11,7 +11,7 @@ ASelectBox::ASelectBox()
 	USpriteRenderer* SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	SpriteRenderer->SetOrder(ERenderOrder::UPPER);
 	SpriteRenderer->SetSprite("SelectBox.png");
-	SpriteRenderer->CreateAnimation("SelectBox", "SelectBox.png", 0, 2, 0.1f);
+	SpriteRenderer->CreateAnimation("SelectBox", "SelectBox.png", 0, 2, 0.3f);
 	SpriteRenderer->ChangeAnimation("SelectBox");
 	SpriteRenderer->SetComponentScale({ 54, 54 });
 	SpriteRenderer->SetComponentLocation({ 0, 0 });
