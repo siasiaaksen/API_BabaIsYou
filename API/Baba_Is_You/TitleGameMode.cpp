@@ -140,7 +140,8 @@ void ATitleGameMode::BtnSelect()
 		{
 			AFade* Fade = GetWorld()->SpawnActor<AFade>();
 			Fade->FadeOut();
-			//Fade->FadeDestroy();
+
+			// 페이드 아웃 프레임 끝에서 오픈 레벨
 			//UEngineAPICore::GetCore()->OpenLevel("Map");
 		}
 	}

@@ -19,9 +19,6 @@
     <ClInclude Include="TitleLogo.h">
       <Filter>ContentsObject\Title</Filter>
     </ClInclude>
-    <ClInclude Include="PlayMap.h">
-      <Filter>ContentsObject\Play</Filter>
-    </ClInclude>
     <ClInclude Include="TitleBackground.h">
       <Filter>ContentsObject\Title</Filter>
     </ClInclude>
@@ -58,6 +55,9 @@
     <ClInclude Include="SelectBox.h">
       <Filter>ContentsObject\Map</Filter>
     </ClInclude>
+    <ClInclude Include="StagePath.h">
+      <Filter>ContentsObject\Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -77,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
       <Filter>ContentsObject\Title</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayMap.cpp">
-      <Filter>ContentsObject\Play</Filter>
     </ClCompile>
     <ClCompile Include="TitleBackground.cpp">
       <Filter>ContentsObject\Title</Filter>
@@ -116,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="SelectBox.cpp">
       <Filter>ContentsObject\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="StagePath.cpp">
+      <Filter>ContentsObject\Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

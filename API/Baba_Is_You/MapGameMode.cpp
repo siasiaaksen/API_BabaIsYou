@@ -6,6 +6,8 @@
 #include <EngineCore/EngineAPICore.h>
 #include "Background.h"
 #include "Map.h"
+#include "StagePath.h"
+#include "PlayGameMode.h"
 
 
 AMapGameMode::AMapGameMode()
@@ -76,6 +78,7 @@ void AMapGameMode::Tick(float _DeltaTime)
 	UEngineDebug::CoreOutPutString("SelectBoxIndex : " + SelectBoxIndex.ToString());
 
 	BoxMove(_DeltaTime);
+	SelectStage();
 }
 
 void AMapGameMode::BoxMove(float _DeltaTime)
@@ -84,58 +87,22 @@ void AMapGameMode::BoxMove(float _DeltaTime)
 
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
-		FVector2D StartPos = SelectBox->GetActorLocation();
-		FVector2D EndPos = StartPos + (FVector2D::UP * 36);
-
-		if (false == IsMovable(EndPos))
-		{
-			return;
-		}
-
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		SelectBox->SetActorLocation(CurPos);
+		MoveCheck(FVector2D::UP);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
-		FVector2D StartPos = SelectBox->GetActorLocation();
-		FVector2D EndPos = StartPos + (FVector2D::DOWN * 36);
-
-		if (false == IsMovable(EndPos))
-		{
-			return;
-		}
-
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		SelectBox->SetActorLocation(CurPos);
+		MoveCheck(FVector2D::DOWN);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
-		FVector2D StartPos = SelectBox->GetActorLocation();
-		FVector2D EndPos = StartPos + (FVector2D::LEFT * 36);
-
-		if (false == IsMovable(EndPos))
-		{
-			return;
-		}
-
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		SelectBox->SetActorLocation(CurPos);
+		MoveCheck(FVector2D::LEFT);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
-		FVector2D StartPos = SelectBox->GetActorLocation();
-		FVector2D EndPos = StartPos + (FVector2D::RIGHT * 36);
-
-		if (false == IsMovable(EndPos))
-		{
-			return;
-		}
-
-		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-		SelectBox->SetActorLocation(CurPos);
+		MoveCheck(FVector2D::RIGHT);
 	}
 }
 
@@ -159,4 +126,93 @@ bool AMapGameMode::IsMovable(FVector2D _NextPos)
 	}
 
 	return false;
+}
+
+void AMapGameMode::MoveCheck(FVector2D _Dir)
+{
+	FVector2D StartPos = SelectBox->GetActorLocation();
+	EndPos = StartPos + (_Dir * 36);
+
+	if (false == IsMovable(EndPos))
+	{
+		return;
+	}
+
+	FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+	SelectBox->SetActorLocation(CurPos);
+}
+
+bool AMapGameMode::IsSelectable(FVector2D _NextPos)
+{
+	FIntPoint NextIndex = TileMap->LocationToIndex(_NextPos - FVector2D(36, 36));
+
+	for (int i = 0; i < static_cast<int>(EMapOrder::MAX); i++)
+	{
+		Tile* NextTile = TileMap->GetTileRef(NextIndex, i);
+
+		if (nullptr == NextTile)
+		{
+			continue;
+		}
+
+		if (3 == NextTile->FloorOrder)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void AMapGameMode::SelectStage()
+{
+	if (false == IsSelectable(EndPos))
+	{
+		return;
+	}
+
+	if (true == UEngineInput::GetInst().IsDown(VK_SPACE))
+	{
+		FIntPoint NextIndex = TileMap->LocationToIndex(EndPos - FVector2D(36, 36));
+		Tile* NextTile = TileMap->GetTileRef(NextIndex, 3);
+		SpriteIndex = NextTile->SpriteIndex;
+
+		StagePath& StagePathValue = APlayGameMode::StagePathValue;
+
+		// 스테이지 경로
+		switch (SpriteIndex)
+		{
+		case 0:
+			StagePathValue.SetPath(0);
+			break;
+		case 1:
+			StagePathValue.SetPath(1);
+			break;
+		case 2:
+			StagePathValue.SetPath(2);
+			break;
+		case 3:
+			StagePathValue.SetPath(3);
+			break;
+		case 4:
+			StagePathValue.SetPath(4);
+			break;
+		case 5:
+			StagePathValue.SetPath(5);
+			break;
+		case 6:
+			StagePathValue.SetPath(6);
+			break;
+		case 7:
+			StagePathValue.SetPath(7);
+			break;
+		default:
+			break;
+		}
+
+		// 페이드 인/아웃 필요
+
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
+		UEngineAPICore::GetCore()->OpenLevel("Play");
+	}
 }

@@ -17,6 +17,9 @@ public:
 
 	void BoxMove(float _DeltaTime);
 	bool IsMovable(FVector2D _NextPos);
+	void MoveCheck(FVector2D _Dir);
+	bool IsSelectable(FVector2D _NextPos);
+	void SelectStage();
 
 protected:
 	void BeginPlay() override;
@@ -26,7 +29,9 @@ private:
 	ATileMap* TileMap = nullptr;
 	FIntPoint Scale;
 	FIntPoint MouseIndex;
+	FVector2D EndPos;
 	ASelectBox* SelectBox = nullptr;
 	float ActionTime = 0.0f;
+	int SpriteIndex;
 };
 

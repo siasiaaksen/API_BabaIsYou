@@ -4,6 +4,7 @@
 #include "BabaMapGameMode.h"
 #include "TileMap.h"
 #include "ContentsEnum.h"
+#include "StagePath.h"
 
 
 enum class EGameState
@@ -57,6 +58,7 @@ public:
 	void Undo(float _DeltaTime);
 
 	void GameState(float _DeltaTime);
+	static StagePath StagePathValue;
 
 protected:
 	void Tick(float _DeltaTime) override;

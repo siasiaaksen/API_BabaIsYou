@@ -10,6 +10,7 @@
 #include "ContentsEnum.h"
 #include "TileMap.h"
 
+StagePath APlayGameMode::StagePathValue;
 
 APlayGameMode::APlayGameMode()
 {
@@ -28,7 +29,7 @@ void APlayGameMode::BeginPlay()
 	State = EGameState::SELECT;
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
-	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\Level05.MData");
+	TileMap->TileMapLoad(StagePathValue.GetPath());
 	CreateStageInit(TileMap->GetTileCount(), true);
 	Scale = TileMap->GetTileCount();
 
@@ -499,5 +500,8 @@ void APlayGameMode::Tick(float _DeltaTime)
 		UEngineAPICore::GetCore()->OpenLevel("Map");
 	}
 }
+
+
+
 
 
