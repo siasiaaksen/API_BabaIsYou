@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 #include "TileMap.h"
+#include "SelectBox.h"
 
 
 class AMapGameMode : public AGameMode
@@ -14,8 +15,8 @@ public:
 	AMapGameMode& operator=(const AMapGameMode& _Other) = delete;
 	AMapGameMode& operator=(AMapGameMode&& _Other) noexcept = delete;
 
-	void BoxMove();
-	void IsMovable();
+	void BoxMove(float _DeltaTime);
+	bool IsMovable(FVector2D _NextPos);
 
 protected:
 	void BeginPlay() override;
@@ -25,5 +26,7 @@ private:
 	ATileMap* TileMap = nullptr;
 	FIntPoint Scale;
 	FIntPoint MouseIndex;
+	ASelectBox* SelectBox = nullptr;
+	float ActionTime = 0.0f;
 };
 

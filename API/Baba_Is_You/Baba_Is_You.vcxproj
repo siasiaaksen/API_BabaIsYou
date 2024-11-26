@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SelectBox.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Fade.h">
       <SubType>
       </SubType>
@@ -219,6 +223,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SelectBox.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Fade.cpp">
       <SubType>
       </SubType>

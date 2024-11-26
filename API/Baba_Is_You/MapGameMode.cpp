@@ -22,13 +22,16 @@ void AMapGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
-	ABackground* BG = GetWorld()->SpawnActor<ABackground>();
-	AMap* WorldMap = GetWorld()->SpawnActor<AMap>();
-
 	Scale = { 33, 18 };
 	FVector2D CenterPivot;
 	CenterPivot.X = (1280 - (Scale.X * 36)) / 2;
 	CenterPivot.Y = (720 - (Scale.Y * 36)) / 2;
+
+	ABackground* BG = GetWorld()->SpawnActor<ABackground>();
+	AMap* WorldMap = GetWorld()->SpawnActor<AMap>();
+	SelectBox = GetWorld()->SpawnActor<ASelectBox>();
+	SelectBox->SetActorLocation(CenterPivot + FVector2D((9 * 36) + 18, (15 * 36) + 18));
+
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
 	TileMap->Create(Scale, { 36, 36 });
 	TileMap->SetActorLocation(CenterPivot);
@@ -51,7 +54,7 @@ void AMapGameMode::BeginPlay()
 		TileMap->SetTile("Line.png", { 12, 11 }, 14, static_cast<int>(EMapOrder::LINE), ERenderOrder::LOWER);
 		
 		// SelectBox
-		TileMap->SetTile("SelectBox.png", { 9, 15 }, { 0, 0 }, { 54, 54 }, 0, static_cast<int>(EMapOrder::SELECTBOX), ERenderOrder::UPPER);
+		// TileMap->SetTile("SelectBox.png", { 9, 15 }, { 0, 0 }, { 54, 54 }, 0, static_cast<int>(EMapOrder::SELECTBOX), ERenderOrder::UPPER);
 		
 		// NUMBER
 		TileMap->SetTile("LevelNum.png", { 9, 15 }, 0, static_cast<int>(EMapOrder::NUMBER), ERenderOrder::UPPER);
@@ -69,41 +72,91 @@ void AMapGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
-	UEngineDebug::CoreOutPutString("BGTileSize : " + Scale.ToString());
+	FIntPoint SelectBoxIndex = TileMap->LocationToIndex(SelectBox->GetActorLocation());
+	UEngineDebug::CoreOutPutString("SelectBoxIndex : " + SelectBoxIndex.ToString());
 
-	//if (true == UEngineInput::GetInst().IsDown('R'))
-	//{
-	//	UEngineAPICore::GetCore()->OpenLevel("Title");
-	//}
-
-	//if (true == UEngineInput::GetInst().IsDown('F'))
-	//{
-	//	UEngineAPICore::GetCore()->OpenLevel("Play");
-	//}
-
-	BoxMove();
+	BoxMove(_DeltaTime);
 }
 
-void AMapGameMode::BoxMove()
+void AMapGameMode::BoxMove(float _DeltaTime)
 {
+	ActionTime += _DeltaTime * 10.0f;
+
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
+		FVector2D StartPos = SelectBox->GetActorLocation();
+		FVector2D EndPos = StartPos + (FVector2D::UP * 36);
+
+		if (false == IsMovable(EndPos))
+		{
+			return;
+		}
+
+		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+		SelectBox->SetActorLocation(CurPos);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
+		FVector2D StartPos = SelectBox->GetActorLocation();
+		FVector2D EndPos = StartPos + (FVector2D::DOWN * 36);
+
+		if (false == IsMovable(EndPos))
+		{
+			return;
+		}
+
+		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+		SelectBox->SetActorLocation(CurPos);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
+		FVector2D StartPos = SelectBox->GetActorLocation();
+		FVector2D EndPos = StartPos + (FVector2D::LEFT * 36);
+
+		if (false == IsMovable(EndPos))
+		{
+			return;
+		}
+
+		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+		SelectBox->SetActorLocation(CurPos);
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
+		FVector2D StartPos = SelectBox->GetActorLocation();
+		FVector2D EndPos = StartPos + (FVector2D::RIGHT * 36);
+
+		if (false == IsMovable(EndPos))
+		{
+			return;
+		}
+
+		FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+		SelectBox->SetActorLocation(CurPos);
 	}
 }
 
-void AMapGameMode::IsMovable()
+bool AMapGameMode::IsMovable(FVector2D _NextPos)
 {
+	FIntPoint NextIndex = TileMap->LocationToIndex(_NextPos - FVector2D(36, 36));
+
+	for (int i = 0; i < static_cast<int>(EMapOrder::MAX); i++)
+	{
+		Tile* NextTile = TileMap->GetTileRef(NextIndex, i);
+
+		if (nullptr == NextTile)
+		{
+			continue;
+		}
+
+		if (2 == NextTile->FloorOrder || 3 == NextTile->FloorOrder)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
