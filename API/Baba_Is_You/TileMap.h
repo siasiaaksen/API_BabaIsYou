@@ -141,7 +141,7 @@ public:
 
 	void AllTileMoveCheck(FIntPoint _MoveIndex);
 
-	void TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex);
+	void TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count = 0);
 	bool TileMoveCheck(FIntPoint _NextIndex, FIntPoint _MoveIndex);
 
 	// 다음 인덱스의 스프라이트가 있어? 모든 FloorOrder 체크

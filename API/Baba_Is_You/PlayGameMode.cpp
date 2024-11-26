@@ -29,7 +29,7 @@ void APlayGameMode::BeginPlay()
 	State = EGameState::SELECT;
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
-	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\Level06.MData");
+	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\test.MData");
 	CreateStageInit(TileMap->GetTileCount(), true);
 	Scale = TileMap->GetTileCount();
 
@@ -247,16 +247,28 @@ void APlayGameMode::BeginPlay()
 void APlayGameMode::OO_IS_ATTMoveSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, EMoveType _MoveType)
 {
 	StartLogic[static_cast<int>(_FLogicType)][static_cast<int>(EVLogicType::IS)][static_cast<int>(_TLogicType)]
-		= [this, _CurObject, _MoveType]()
+		= [this, _FLogicType, _TLogicType, _CurObject, _MoveType]()
 		{
 			this->TileMap->ChangeMoveMode(_CurObject, _MoveType);
+
+			for (int y = 0; y < Scale.Y; y++)
+			{
+				for (int x = 0; x < Scale.X; x++)
+				{
+					Tile* FTile = TileMap->GetTileRef(Scale, static_cast<int>(EFloorOrder::TEXT));
+					if (FTile->FLogicType == _FLogicType)
+					{
+
+					}
+				}
+			}
 		};
 }
 
 void APlayGameMode::OO_IS_ATTStateSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, EStateType _StateType)
 {
 	StartLogic[static_cast<int>(_FLogicType)][static_cast<int>(EVLogicType::IS)][static_cast<int>(_TLogicType)]
-		= [this, _CurObject, _StateType]()
+		= [this, _FLogicType, _TLogicType, _CurObject, _StateType]()
 		{
 			this->TileMap->ChangeStateMode(_CurObject, _StateType);
 		};
@@ -265,7 +277,7 @@ void APlayGameMode::OO_IS_ATTStateSetting(ELogicType _FLogicType, ELogicType _TL
 void APlayGameMode::MM_IS_NNSetting(ELogicType _FLogicType, ELogicType _TLogicType, ELogicType _CurObject, ELogicType _ChangeObject)
 {
 	StartLogic[static_cast<int>(_FLogicType)][static_cast<int>(EVLogicType::IS)][static_cast<int>(_TLogicType)]
-		= [this, _CurObject, _ChangeObject]()
+		= [this, _FLogicType, _TLogicType, _CurObject, _ChangeObject]()
 		{
 			this->TileMap->SpriteChange(_CurObject, _ChangeObject);
 			History NewH;
@@ -406,6 +418,7 @@ void APlayGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	if (S != EVLogicType::NONE)
 	{
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
+		ChangeSpriteCheck(_Index + _Dir + _Dir, _Order, _Dir);
 	}
 
 	return;
@@ -440,6 +453,30 @@ void APlayGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 	}
 
 	return;
+}
+
+void APlayGameMode::ChangeSpriteCheck(FIntPoint _Index, int _Order, FIntPoint _Dir)
+{
+	Tile* CurTile = TileMap->GetTileRef(_Index, _Order);
+
+	if (nullptr == CurTile)
+	{
+		return;
+	}
+
+	if (true == TileMap->IsIndexOver(_Index))
+	{
+		return;
+	}
+
+	T = CurTile->TLogicType;
+	if (T != ELogicType::NONE && true == IsLogicResult())
+	{
+		FIntPoint FIndex = _Index - _Dir - _Dir;
+		FIntPoint TIndex = _Index - _Dir;
+		Tile* FTile = TileMap->GetTileRef(FIndex, _Order);
+		Tile* TTile = TileMap->GetTileRef(TIndex, _Order);
+	}
 }
 
 void APlayGameMode::Action(float _DeltaTime)

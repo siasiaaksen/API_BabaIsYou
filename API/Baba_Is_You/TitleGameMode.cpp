@@ -138,11 +138,11 @@ void ATitleGameMode::BtnSelect()
 	{
 		if (CurBtnIndex == 0)
 		{
-			AFade* Fade = GetWorld()->SpawnActor<AFade>();
-			Fade->FadeOut();
+			//AFade* Fade = GetWorld()->SpawnActor<AFade>();
+			//Fade->FadeOut();
 
 			// 페이드 아웃 프레임 끝에서 오픈 레벨
-			//UEngineAPICore::GetCore()->OpenLevel("Map");
+			UEngineAPICore::GetCore()->OpenLevel("Map");
 		}
 	}
 }

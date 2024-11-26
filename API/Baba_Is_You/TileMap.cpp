@@ -11,6 +11,7 @@
 //#include "TestGameMode.h"
 #include "PlayGameMode.h"
 #include "BabaMapGameMode.h"
+#include "Fade.h"
 
 
 ATileMap::ATileMap()
@@ -79,8 +80,8 @@ void ATileMap::Tick(float _DeltaTime)
 					int CurTileX = CurTile->GetActorLocation().iX() - TileSize.iX();
 					int CurTileY = CurTile->GetActorLocation().iY() - TileSize.iY();
 					FIntPoint CurTileIndex = LocationToIndex(FVector2D(CurTileX, CurTileY));
-					UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
-					UEngineDebug::CoreOutPutString("YouTilePos : " + CurTileIndex.ToString());
+					//UEngineDebug::CoreOutPutString("FPS : " + std::to_string(1.0f / _DeltaTime));
+					//UEngineDebug::CoreOutPutString("YouTilePos : " + CurTileIndex.ToString());
 				}
 			}
 		}
@@ -365,13 +366,13 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		//TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
-	else 
+	else
 	{
 		Histories.pop_back();
 	}
 }
 
-void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
+void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
@@ -394,7 +395,11 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 		Tile* CurTile = CurMap[i];
 
-		if (nullptr != CurTile)
+		if (nullptr == CurTile)
+		{
+			continue;
+		}
+		else
 		{
 			EStateType CurStateType = CurTile->StateType;
 			EMoveType CurMoveType = CurTile->MoveType;
@@ -424,7 +429,7 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 			}
 			else
 			{
-				TileMove(NextIndex, _MoveIndex);
+				TileMove(NextIndex, _MoveIndex, ++_Count);
 
 				for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 				{
@@ -436,10 +441,22 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 					Tile* NextTile = NextMap[j];
 					if (nullptr != NextTile)
 					{
-						if ((EMoveType::YOU == CurMap[i]->MoveType && EStateType::DEFEAT == NextMap[j]->StateType) ||
-							(EStateType::SINK == NextMap[j]->StateType) ||
-							(EStateType::MELT == CurMap[i]->StateType && EStateType::HOT == NextMap[j]->StateType) ||
-							(EMoveType::YOU == CurMap[i]->MoveType && EStateType::WIN == NextMap[j]->StateType))
+						if (EStateType::DEFEAT == NextMap[j]->StateType)
+						{
+							if (EMoveType::YOU == CurMap[i]->MoveType)
+							{
+								History NewH;
+								NewH.Tile = CurTile;
+								NewH.Prev = _CurIndex;
+								NewH.Next = NextIndex;
+
+								LastHistories->push_back(NewH);
+
+								return;
+							}
+						}
+
+						if (EStateType::SINK == NextMap[j]->StateType)
 						{
 							History NewH;
 							NewH.Tile = CurTile;
@@ -449,6 +466,33 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 							LastHistories->push_back(NewH);
 
 							return;
+						}
+
+						if (EStateType::MELT == CurMap[i]->StateType && EStateType::HOT == NextMap[j]->StateType)
+						{
+							History NewH;
+							NewH.Tile = CurTile;
+							NewH.Prev = _CurIndex;
+							NewH.Next = NextIndex;
+
+							LastHistories->push_back(NewH);
+
+							return;
+						}
+
+						if (EStateType::WIN == NextMap[j]->StateType)
+						{
+							if (EMoveType::YOU == CurMap[i]->MoveType)
+							{
+								History NewH;
+								NewH.Tile = CurTile;
+								NewH.Prev = _CurIndex;
+								NewH.Next = NextIndex;
+
+								LastHistories->push_back(NewH);
+
+								return;
+							}
 						}
 
 						continue;
@@ -881,6 +925,11 @@ void ATileMap::Action(float _DeltaTime)
 			History.Prev; // 瘤况
 			History.Next; // 积己
 
+			if (nullptr == CurTile)
+			{
+				continue;
+			}
+
 			if (CurTile->MoveType != EMoveType::NONE)
 			{
 				AllTiles[History.Next.Y][History.Next.X][CurFloorOrder] = AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder];
@@ -935,12 +984,14 @@ void ATileMap::Action(float _DeltaTime)
 							if (EMoveType::YOU == CurTile->MoveType/* && EStateType::WIN == OtherTile[i]->StateType*/)
 							{
 								History.State = EState::DEACTIVEONE;
+
+								//AFade* Fade = GetWorld()->SpawnActor<AFade>();
+								//Fade->FadeOut();
 								// 甘 捞悼
 								UEngineAPICore::GetCore()->OpenLevel("Map");
 							}
 						}
 					}
-
 				}
 			}
 		}
@@ -1028,6 +1079,11 @@ void ATileMap::Undo(float _DeltaTime)
 			History& History = *StartIter;
 			Tile* CurTile = History.Tile;
 
+			if (nullptr == CurTile)
+			{
+				continue;
+			}
+
 			if (ELogicType::NONE != History.PrevSprite || ELogicType::NONE != History.NextSprite)
 			{
 				for (int y = 0; y < AllTiles.size(); y++)
@@ -1076,12 +1132,10 @@ void ATileMap::Undo(float _DeltaTime)
 			History.Next; // 瘤况
 			History.Prev; // 积己
 
-
 			AllTiles[History.Prev.Y][History.Prev.X][CurFloorOrder] = AllTiles[History.Next.Y][History.Next.X][CurFloorOrder];
 
 			std::map<int, Tile*>::iterator FindIter = AllTiles[History.Next.Y][History.Next.X].find(CurFloorOrder);
 			AllTiles[History.Next.Y][History.Next.X].erase(FindIter);
-
 
 			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
@@ -1092,22 +1146,25 @@ void ATileMap::Undo(float _DeltaTime)
 					continue;
 				}
 
-				// DEFEAT, HOT
-				if (History.State == EState::DEACTIVEONE)
+				if (nullptr != OtherTile[i])
 				{
-					if (false == CurTile->SpriteRenderer->IsActive())
+					// DEFEAT, HOT
+					if (History.State == EState::DEACTIVEONE)
+					{
+						if (false == CurTile->SpriteRenderer->IsActive())
+						{
+							CurTile->SpriteRenderer->SetActive(true);
+						}
+
+						CurTile->IsMove = true;
+					}
+					// SINK
+					else if (History.State == EState::DEACTIVEBOTH)
 					{
 						CurTile->SpriteRenderer->SetActive(true);
+						CurTile->IsMove = true;
+						OtherTile[i]->SpriteRenderer->SetActive(true);
 					}
-
-					CurTile->IsMove = true;
-				}
-				// SINK
-				else if (History.State == EState::DEACTIVEBOTH)
-				{
-					CurTile->SpriteRenderer->SetActive(true);
-					CurTile->IsMove = true;
-					OtherTile[i]->SpriteRenderer->SetActive(true);
 				}
 			}
 		}
