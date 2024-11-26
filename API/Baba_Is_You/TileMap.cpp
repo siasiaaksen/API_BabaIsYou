@@ -8,8 +8,8 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-//#include "TestGameMode.h"
-#include "PlayGameMode.h"
+#include "TestGameMode.h"
+//#include "PlayGameMode.h"
 #include "BabaMapGameMode.h"
 #include "Fade.h"
 
@@ -356,14 +356,14 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		PGameMode->SetState(EGameState::ACTION);
-		//TGameMode->SetState(ETestGameState::ACTION);
+		//PGameMode->SetState(EGameState::ACTION);
+		TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
 	else
@@ -429,10 +429,20 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
 			}
 			else
 			{
-				if (NextMap.contains(static_cast<int>(EMoveType::PUSH)))
+				for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 				{
-					// 내가 그녀석을 조사해줘야 한다.
-					TileMove(NextIndex, _MoveIndex, ++_Count);
+					Tile* NextTile = NextMap[j];
+
+					if (nullptr == NextTile)
+					{
+						continue;
+					}
+
+					if (EMoveType::PUSH == NextTile->MoveType)
+					{
+						// 내가 그녀석을 조사해줘야 한다.
+						TileMove(NextIndex, _MoveIndex, ++_Count);
+					}
 				}
 
 				History NewH;
@@ -843,6 +853,7 @@ void ATileMap::Action(float _DeltaTime)
 
 	LastHistories = &Last;
 
+	// Action 맨 처음
 	if (0.0f == ActionTime)
 	{
 		ActionAllTile.clear();
@@ -874,11 +885,14 @@ void ATileMap::Action(float _DeltaTime)
 	// ActionTime이 끝난 후
 	if (1.0f <= ActionTime)
 	{
-		// AllTiles.clear();
-
 		for (size_t i = 0; i < ActionAllTile.size(); i++)
 		{
 			Tile* CurTile = ActionAllTile[i];
+
+			if (nullptr == CurTile)
+			{
+				continue;
+			}
 
 			FIntPoint Point = LocationToIndex(CurTile->GetActorLocation() - GetActorLocation());
 
@@ -890,50 +904,52 @@ void ATileMap::Action(float _DeltaTime)
 	}
 
 	// ActionTime동안 이동하면서 벌어지는
-
-	std::list<History>::iterator StartIter = LastHistories->begin();
-	std::list<History>::iterator EndIter = LastHistories->end();
-
-	for (; StartIter != EndIter; ++StartIter)
 	{
-		History& History = *StartIter;
-		Tile* CurTile = History.Tile;
+		std::list<History>::iterator StartIter = LastHistories->begin();
+		std::list<History>::iterator EndIter = LastHistories->end();
 
-		if (nullptr == CurTile)
+		for (; StartIter != EndIter; ++StartIter)
 		{
-			MSGASSERT("말도 안되는 상황입니다.");
-		}
-		
-		if (CurTile->MoveType == EMoveType::YOU)
-		{
-			std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
-			
-			if (CurrentLayer.contains(static_cast<int>(EFloorOrder::TEXT)))
+			History& History = *StartIter;
+			Tile* CurTile = History.Tile;
+
+			if (nullptr == CurTile)
 			{
-				Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
-				
-				if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
+				MSGASSERT("말도 안되는 상황입니다.");
+			}
+
+			// 여기 확인
+			if (CurTile->MoveType == EMoveType::YOU)
+			{
+				std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
+
+				if (CurrentLayer.contains(static_cast<int>(EFloorOrder::TEXT)))
 				{
-					CurTextTile->IsMove = false;
-					CurTextTile->MoveType = EMoveType::NONE;
-					int a = 0;
+					Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
+
+					if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
+					{
+						CurTextTile->IsMove = false;
+						CurTextTile->MoveType = EMoveType::NONE;
+						int a = 0;
+					}
 				}
 			}
-		}
 
-		if (CurTile->MoveType != EMoveType::NONE)
-		{
-			FVector2D StartPos = History.Prev.ConvertToVector();
-			FVector2D EndPos = History.Next.ConvertToVector();
-			StartPos *= TileSize;
-			EndPos *= TileSize;
+			if (CurTile->MoveType != EMoveType::NONE)
+			{
+				FVector2D StartPos = History.Prev.ConvertToVector();
+				FVector2D EndPos = History.Next.ConvertToVector();
+				StartPos *= TileSize;
+				EndPos *= TileSize;
 
-			StartPos += GetActorLocation() + TileSize.Half();
-			EndPos += GetActorLocation() + TileSize.Half();
+				StartPos += GetActorLocation() + TileSize.Half();
+				EndPos += GetActorLocation() + TileSize.Half();
 
-			// ActionTime 동안 StartPos에서 EndPos로 이동
-			FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
-			CurTile->SetActorLocation(CurPos);
+				// ActionTime 동안 StartPos에서 EndPos로 이동
+				FVector2D CurPos = FVector2D::Lerp(StartPos, EndPos, ActionTime);
+				CurTile->SetActorLocation(CurPos);
+			}
 		}
 	}
 }
