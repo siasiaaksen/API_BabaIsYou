@@ -250,18 +250,6 @@ void APlayGameMode::OO_IS_ATTMoveSetting(ELogicType _FLogicType, ELogicType _TLo
 		= [this, _FLogicType, _TLogicType, _CurObject, _MoveType]()
 		{
 			this->TileMap->ChangeMoveMode(_CurObject, _MoveType);
-
-			for (int y = 0; y < Scale.Y; y++)
-			{
-				for (int x = 0; x < Scale.X; x++)
-				{
-					Tile* FTile = TileMap->GetTileRef(Scale, static_cast<int>(EFloorOrder::TEXT));
-					if (FTile->FLogicType == _FLogicType)
-					{
-
-					}
-				}
-			}
 		};
 }
 
@@ -392,6 +380,8 @@ void APlayGameMode::TileCheck()
 				F = CurTile->FLogicType;
 				if (F != ELogicType::NONE)
 				{
+					ChangeSpriteCheck(CurIndex, i);
+
 					NextTileCheck(CurIndex, FIntPoint{ 1, 0 }, i);
 					NextTileCheck(CurIndex, FIntPoint{ 0, 1 }, i);
 				}
@@ -417,8 +407,8 @@ void APlayGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	S = CurTile->SLogicType;
 	if (S != EVLogicType::NONE)
 	{
+		ChangeSpriteCheck(_Index, _Order);
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
-		ChangeSpriteCheck(_Index + _Dir + _Dir, _Order, _Dir);
 	}
 
 	return;
@@ -450,32 +440,107 @@ void APlayGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 		{
 			TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
 		}
+
+		ChangeSpriteCheck(_Index, _Order);
 	}
 
 	return;
 }
 
-void APlayGameMode::ChangeSpriteCheck(FIntPoint _Index, int _Order, FIntPoint _Dir)
+void APlayGameMode::ChangeSpriteCheck(FIntPoint _Index, int _Order)
 {
 	Tile* CurTile = TileMap->GetTileRef(_Index, _Order);
 
-	if (nullptr == CurTile)
+	if (nullptr == CurTile || ELogicType::NONE == CurTile->FLogicType)
 	{
 		return;
 	}
 
-	if (true == TileMap->IsIndexOver(_Index))
+	if (ELogicType::WALLOBJECT == CurTile->FLogicType ||
+		ELogicType::GRASSOBJECT == CurTile->FLogicType ||
+		ELogicType::LAVAOBJECT == CurTile->FLogicType ||
+		ELogicType::WATEROBJECT == CurTile->FLogicType)
 	{
-		return;
-	}
+		int Index = 0;
 
-	T = CurTile->TLogicType;
-	if (T != ELogicType::NONE && true == IsLogicResult())
-	{
-		FIntPoint FIndex = _Index - _Dir - _Dir;
-		FIntPoint TIndex = _Index - _Dir;
-		Tile* FTile = TileMap->GetTileRef(FIndex, _Order);
-		Tile* TTile = TileMap->GetTileRef(TIndex, _Order);
+		bool Left = (TileMap->IsIndexOver(_Index + FIntPoint::LEFT) &&
+			TileMap->GetTileRef(_Index + FIntPoint::LEFT, _Order)->FLogicType == CurTile->FLogicType);
+		bool Right = (TileMap->IsIndexOver(_Index + FIntPoint::RIGHT) &&
+			TileMap->GetTileRef(_Index + FIntPoint::RIGHT, _Order)->FLogicType == CurTile->FLogicType);
+		bool Up = (TileMap->IsIndexOver(_Index + FIntPoint::UP) &&
+			TileMap->GetTileRef(_Index + FIntPoint::UP, _Order)->FLogicType == CurTile->FLogicType);
+		bool Down = (TileMap->IsIndexOver(_Index + FIntPoint::DOWN) &&
+			TileMap->GetTileRef(_Index + FIntPoint::DOWN, _Order)->FLogicType == CurTile->FLogicType);
+
+		// ÀÎµ¦½º Ã£±â
+		{
+			if (!Left && !Right && !Up && !Down)
+			{
+				Index = 0;
+			}
+			else if (!Left && Right && !Up && !Down)
+			{
+				Index = 1;
+			}
+			else if (!Left && !Right && Up && !Down)
+			{
+				Index = 2;
+			}
+			else if (!Left && Right && Up && !Down)
+			{
+				Index = 3;
+			}
+			else if (Left && !Right && !Up && !Down)
+			{
+				Index = 4;
+			}
+			else if (Left && Right && !Up && !Down)
+			{
+				Index = 5;
+			}
+			else if (Left && !Right && Up && !Down)
+			{
+				Index = 6;
+			}
+			else if (Left && Right && Up && !Down)
+			{
+				Index = 7;
+			}
+			else if (!Left && !Right && !Up && Down)
+			{
+				Index = 8;
+			}
+			else if (!Left && Right && !Up && Down)
+			{
+				Index = 9;
+			}
+			else if (!Left && !Right && Up && Down)
+			{
+				Index = 10;
+			}
+			else if (!Left && Right && Up && Down)
+			{
+				Index = 11;
+			}
+			else if (Left && !Right && !Up && Down)
+			{
+				Index = 12;
+			}
+			else if (Left && Right && !Up && Down)
+			{
+				Index = 13;
+			}
+			else if (Left && !Right && Up && Down)
+			{
+				Index = 14;
+			}
+			else if (Left && Right && Up && Down)
+			{
+				Index = 15;
+			}
+		}
+
+		CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, Index);
 	}
 }
 

@@ -41,7 +41,7 @@ public:
 	void TileCheck();
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
 	void LastTileCheck(FIntPoint _Index, int _Order);
-	void ChangeSpriteCheck(FIntPoint _Index, int _Order, FIntPoint _Dir);
+	void ChangeSpriteCheck(FIntPoint _Index, int _Order);
 
 	void SetState(EGameState _State)
 	{
