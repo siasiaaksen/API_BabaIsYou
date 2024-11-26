@@ -18,7 +18,7 @@ public:
 	void BoxMove(float _DeltaTime);
 	bool IsMovable(FVector2D _NextPos);
 	void MoveCheck(FVector2D _Dir);
-	bool IsSelectable(FVector2D _NextPos);
+	bool IsSelectable();
 	void SelectStage();
 
 protected:

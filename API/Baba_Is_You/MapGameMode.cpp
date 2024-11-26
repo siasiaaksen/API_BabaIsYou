@@ -142,20 +142,20 @@ void AMapGameMode::MoveCheck(FVector2D _Dir)
 	SelectBox->SetActorLocation(CurPos);
 }
 
-bool AMapGameMode::IsSelectable(FVector2D _NextPos)
+bool AMapGameMode::IsSelectable()
 {
-	FIntPoint NextIndex = TileMap->LocationToIndex(_NextPos - FVector2D(36, 36));
+	FIntPoint CurIndex = TileMap->LocationToIndex(SelectBox->GetActorLocation() - FVector2D(36, 36));
 
 	for (int i = 0; i < static_cast<int>(EMapOrder::MAX); i++)
 	{
-		Tile* NextTile = TileMap->GetTileRef(NextIndex, i);
+		Tile* CurTile = TileMap->GetTileRef(CurIndex, i);
 
-		if (nullptr == NextTile)
+		if (nullptr == CurTile)
 		{
 			continue;
 		}
 
-		if (3 == NextTile->FloorOrder)
+		if (3 == CurTile->FloorOrder)
 		{
 			return true;
 		}
@@ -166,16 +166,16 @@ bool AMapGameMode::IsSelectable(FVector2D _NextPos)
 
 void AMapGameMode::SelectStage()
 {
-	if (false == IsSelectable(EndPos))
+	if (false == IsSelectable())
 	{
 		return;
 	}
 
 	if (true == UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
-		FIntPoint NextIndex = TileMap->LocationToIndex(EndPos - FVector2D(36, 36));
-		Tile* NextTile = TileMap->GetTileRef(NextIndex, 3);
-		SpriteIndex = NextTile->SpriteIndex;
+		FIntPoint CurIndex = TileMap->LocationToIndex(SelectBox->GetActorLocation() - FVector2D(36, 36));
+		Tile* CurTile = TileMap->GetTileRef(CurIndex, 3);
+		SpriteIndex = CurTile->SpriteIndex;
 
 		StagePath& StagePathValue = APlayGameMode::StagePathValue;
 

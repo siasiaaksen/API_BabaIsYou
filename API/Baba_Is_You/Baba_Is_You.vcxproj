@@ -212,10 +212,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="TitleLogo.h">
       <SubType>
@@ -281,10 +277,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <SubType>
       </SubType>
     </ClCompile>

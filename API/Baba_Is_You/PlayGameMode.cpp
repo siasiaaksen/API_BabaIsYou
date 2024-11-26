@@ -29,7 +29,7 @@ void APlayGameMode::BeginPlay()
 	State = EGameState::SELECT;
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
-	TileMap->TileMapLoad(StagePathValue.GetPath());
+	TileMap->TileMapLoad(".\\..\\BabaResources\\Data\\Level06.MData");
 	CreateStageInit(TileMap->GetTileCount(), true);
 	Scale = TileMap->GetTileCount();
 

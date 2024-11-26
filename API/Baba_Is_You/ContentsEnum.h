@@ -14,7 +14,7 @@ enum class ERenderOrder
 	BGOBJECT = 0,
 	LOWER = 1,
 	UPPER = 2,
-	PLAYER = 1000,
+	CONGRA = 1000,
 	FADE = 2000,
 };
 

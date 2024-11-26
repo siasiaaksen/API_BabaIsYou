@@ -14,7 +14,6 @@
 #include "PlayGameMode.h"
 #include "TestGameMode.h"
 #include "MapEditor.h"
-#include "Player.h"
 
 
 BabaContentsCore::BabaContentsCore()
@@ -90,6 +89,7 @@ void BabaContentsCore::BeginPlay()
 			UImageManager::GetInst().CuttingSprite("WorldMapNumberBack36.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("Line.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("LevelNum.png", { 36, 36 });
+			UImageManager::GetInst().CuttingSprite("CongratulationsUI.bmp", { 900, 300 });
 		}
 	}
 
@@ -138,7 +138,7 @@ void BabaContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, AActor>("Play");
 	UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
 	UEngineAPICore::GetCore()->CreateLevel<AMapEditor, AActor>("Editor");
-	UEngineAPICore::GetCore()->OpenLevel("Map");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void BabaContentsCore::Tick()
