@@ -218,5 +218,7 @@ private:
 	float ActionTime = 0.0f;
 
 	std::vector<Tile*> DeactiveObject;
+
+	std::vector<Tile*> ActionAllTile;
 };
 
