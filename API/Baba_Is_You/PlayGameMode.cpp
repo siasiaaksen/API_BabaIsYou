@@ -9,6 +9,8 @@
 
 #include "ContentsEnum.h"
 #include "TileMap.h"
+#include "MapGameMode.h"
+
 
 StagePath APlayGameMode::StagePathValue;
 
@@ -25,6 +27,9 @@ void APlayGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorld()->SetCameraToMainPawn(false);
+
+	Fade = GetWorld()->SpawnActor<AFade>();
+	Fade->FadeIn();
 
 	BGMPlayer = UEngineSound::Play("baba.ogg");
 
@@ -316,24 +321,28 @@ void APlayGameMode::MoveCheck()
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::UP);
 		BabaIndexChange();
+		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::LEFT);
 		BabaIndexChange();
+		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::DOWN);
 		BabaIndexChange();
+		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
 		BabaIndexChange();
+		MoveSound();
 	}
 }
 
@@ -508,7 +517,7 @@ void APlayGameMode::ChangeSpriteCheck(FIntPoint _Index, int _Order)
 			{
 				CurTile->SpriteIndex = 3;
 			}
-			else if (true == Left && false == Right && false == Up && true == Down)
+			else if (true == Left && false == Right && false == Up && false == Down)
 			{
 				CurTile->SpriteIndex = 4;
 			}
@@ -618,7 +627,15 @@ void APlayGameMode::Tick(float _DeltaTime)
 	if (true == UEngineInput::GetInst().IsDown('P'))
 	{
 		BGMPlayer.Off();
+		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->OpenLevel("Map");
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('R'))
+	{
+		BGMPlayer.Off();
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
+		UEngineAPICore::GetCore()->OpenLevel("Play");
 	}
 }
 
@@ -659,6 +676,12 @@ void APlayGameMode::BabaIndexChange()
 			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
 		}
 	}
+}
+
+void APlayGameMode::MoveSound()
+{
+	MovePlayer = UEngineSound::Play("Move.ogg");
+	MovePlayer.SetVolume(30.0f);
 }
 
 

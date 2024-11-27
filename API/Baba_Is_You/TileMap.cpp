@@ -8,8 +8,9 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-//#include "TestGameMode.h"
-#include "PlayGameMode.h"
+#include "TestGameMode.h"
+//#include "PlayGameMode.h"
+#include "MapGameMode.h"
 #include "BabaMapGameMode.h"
 #include "Fade.h"
 
@@ -381,14 +382,14 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		PGameMode->SetState(EGameState::ACTION);
-		//TGameMode->SetState(ETestGameState::ACTION);
+		//PGameMode->SetState(EGameState::ACTION);
+		TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
 	else
@@ -686,7 +687,7 @@ void ATileMap::SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite)
 				if (CurTile->FLogicType == _CurSprite)
 				{
 					CurTile->IsChange = true;
-					int SpriteIndex = CurTile->SpriteIndex;
+					int SpriteIndex = 0;
 					std::string_view SpriteName = FindSpriteName(_ChangeSprite);
 					std::string UpperName = UEngineString::ToUpper(SpriteName);
 					CurTile->FLogicType = _ChangeSprite;
@@ -971,18 +972,6 @@ void ATileMap::Action(float _DeltaTime)
 				}
 				else
 				{
-					//if (OtherTile.contains(static_cast<int>(EFloorOrder::TEXT)))
-					//{
-					//	Tile* CurTextTile = OtherTile[static_cast<int>(EFloorOrder::TEXT)];
-
-					//	if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
-					//	{
-					//		CurTextTile->IsMove = false;
-					//		CurTextTile->MoveType = EMoveType::NONE;
-					//		int a = 0;
-					//	}
-					//}
-
 					Tile* FindTile = OtherTile[i];
 
 					if (nullptr != FindTile)
@@ -1022,7 +1011,12 @@ void ATileMap::Action(float _DeltaTime)
 
 								//AFade* Fade = GetWorld()->SpawnActor<AFade>();
 								//Fade->FadeOut();
+								
+								//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+								//PGameMode->GetBGMPlayer().Off();
+
 								// 맵 이동
+								UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
 								UEngineAPICore::GetCore()->OpenLevel("Map");
 							}
 						}

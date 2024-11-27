@@ -13,9 +13,9 @@ public:
 	FIntPoint Index;
 	FVector2D Pivot;
 	FVector2D SpriteScale;
-	int SpriteIndex;
-	int FloorOrder;
-	ERenderOrder Order;
+	int SpriteIndex = 0;
+	int FloorOrder = 0;
+	ERenderOrder Order = ERenderOrder::NONE;
 	ELogicType FLogicType = ELogicType::NONE;
 	EVLogicType SLogicType = EVLogicType::NONE;
 	ELogicType TLogicType = ELogicType::NONE;

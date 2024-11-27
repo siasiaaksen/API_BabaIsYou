@@ -8,7 +8,7 @@
 #include "ContentsEnum.h"
 #include "TitleLogo.h"
 #include "TitleBackground.h"
-#include "Fade.h"
+#include "MapGameMode.h"
 
 
 ATitleGameMode::ATitleGameMode()
@@ -29,56 +29,61 @@ void ATitleGameMode::BeginPlay()
 
 	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
 	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
+	AButtons* Btn = GetWorld()->SpawnActor<AButtons>();
+	Fade = GetWorld()->SpawnActor<AFade>();
 
 	// Buttons
 	{
 		// StartBtn
-		AButtons* StartBtn = GetWorld()->SpawnActor<AButtons>();
-		StartBtn->SetButton("StartButton784_51.png", { 640, 450 });
-		Btns.push_back(StartBtn);
+		Btn->SetButton("StartButton784_51.png", { 640, 450 });
+		Btns.push_back(Btn);
 
 		// SettingsBtn
-		AButtons* SettingsBtn = GetWorld()->SpawnActor<AButtons>();
-		SettingsBtn->SetButton("SettingButton786_51.png", { 640, 530 });
-		Btns.push_back(SettingsBtn);
+		Btn->SetButton("SettingButton786_51.png", { 640, 530 });
+		Btns.push_back(Btn);
 
 		// ExitBtn
-		AButtons* ExitBtn = GetWorld()->SpawnActor<AButtons>();
-		ExitBtn->SetButton("ExitButton786_51.png", { 640, 610 });
-		Btns.push_back(ExitBtn);
+		Btn->SetButton("ExitButton786_51.png", { 640, 610 });
+		Btns.push_back(Btn);
 	}
 
 	// Baba
 	{
 		// StartBtn
 		{
-			USpriteRenderer* StartBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
-			StartBabaSprite->SetOrder(ERenderOrder::BABASELECT);
-			StartBabaSprite->SetSprite("BabaObject.png");
-			FVector2D StartBtnScale = StartBabaSprite->SetSpriteScale(1.0f);
-			StartBabaSprite->SetComponentLocation({ 425, 450 });
-			Babas.push_back(StartBabaSprite);
-			StartBabaSprite->SetActive(true);
+			USpriteRenderer* BabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			BabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			BabaSprite->SetSprite("BabaObject.png");
+			BabaSprite->CreateAnimation("TitleBaba", "BabaObject.png", { 2, 22, 42 }, 0.2f);
+			BabaSprite->ChangeAnimation("TitleBaba");
+			FVector2D BabaSpriteScale = BabaSprite->SetSpriteScale(1.0f);
+			BabaSprite->SetComponentLocation({ 425, 450 });
+			Babas.push_back(BabaSprite);
+			BabaSprite->SetActive(true);
 		}
 		// SettingsBtn
 		{
-			USpriteRenderer* SettingsBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
-			SettingsBabaSprite->SetOrder(ERenderOrder::BABASELECT);
-			SettingsBabaSprite->SetSprite("BabaObject.png");
-			FVector2D StartBtnScale = SettingsBabaSprite->SetSpriteScale(1.0f);
-			SettingsBabaSprite->SetComponentLocation({ 425, 530 });
-			Babas.push_back(SettingsBabaSprite);
-			SettingsBabaSprite->SetActive(false);
+			USpriteRenderer* BabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			BabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			BabaSprite->SetSprite("BabaObject.png");
+			BabaSprite->CreateAnimation("TitleBaba", "BabaObject.png", { 2, 22, 42 }, 0.2f);
+			BabaSprite->ChangeAnimation("TitleBaba");
+			FVector2D BabaSpriteScale = BabaSprite->SetSpriteScale(1.0f);
+			BabaSprite->SetComponentLocation({ 425, 530 });
+			Babas.push_back(BabaSprite);
+			BabaSprite->SetActive(false);
 		}
 		// ExitBtn
 		{
-			USpriteRenderer* ExitBabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
-			ExitBabaSprite->SetOrder(ERenderOrder::BABASELECT);
-			ExitBabaSprite->SetSprite("BabaObject.png");
-			FVector2D StartBtnScale = ExitBabaSprite->SetSpriteScale(1.0f);
-			ExitBabaSprite->SetComponentLocation({ 425, 610 });
-			Babas.push_back(ExitBabaSprite);
-			ExitBabaSprite->SetActive(false);
+			USpriteRenderer* BabaSprite = CreateDefaultSubObject<USpriteRenderer>();;
+			BabaSprite->SetOrder(ERenderOrder::BABASELECT);
+			BabaSprite->SetSprite("BabaObject.png");
+			BabaSprite->CreateAnimation("TitleBaba", "BabaObject.png", { 2, 22, 42 }, 0.2f);
+			BabaSprite->ChangeAnimation("TitleBaba");
+			FVector2D BabaSpriteScale = BabaSprite->SetSpriteScale(1.0f);
+			BabaSprite->SetComponentLocation({ 425, 610 });
+			Babas.push_back(BabaSprite);
+			BabaSprite->SetActive(false);
 		}
 	}
 }
@@ -88,6 +93,11 @@ void ATitleGameMode::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	BtnSelect();
+
+	if (IsAnimed)
+	{
+		MoveMapLevel();
+	}
 }
 
 void ATitleGameMode::BtnSelect()
@@ -112,6 +122,8 @@ void ATitleGameMode::BtnSelect()
 				Babas[i]->SetActive(false);
 			}
 		}
+
+		OptionSound = UEngineSound::Play("OptionCursorSound.ogg");
 	}
 
 	if (true == UEngineInput::GetInst().IsDown(VK_DOWN) || true == UEngineInput::GetInst().IsDown('S'))
@@ -134,19 +146,28 @@ void ATitleGameMode::BtnSelect()
 				Babas[i]->SetActive(false);
 			}
 		}
+
+		OptionSound = UEngineSound::Play("OptionCursorSound.ogg");
 	}
 
 	if (true == UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
 		if (CurBtnIndex == 0)
 		{
-			//AFade* Fade = GetWorld()->SpawnActor<AFade>();
-			//Fade->FadeOut();
-
+			SelectSound = UEngineSound::Play("OptionSelect.ogg");
 			BGMPlayer.Off();
-
-			// 페이드 아웃 프레임 끝에서 오픈 레벨
-			UEngineAPICore::GetCore()->OpenLevel("Map");
+			Fade->FadeOut();
+			IsAnimed = true;
 		}
+	}
+}
+
+void ATitleGameMode::MoveMapLevel()
+{
+	IsAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsAnimEnd)
+	{
+		UEngineAPICore::GetCore()->OpenLevel("Map");
 	}
 }

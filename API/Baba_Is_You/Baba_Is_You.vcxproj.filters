@@ -55,9 +55,6 @@
     <ClInclude Include="StagePath.h">
       <Filter>ContentsObject\Play</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>ContentsObject\Global</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -113,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="StagePath.cpp">
       <Filter>ContentsObject\Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>ContentsObject\Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

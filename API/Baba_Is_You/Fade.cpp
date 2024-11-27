@@ -10,6 +10,13 @@
 
 AFade::AFade()
 {
+	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	SpriteRenderer->SetOrder(ERenderOrder::FADE);
+	SpriteRenderer->SetSprite("Fade");
+	SpriteRenderer->CreateAnimation("FadeIn", "Fade", 34, 0, 0.03f, false);
+	SpriteRenderer->CreateAnimation("FadeOut", "Fade", 0, 34, 0.03f, false);
+	FVector2D LogoScale = SpriteRenderer->SetSpriteScale(1.0f);
+	SpriteRenderer->SetComponentLocation({ 640, 360 });
 }
 
 AFade::~AFade()
@@ -28,27 +35,12 @@ void AFade::Tick(float _DeltaTime)
 
 void AFade::FadeIn()
 {
-	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpriteRenderer->SetOrder(ERenderOrder::FADE);
-	SpriteRenderer->SetSprite("Fade");
-	SpriteRenderer->CreateAnimation("FadeIn", "Fade", 34, 0, 0.03f, false);
 	SpriteRenderer->ChangeAnimation("FadeIn");
-
-	FVector2D LogoScale = SpriteRenderer->SetSpriteScale(1.0f);
-	SpriteRenderer->SetComponentLocation({ 640, 360 });
 }
 
 void AFade::FadeOut()
 {
-	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpriteRenderer->SetOrder(ERenderOrder::FADE);
-	SpriteRenderer->SetSprite("Fade");
-	SpriteRenderer->CreateAnimation("FadeOut", "Fade", 0, 34, 0.03f, false);
 	SpriteRenderer->ChangeAnimation("FadeOut");
-	//SpriteRenderer->SetAnimationEvent("FadeOut", 34, Function)
-
-	FVector2D LogoScale = SpriteRenderer->SetSpriteScale(1.0f);
-	SpriteRenderer->SetComponentLocation({ 640, 360 });
 }
 
 void AFade::FadeDestroy()

@@ -24,6 +24,9 @@ void AMapGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
+	Fade = GetWorld()->SpawnActor<AFade>();
+	Fade->FadeIn();
+
 	BGMPlayer = UEngineSound::Play("map.ogg");
 
 	Scale = { 33, 18 };
@@ -78,6 +81,11 @@ void AMapGameMode::Tick(float _DeltaTime)
 
 	BoxMove(_DeltaTime);
 	SelectStage();
+
+	if (IsAnimed)
+	{
+		MovePlayLevel();
+	}
 }
 
 void AMapGameMode::BoxMove(float _DeltaTime)
@@ -210,12 +218,10 @@ void AMapGameMode::SelectStage()
 			break;
 		}
 
+		SelectSound = UEngineSound::Play("StageEnterSound.ogg");
 		BGMPlayer.Off();
-
-		// 페이드 인/아웃 필요
-
-		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
-		UEngineAPICore::GetCore()->OpenLevel("Play");
+		Fade->FadeOut();
+		IsAnimed = true;
 	}
 }
 
@@ -223,4 +229,17 @@ void AMapGameMode::MoveSound()
 {
 	MovePlayer = UEngineSound::Play("Move.ogg");
 	MovePlayer.SetVolume(30.0f);
+}
+
+void AMapGameMode::MovePlayLevel()
+{
+	IsAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsAnimEnd)
+	{
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
+		UEngineAPICore::GetCore()->OpenLevel("Play");
+
+		IsAnimed = false;
+	}
 }

@@ -6,6 +6,7 @@
 #include "TileMap.h"
 #include "ContentsEnum.h"
 #include "StagePath.h"
+#include "Fade.h"
 
 
 enum class EGameState
@@ -44,6 +45,7 @@ public:
 	void LastTileCheck(FIntPoint _Index, int _Order);
 	void ChangeSpriteCheck(FIntPoint _Index, int _Order);
 	void BabaIndexChange();
+	void MoveSound();
 
 	void SetState(EGameState _State)
 	{
@@ -53,6 +55,11 @@ public:
 	EGameState GetState() const
 	{
 		return State;
+	}
+
+	USoundPlayer GetBGMPlayer() const
+	{
+		return BGMPlayer;
 	}
 
 	void BeginPlay() override;
@@ -87,5 +94,9 @@ private:
 	EGameState State;
 
 	USoundPlayer BGMPlayer;
+	USoundPlayer MovePlayer;
+	AFade* Fade = nullptr;
+	bool IsAnimEnd = false;
+	bool IsAnimed = false;
 };
 

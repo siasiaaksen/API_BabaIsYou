@@ -167,10 +167,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="StagePath.h">
       <SubType>
       </SubType>
@@ -236,10 +232,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="BabaMapGameMode.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
       <SubType>
       </SubType>
     </ClCompile>
