@@ -56,11 +56,7 @@ void ULevel::BeginPlayCheck()
 
 		BeginPlayList.clear();
 
-		Renderers;
-
 		AActor::ComponentBeginPlay();
-
-		Renderers;
 	}
 }
 

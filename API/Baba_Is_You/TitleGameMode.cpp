@@ -4,8 +4,8 @@
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/SpriteRenderer.h>
-#include "ContentsEnum.h"
 
+#include "ContentsEnum.h"
 #include "TitleLogo.h"
 #include "TitleBackground.h"
 #include "Fade.h"
@@ -24,6 +24,8 @@ void ATitleGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorld()->SetCameraToMainPawn(false);
+
+	BGMPlayer = UEngineSound::Play("menu.ogg");
 
 	ATitleBackground* NewBG = GetWorld()->SpawnActor<ATitleBackground>();
 	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();

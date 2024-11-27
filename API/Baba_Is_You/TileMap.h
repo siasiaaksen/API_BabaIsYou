@@ -138,6 +138,7 @@ public:
 
 	std::string_view FindSpriteName(ELogicType _FLogicType);
 	std::vector<FIntPoint> FindMoveTile();
+	Tile* FindYouTile();
 
 	void AllTileMoveCheck(FIntPoint _MoveIndex);
 

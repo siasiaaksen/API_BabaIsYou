@@ -313,21 +313,25 @@ void APlayGameMode::MoveCheck()
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::UP);
+		BabaIndexChange();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::LEFT);
+		BabaIndexChange();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::DOWN);
+		BabaIndexChange();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
+		BabaIndexChange();
 	}
 }
 
@@ -407,7 +411,6 @@ void APlayGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	S = CurTile->SLogicType;
 	if (S != EVLogicType::NONE)
 	{
-		//ChangeSpriteCheck(_Index, _Order);
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
 	}
 
@@ -440,8 +443,6 @@ void APlayGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 		{
 			TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
 		}
-
-		//ChangeSpriteCheck(_Index, _Order);
 	}
 
 	return;
@@ -615,6 +616,45 @@ void APlayGameMode::Tick(float _DeltaTime)
 	if (true == UEngineInput::GetInst().IsDown('P'))
 	{
 		UEngineAPICore::GetCore()->OpenLevel("Map");
+	}
+}
+
+void APlayGameMode::BabaIndexChange()
+{
+	if (false == IsMove())
+	{
+		return;
+	}
+
+	Tile* CurTile = TileMap->FindYouTile();
+
+	if (nullptr == CurTile)
+	{
+		return;
+	}
+	else
+	{
+		std::string UpperName = UEngineString::ToUpper("BabaObject.png");
+		if (UpperName == CurTile->SpriteName)
+		if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 4);
+		}
+
+		if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 8);
+		}
+
+		if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 12);
+		}
+
+		if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
+		}
 	}
 }
 

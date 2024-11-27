@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include <EnginePlatform/EngineSound.h>
 #include "Buttons.h"
 
 
@@ -24,5 +25,6 @@ private:
 	int CurBtnIndex;
 	std::vector<AButtons*> Btns;
 	std::vector<USpriteRenderer*> Babas;
+	USoundPlayer BGMPlayer;
 };
 

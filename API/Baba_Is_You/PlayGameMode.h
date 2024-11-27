@@ -42,6 +42,7 @@ public:
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
 	void LastTileCheck(FIntPoint _Index, int _Order);
 	void ChangeSpriteCheck(FIntPoint _Index, int _Order);
+	void BabaIndexChange();
 
 	void SetState(EGameState _State)
 	{

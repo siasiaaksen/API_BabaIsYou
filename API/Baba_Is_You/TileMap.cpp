@@ -344,6 +344,31 @@ std::vector<FIntPoint> ATileMap::FindMoveTile()
 	return MoveTiles;
 }
 
+Tile* ATileMap::FindYouTile()
+{
+	for (int y = 0; y < TileSize.Y; y++)
+	{
+		for (int x = 0; x < TileSize.X; x++)
+		{
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+			{
+				FIntPoint CurIndex = FIntPoint(x, y);
+				Tile* CurTile = GetTileRef(CurIndex, i);
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (EMoveType::YOU == CurTile->MoveType)
+				{
+					return CurTile;
+				}
+			}
+		}
+	}
+}
+
 void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 {
 	Histories.push_back(std::list<History>());
