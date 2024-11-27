@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EnginePlatform/EngineSound.h>
+#include <EngineCore/SpriteRenderer.h>
 
 
 class AFade : public AActor
@@ -31,6 +32,5 @@ protected:
 
 private:
 	USpriteRenderer* SpriteRenderer = nullptr;
-	std::function<void()> Function;
 };
 

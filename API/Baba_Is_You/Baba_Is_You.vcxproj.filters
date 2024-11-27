@@ -55,6 +55,9 @@
     <ClInclude Include="StagePath.h">
       <Filter>ContentsObject\Play</Filter>
     </ClInclude>
+    <ClInclude Include="Congratulations.h">
+      <Filter>ContentsObject\Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -109,6 +112,9 @@
       <Filter>ContentsObject\Map</Filter>
     </ClCompile>
     <ClCompile Include="StagePath.cpp">
+      <Filter>ContentsObject\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Congratulations.cpp">
       <Filter>ContentsObject\Play</Filter>
     </ClCompile>
   </ItemGroup>

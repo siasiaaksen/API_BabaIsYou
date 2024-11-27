@@ -43,13 +43,19 @@ public:
 	void TileCheck();
 	void NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order);
 	void LastTileCheck(FIntPoint _Index, int _Order);
+
 	void ChangeSpriteCheck(FIntPoint _Index, int _Order);
 	void BabaIndexChange();
+
 	void MoveSound();
 	void UndoSound();
+
 	void MoveMapLevel();
 	void Restart();
 	void InputKey();
+
+	bool IsYouTileExist();
+	void BGMTurnOn();
 
 	void SetState(EGameState _State)
 	{
@@ -103,7 +109,9 @@ private:
 	USoundPlayer BGMPlayer;
 	USoundPlayer MovePlayer;
 	USoundPlayer UndoPlayer;
+	USoundPlayer GameOverSound;
 	AFade* Fade = nullptr;
+	bool IsBGMOn = true;
 	bool IsAnimEnd = false;
 	bool IsPauseAnimed = false;
 	bool IsRestartAnimed = false;

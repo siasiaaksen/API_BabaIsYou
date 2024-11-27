@@ -4,7 +4,6 @@
 #include <EngineBase/EngineFile.h>
 #include <EngineCore/ImageManager.h>
 #include <EngineBase/EngineDebug.h>
-#include <EngineCore/SpriteRenderer.h>
 #include "ContentsEnum.h"
 
 

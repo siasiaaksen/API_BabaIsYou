@@ -404,7 +404,7 @@ void APlayGameMode::TileCheck()
 					if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsFirstCombine)
 					{
 						CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
-
+						
 						IsFirstCombine = false;
 					}
 				}
@@ -631,6 +631,8 @@ void APlayGameMode::GameState(float _DeltaTime)
 		MoveCheck();
 		UndoCheck();
 
+		BGMTurnOn();
+
 		break;
 	case EGameState::ACTION:
 		Action(_DeltaTime);
@@ -668,35 +670,50 @@ void APlayGameMode::BabaIndexChange()
 	{
 		return;
 	}
-
-	Tile* CurTile = TileMap->FindYouTile();
-
-	if (nullptr == CurTile)
-	{
-		return;
-	}
 	else
 	{
-		std::string UpperName = UEngineString::ToUpper("BabaObject.png");
-		if (UpperName == CurTile->SpriteName)
-		if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
+		for (int y = 0; y < Scale.Y; y++)
 		{
-			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 4);
-		}
+			for (int x = 0; x < Scale.X; x++)
+			{
+				for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+				{
+					FIntPoint CurIndex = FIntPoint(x, y);
+					Tile* CurTile = TileMap->GetTileRef(CurIndex, i);
 
-		if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
-		{
-			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 8);
-		}
+					if (nullptr == CurTile)
+					{
+						continue;
+					}
 
-		if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
-		{
-			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 12);
-		}
+					if (EMoveType::YOU == CurTile->MoveType)
+					{
+						std::string UpperName = UEngineString::ToUpper("BabaObject.png");
+						if (UpperName == CurTile->SpriteName)
+						{
+							if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
+							{
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 4);
+							}
 
-		if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
-		{
-			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
+							if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
+							{
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 8);
+							}
+
+							if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
+							{
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 12);
+							}
+
+							if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
+							{
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -719,6 +736,7 @@ void APlayGameMode::InputKey()
 	if (true == UEngineInput::GetInst().IsDown('P'))
 	{
 		BGMPlayer.Off();
+		IsBGMOn = false;
 		Fade->FadeOut();
 		IsPauseAnimed = true;
 	}
@@ -726,6 +744,7 @@ void APlayGameMode::InputKey()
 	if (true == UEngineInput::GetInst().IsDown('R'))
 	{
 		BGMPlayer.Off();
+		IsBGMOn = false;
 		Fade->FadeOut();
 		IsRestartAnimed = true;
 	}
@@ -754,6 +773,60 @@ void APlayGameMode::Restart()
 		UEngineAPICore::GetCore()->OpenLevel("Play");
 
 		IsRestartAnimed = false;
+	}
+}
+
+bool APlayGameMode::IsYouTileExist()
+{
+	for (int x = 0; x < Scale.X; ++x)
+	{
+		for (int y = 0; y < Scale.Y; ++y)
+		{
+			FIntPoint CurIndex = { x, y };
+
+			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); ++i)
+			{
+				Tile* CurTile = TileMap->GetTileRef(CurIndex, i);
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (CurTile->MoveType == EMoveType::YOU)
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+void APlayGameMode::BGMTurnOn()
+{
+	if (!IsYouTileExist())
+	{
+		if (IsBGMOn)
+		{
+			BGMPlayer.Off();
+			IsBGMOn = false;
+			GameOverSound = UEngineSound::Play("GameOver.ogg");
+		}
+
+		// 특정 스프라이트 생성 3초 딜레이
+	}
+	else
+	{
+		if (!IsBGMOn)
+		{
+			BGMPlayer.On();
+			IsBGMOn = true;
+			GameOverSound.Off();
+		}
+
+		// 스프라이트 비활성화
 	}
 }
 

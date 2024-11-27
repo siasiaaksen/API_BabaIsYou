@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Congratulations.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="SelectBox.h">
       <SubType>
       </SubType>
@@ -219,6 +223,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Congratulations.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="SelectBox.cpp">
       <SubType>
       </SubType>

@@ -1,9 +1,12 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EnginePlatform/EngineSound.h>
 #include <EngineBase/EngineSerializer.h>
 
 #include "ContentsEnum.h"
+#include "Fade.h"
+#include "Congratulations.h"
 
 
 class TileData : public ISerializObject
@@ -138,7 +141,6 @@ public:
 
 	std::string_view FindSpriteName(ELogicType _FLogicType);
 	std::vector<FIntPoint> FindMoveTile();
-	Tile* FindYouTile();
 
 	void AllTileMoveCheck(FIntPoint _MoveIndex);
 
@@ -204,6 +206,9 @@ public:
 		return TileCount;
 	}
 
+	void WinAfterFade();
+	void MoveMapLevel();
+
 protected:
 
 private:
@@ -222,5 +227,14 @@ private:
 	std::vector<Tile*> DeactiveObject;
 
 	std::vector<Tile*> ActionAllTile;
+
+	AFade* Fade;
+	ACongratulations* Winning;
+	bool IsWinAnimed = false;
+	bool IsFadeAnimed = false;
+	bool IsWinAnimEnd = false;
+	bool IsFadeAnimEnd = false;
+	USoundPlayer SoundPlayer;
+	USoundPlayer GameOverSound;
 };
 

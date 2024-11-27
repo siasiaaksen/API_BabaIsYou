@@ -1,3 +1,4 @@
+
 #include "PreCompile.h"
 #include "TileMap.h"
 
@@ -12,7 +13,6 @@
 #include "PlayGameMode.h"
 #include "MapGameMode.h"
 #include "BabaMapGameMode.h"
-#include "Fade.h"
 
 
 ATileMap::ATileMap()
@@ -50,6 +50,10 @@ ATileMap::~ATileMap()
 void ATileMap::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Fade = GetWorld()->SpawnActor<AFade>();
+	Winning = GetWorld()->SpawnActor<ACongratulations>();
+	Winning->SetActive(false);
 }
 
 void ATileMap::Tick(float _DeltaTime)
@@ -91,6 +95,16 @@ void ATileMap::Tick(float _DeltaTime)
 	if (true == UEngineInput::GetInst().IsDown('Q'))
 	{
 		UEngineDebug::SwitchIsDebug();
+	}
+
+	if (IsWinAnimed)
+	{
+		WinAfterFade();
+	}
+
+	if (IsFadeAnimed)
+	{
+		MoveMapLevel();
 	}
 }
 
@@ -343,31 +357,6 @@ std::vector<FIntPoint> ATileMap::FindMoveTile()
 	}
 
 	return MoveTiles;
-}
-
-Tile* ATileMap::FindYouTile()
-{
-	for (int y = 0; y < TileSize.Y; y++)
-	{
-		for (int x = 0; x < TileSize.X; x++)
-		{
-			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
-			{
-				FIntPoint CurIndex = FIntPoint(x, y);
-				Tile* CurTile = GetTileRef(CurIndex, i);
-
-				if (nullptr == CurTile)
-				{
-					continue;
-				}
-
-				if (EMoveType::YOU == CurTile->MoveType)
-				{
-					return CurTile;
-				}
-			}
-		}
-	}
 }
 
 void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
@@ -723,6 +712,7 @@ void ATileMap::SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite)
 					CurTile->SpriteName = UpperName;
 					CurTile->FLogicType = _ChangeSprite;
 					CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
+					CurTile->SpriteIndex = SpriteIndex;
 				}
 			}
 		}
@@ -1032,6 +1022,14 @@ void ATileMap::Action(float _DeltaTime)
 							if (EMoveType::YOU == CurTile->MoveType)
 							{
 								History.State = EState::DEACTIVEONE;
+								
+								SoundPlayer = UEngineSound::Play("DefeatDeadSound.ogg");
+
+								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+								PGameMode->GetBGMPlayer().Off();
+
+								GameOverSound = UEngineSound::Play("GameOver.ogg");
+
 								CurTile->SpriteRenderer->SetActive(false);
 							}
 						}
@@ -1042,6 +1040,16 @@ void ATileMap::Action(float _DeltaTime)
 
 							if (FindTile->StateType == EStateType::SINK)
 							{
+								SoundPlayer = UEngineSound::Play("WaterSinkDead.ogg");
+
+								if (CurTile->MoveType == EMoveType::YOU)
+								{
+									APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+									PGameMode->GetBGMPlayer().Off();
+
+									GameOverSound = UEngineSound::Play("GameOver.ogg");
+								}
+
 								CurTile->SpriteRenderer->SetActive(false);
 								FindTile->SpriteRenderer->SetActive(false);
 							}
@@ -1050,6 +1058,14 @@ void ATileMap::Action(float _DeltaTime)
 						else if (EStateType::MELT == CurTile->StateType && EStateType::HOT == FindTile->StateType)
 						{
 							History.State = EState::DEACTIVEONE;
+
+							SoundPlayer = UEngineSound::Play("LavaMeltSound.ogg");
+
+							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+							PGameMode->GetBGMPlayer().Off();
+
+							GameOverSound = UEngineSound::Play("GameOver.ogg");
+
 							CurTile->SpriteRenderer->SetActive(false);
 						}
 						// WIN
@@ -1059,15 +1075,15 @@ void ATileMap::Action(float _DeltaTime)
 							{
 								History.State = EState::DEACTIVEONE;
 
-								//AFade* Fade = GetWorld()->SpawnActor<AFade>();
-								//Fade->FadeOut();
+								SoundPlayer = UEngineSound::Play("Win.ogg");
+
+								Winning->SetActive(true);
+								Winning->Winning();
 								
 								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
 								PGameMode->GetBGMPlayer().Off();
 
-								// ¸Ê ÀÌµ¿
-								UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
-								UEngineAPICore::GetCore()->OpenLevel("Map");
+								IsWinAnimed = true;
 							}
 						}
 					}
@@ -1210,11 +1226,12 @@ void ATileMap::Undo(float _DeltaTime)
 
 							if (CurTile->FLogicType == History.NextSprite && CurTile->IsChange == true)
 							{
-								int SpriteIndex = CurTile->SpriteIndex;
+								int SpriteIndex = 0;
 								std::string_view SpriteName = FindSpriteName(History.PrevSprite);
 								std::string UpperName = UEngineString::ToUpper(SpriteName);
+								CurTile->SpriteName = UpperName;
 								CurTile->FLogicType = History.PrevSprite;
-								CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
+								CurTile->SpriteRenderer->SetSprite(UpperName, 0);
 								CurTile->IsChange = false;
 							}
 						}
@@ -1246,6 +1263,11 @@ void ATileMap::Undo(float _DeltaTime)
 						if (false == CurTile->SpriteRenderer->IsActive())
 						{
 							CurTile->SpriteRenderer->SetActive(true);
+
+							GameOverSound.Off();
+
+							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+							PGameMode->GetBGMPlayer().On();
 						}
 
 						CurTile->IsMove = true;
@@ -1256,6 +1278,11 @@ void ATileMap::Undo(float _DeltaTime)
 						CurTile->SpriteRenderer->SetActive(true);
 						CurTile->IsMove = true;
 						OtherTile[i]->SpriteRenderer->SetActive(true);
+
+						GameOverSound.Off();
+
+						APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+						PGameMode->GetBGMPlayer().On();
 					}
 				}
 			}
@@ -1383,6 +1410,33 @@ void ATileMap::TileMapLoad(const std::string Path)
 		TileData& TData = TileDatas[i];
 		SetTile(TData.Sprite, TData.Index, TData.Pivot = {0, 0}, TData.SpriteScale, TData.SpriteIndex, TData.FloorOrder, TData.Order,
 			TData.FLogicType, TData.SLogicType, TData.TLogicType);
+	}
+}
+
+void ATileMap::WinAfterFade()
+{
+	IsWinAnimEnd = Winning->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsWinAnimEnd)
+	{
+		Fade->FadeOut();
+		IsFadeAnimed = true;
+
+		IsWinAnimed = false;
+	}
+}
+
+void ATileMap::MoveMapLevel()
+{
+	IsFadeAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsFadeAnimEnd)
+	{
+		// ¸Ê ÀÌµ¿
+		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
+		UEngineAPICore::GetCore()->OpenLevel("Map");
+
+		IsFadeAnimed = false;
 	}
 }
 
