@@ -68,6 +68,7 @@ private:
 	ATileMap* TileMap = nullptr;
 
 	FIntPoint Scale;
+	int Index;
 
 	ELogicType F;
 	EVLogicType S;

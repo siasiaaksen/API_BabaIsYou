@@ -407,7 +407,7 @@ void APlayGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	S = CurTile->SLogicType;
 	if (S != EVLogicType::NONE)
 	{
-		ChangeSpriteCheck(_Index, _Order);
+		//ChangeSpriteCheck(_Index, _Order);
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
 	}
 
@@ -441,7 +441,7 @@ void APlayGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 			TileCombine.push_back(UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]);
 		}
 
-		ChangeSpriteCheck(_Index, _Order);
+		//ChangeSpriteCheck(_Index, _Order);
 	}
 
 	return;
@@ -461,86 +461,101 @@ void APlayGameMode::ChangeSpriteCheck(FIntPoint _Index, int _Order)
 		ELogicType::LAVAOBJECT == CurTile->FLogicType ||
 		ELogicType::WATEROBJECT == CurTile->FLogicType)
 	{
-		int Index = 0;
+		bool Left = false;
+		bool Right = false;
+		bool Up = false;
+		bool Down = false;
 
-		bool Left = (TileMap->IsIndexOver(_Index + FIntPoint::LEFT) &&
-			TileMap->GetTileRef(_Index + FIntPoint::LEFT, _Order)->FLogicType == CurTile->FLogicType);
-		bool Right = (TileMap->IsIndexOver(_Index + FIntPoint::RIGHT) &&
-			TileMap->GetTileRef(_Index + FIntPoint::RIGHT, _Order)->FLogicType == CurTile->FLogicType);
-		bool Up = (TileMap->IsIndexOver(_Index + FIntPoint::UP) &&
-			TileMap->GetTileRef(_Index + FIntPoint::UP, _Order)->FLogicType == CurTile->FLogicType);
-		bool Down = (TileMap->IsIndexOver(_Index + FIntPoint::DOWN) &&
-			TileMap->GetTileRef(_Index + FIntPoint::DOWN, _Order)->FLogicType == CurTile->FLogicType);
+		if (nullptr != TileMap->GetTileRef(_Index + FIntPoint::LEFT, _Order))
+		{
+			Left = (!TileMap->IsIndexOver(_Index + FIntPoint::LEFT) &&
+				TileMap->GetTileRef(_Index + FIntPoint::LEFT, _Order)->FLogicType == CurTile->FLogicType);
+		}
+		if (nullptr != TileMap->GetTileRef(_Index + FIntPoint::RIGHT, _Order))
+		{
+			Right = (!TileMap->IsIndexOver(_Index + FIntPoint::RIGHT) &&
+				TileMap->GetTileRef(_Index + FIntPoint::RIGHT, _Order)->FLogicType == CurTile->FLogicType);
+		}
+		if (nullptr != TileMap->GetTileRef(_Index + FIntPoint::UP, _Order))
+		{
+			Up = (!TileMap->IsIndexOver(_Index + FIntPoint::UP) &&
+				TileMap->GetTileRef(_Index + FIntPoint::UP, _Order)->FLogicType == CurTile->FLogicType);
+		}
+		if (nullptr != TileMap->GetTileRef(_Index + FIntPoint::DOWN, _Order))
+		{
+			Down = (!TileMap->IsIndexOver(_Index + FIntPoint::DOWN) &&
+				TileMap->GetTileRef(_Index + FIntPoint::DOWN, _Order)->FLogicType == CurTile->FLogicType);
+		}
 
 		// ÀÎµ¦½º Ã£±â
 		{
-			if (!Left && !Right && !Up && !Down)
+			if (false == Left && false == Right && false == Up && false == Down)
 			{
-				Index = 0;
+				CurTile->SpriteIndex = 0;
 			}
-			else if (!Left && Right && !Up && !Down)
+			else if (false == Left && true == Right && false == Up && false == Down)
 			{
-				Index = 1;
+				CurTile->SpriteIndex = 1;
 			}
-			else if (!Left && !Right && Up && !Down)
+			else if (false == Left && false == Right && true == Up && false == Down)
 			{
-				Index = 2;
+				CurTile->SpriteIndex = 2;
 			}
-			else if (!Left && Right && Up && !Down)
+			else if (false == Left && true == Right && true == Up && false == Down)
 			{
-				Index = 3;
+				CurTile->SpriteIndex = 3;
 			}
-			else if (Left && !Right && !Up && !Down)
+			else if (true == Left && false == Right && false == Up && true == Down)
 			{
-				Index = 4;
+				CurTile->SpriteIndex = 4;
 			}
-			else if (Left && Right && !Up && !Down)
+			else if (true == Left && true == Right && false == Up && false == Down)
 			{
-				Index = 5;
+				CurTile->SpriteIndex = 5;
 			}
-			else if (Left && !Right && Up && !Down)
+			else if (true == Left && false == Right && true == Up && false == Down)
 			{
-				Index = 6;
+				CurTile->SpriteIndex = 6;
 			}
-			else if (Left && Right && Up && !Down)
+			else if (true == Left && true == Right && true == Up && false == Down)
 			{
-				Index = 7;
+				CurTile->SpriteIndex = 7;
 			}
-			else if (!Left && !Right && !Up && Down)
+			else if (false == Left && false == Right && false == Up && true == Down)
 			{
-				Index = 8;
+				CurTile->SpriteIndex = 8;
 			}
-			else if (!Left && Right && !Up && Down)
+			else if (false == Left && true == Right && false == Up && true == Down)
 			{
-				Index = 9;
+				CurTile->SpriteIndex = 9;
 			}
-			else if (!Left && !Right && Up && Down)
+			else if (false == Left && false == Right && true == Up && true == Down)
 			{
-				Index = 10;
+				CurTile->SpriteIndex = 10;
 			}
-			else if (!Left && Right && Up && Down)
+			else if (false == Left && true == Right && true == Up && true == Down)
 			{
-				Index = 11;
+				CurTile->SpriteIndex = 11;
 			}
-			else if (Left && !Right && !Up && Down)
+			else if (true == Left && false == Right && false == Up && true == Down)
 			{
-				Index = 12;
+				CurTile->SpriteIndex = 12;
 			}
-			else if (Left && Right && !Up && Down)
+			else if (true == Left && true == Right && false == Up && true == Down)
 			{
-				Index = 13;
+				CurTile->SpriteIndex = 13;
 			}
-			else if (Left && !Right && Up && Down)
+			else if (true == Left && false == Right && true == Up && true == Down)
 			{
-				Index = 14;
+				CurTile->SpriteIndex = 14;
 			}
-			else if (Left && Right && Up && Down)
+			else if (true == Left && true == Right && true == Up && true == Down)
 			{
-				Index = 15;
+				CurTile->SpriteIndex = 15;
 			}
 		}
 
-		CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, Index);
+		CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, CurTile->SpriteIndex);
 	}
 }
 
