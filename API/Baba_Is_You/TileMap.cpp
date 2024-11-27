@@ -8,8 +8,8 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-#include "TestGameMode.h"
-//#include "PlayGameMode.h"
+//#include "TestGameMode.h"
+#include "PlayGameMode.h"
 #include "MapGameMode.h"
 #include "BabaMapGameMode.h"
 #include "Fade.h"
@@ -382,14 +382,14 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		//PGameMode->SetState(EGameState::ACTION);
-		TGameMode->SetState(ETestGameState::ACTION);
+		PGameMode->SetState(EGameState::ACTION);
+		//TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
 	else
@@ -597,6 +597,36 @@ Tile* ATileMap::GetTileRef(FIntPoint _Index, int _FloorOrder)
 	}
 
 	return AllTiles[_Index.Y][_Index.X][_FloorOrder];
+}
+
+void ATileMap::ResetAllTextSprite()
+{
+	for (size_t y = 0; y < AllTiles.size(); y++)
+	{
+		std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+		for (size_t x = 0; x < VectorY.size(); x++)
+		{
+			std::map<int, Tile*>& VectorX = VectorY[x];
+
+			std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+			std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+			for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+			{
+				Tile* CurTile = StartLeftIter->second;
+
+				if (nullptr == CurTile)
+				{
+					continue;
+				}
+
+				if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT))
+				{
+					CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
+				}
+			}
+		}
+	}
 }
 
 // 모든 타일의 MoveType 리셋
@@ -945,18 +975,24 @@ void ATileMap::Action(float _DeltaTime)
 			}
 
 			//// YOU인 개체와 TEXT가 겹쳐있을 때
-			//if (CurTile->MoveType == EMoveType::YOU)
+			//if (CurTile->MoveType != EMoveType::YOU)
 			//{
-			//	std::map<int, Tile*>& CurrentLayer = AllTiles[History.Prev.Y][History.Prev.X];
+			//	std::map<int, Tile*>& CurMap = AllTiles[History.Prev.Y][History.Prev.X];
+			//	std::map<int, Tile*>& NextMap = AllTiles[History.Next.Y][History.Next.X];
 
-			//	if (CurrentLayer.contains(static_cast<int>(EFloorOrder::TEXT)))
+			//	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			//	{
-			//		Tile* CurTextTile = CurrentLayer[static_cast<int>(EFloorOrder::TEXT)];
-
-			//		if (CurTextTile != nullptr && CurTextTile->MoveType != EMoveType::NONE)
+			//		if (false == NextMap.contains(i))
 			//		{
-			//			CurTextTile->IsMove = false;
-			//			CurTextTile->MoveType = EMoveType::NONE;
+			//			continue;
+			//		}
+
+			//		Tile* CurTextTile = NextMap[i];
+
+			//		if (CurTextTile != nullptr && CurTextTile->MoveType == EMoveType::YOU)
+			//		{
+			//			CurTile->IsMove = false;
+			//			CurTile->MoveType = EMoveType::NONE;
 			//			int a = 0;
 			//		}
 			//	}
@@ -972,10 +1008,23 @@ void ATileMap::Action(float _DeltaTime)
 				}
 				else
 				{
+
 					Tile* FindTile = OtherTile[i];
 
 					if (nullptr != FindTile)
 					{
+						//if (EMoveType::YOU == FindTile->MoveType)
+						//{
+						//	if (OtherTile.contains(static_cast<int>(EFloorOrder::TEXT)))
+						//	{
+						//		Tile* TextTile = OtherTile[static_cast<int>(EFloorOrder::TEXT)];
+
+						//		TextTile->IsMove = false;
+						//		TextTile->MoveType = EMoveType::NONE;
+						//		int b = 0;
+						//	}
+						//}
+
 						if (EStateType::DEFEAT == FindTile->StateType)
 						{
 							// DEFEAT
@@ -1012,8 +1061,8 @@ void ATileMap::Action(float _DeltaTime)
 								//AFade* Fade = GetWorld()->SpawnActor<AFade>();
 								//Fade->FadeOut();
 								
-								//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-								//PGameMode->GetBGMPlayer().Off();
+								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+								PGameMode->GetBGMPlayer().Off();
 
 								// 맵 이동
 								UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");

@@ -428,6 +428,13 @@ void ATestGameMode::TileCheck()
 				{
 					NextTileCheck(CurIndex, FIntPoint{ 1, 0 }, i);
 					NextTileCheck(CurIndex, FIntPoint{ 0, 1 }, i);
+
+					if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsFirstCombine)
+					{
+						CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+
+						IsFirstCombine = false;
+					}
 				}
 			}
 		}
@@ -452,6 +459,14 @@ void ATestGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	if (S != EVLogicType::NONE)
 	{
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
+
+		if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsSecondCombine)
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+
+			IsFirstCombine = true;
+			IsSecondCombine = false;
+		}
 	}
 
 	return;
@@ -477,6 +492,13 @@ void ATestGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 		if (nullptr != StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
 		{
 			StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]();
+
+			if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT))
+			{
+				CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+				
+				IsSecondCombine = true;
+			}
 		}
 
 		if (nullptr != UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
@@ -523,6 +545,8 @@ void ATestGameMode::GameState(float _DeltaTime)
 
 		TileMap->MoveTileTypeReset();
 		TileMap->MoveTileStateReset();
+
+		TileMap->ResetAllTextSprite();
 
 		// 다시 모든 TileCheck
 		TileCheck();

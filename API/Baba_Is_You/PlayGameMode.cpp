@@ -352,6 +352,7 @@ void APlayGameMode::UndoCheck()
 	{
 		State = EGameState::UNDO;
 		TileMap->SetActionTime(0.0f);
+		UndoSound();
 	}
 }
 
@@ -399,6 +400,13 @@ void APlayGameMode::TileCheck()
 
 					NextTileCheck(CurIndex, FIntPoint{ 1, 0 }, i);
 					NextTileCheck(CurIndex, FIntPoint{ 0, 1 }, i);
+
+					if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsFirstCombine)
+					{
+						CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+
+						IsFirstCombine = false;
+					}
 				}
 			}
 		}
@@ -423,6 +431,14 @@ void APlayGameMode::NextTileCheck(FIntPoint _Index, FIntPoint _Dir, int _Order)
 	if (S != EVLogicType::NONE)
 	{
 		LastTileCheck(_Index + _Dir + _Dir, _Order);
+
+		if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsSecondCombine)
+		{
+			CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+
+			IsFirstCombine = true;
+			IsSecondCombine = false;
+		}
 	}
 
 	return;
@@ -448,6 +464,13 @@ void APlayGameMode::LastTileCheck(FIntPoint _Index, int _Order)
 		if (nullptr != StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
 		{
 			StartLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)]();
+
+			if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT))
+			{
+				CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
+
+				IsSecondCombine = true;
+			}
 		}
 
 		if (nullptr != UpdateLogic[static_cast<int>(F)][static_cast<int>(S)][static_cast<int>(T)])
@@ -601,6 +624,8 @@ void APlayGameMode::GameState(float _DeltaTime)
 		TileMap->MoveTileTypeReset();
 		TileMap->MoveTileStateReset();
 
+		TileMap->ResetAllTextSprite();
+
 		TileCheck();
 
 		MoveCheck();
@@ -624,18 +649,16 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	GameState(_DeltaTime);
 
-	if (true == UEngineInput::GetInst().IsDown('P'))
+	InputKey();
+
+	if (IsPauseAnimed)
 	{
-		BGMPlayer.Off();
-		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
-		UEngineAPICore::GetCore()->OpenLevel("Map");
+		MoveMapLevel();
 	}
 
-	if (true == UEngineInput::GetInst().IsDown('R'))
+	if (IsRestartAnimed)
 	{
-		BGMPlayer.Off();
-		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
-		UEngineAPICore::GetCore()->OpenLevel("Play");
+		Restart();
 	}
 }
 
@@ -681,7 +704,57 @@ void APlayGameMode::BabaIndexChange()
 void APlayGameMode::MoveSound()
 {
 	MovePlayer = UEngineSound::Play("Move.ogg");
-	MovePlayer.SetVolume(30.0f);
+	MovePlayer.SetVolume(40.0f);
+}
+
+void APlayGameMode::UndoSound()
+{
+	UndoPlayer = UEngineSound::Play("MoveBackSound.ogg");
+	UndoPlayer.SetVolume(40.0f);
+}
+
+void APlayGameMode::InputKey()
+{
+
+	if (true == UEngineInput::GetInst().IsDown('P'))
+	{
+		BGMPlayer.Off();
+		Fade->FadeOut();
+		IsPauseAnimed = true;
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('R'))
+	{
+		BGMPlayer.Off();
+		Fade->FadeOut();
+		IsRestartAnimed = true;
+	}
+}
+
+void APlayGameMode::MoveMapLevel()
+{
+	IsAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsAnimEnd)
+	{
+		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
+		UEngineAPICore::GetCore()->OpenLevel("Map");
+	
+		IsPauseAnimed = false;
+	}
+}
+
+void APlayGameMode::Restart()
+{
+	IsAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsAnimEnd)
+	{
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
+		UEngineAPICore::GetCore()->OpenLevel("Play");
+
+		IsRestartAnimed = false;
+	}
 }
 
 

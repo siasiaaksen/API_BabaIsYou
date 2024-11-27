@@ -46,6 +46,10 @@ public:
 	void ChangeSpriteCheck(FIntPoint _Index, int _Order);
 	void BabaIndexChange();
 	void MoveSound();
+	void UndoSound();
+	void MoveMapLevel();
+	void Restart();
+	void InputKey();
 
 	void SetState(EGameState _State)
 	{
@@ -76,12 +80,15 @@ protected:
 private:
 	ATileMap* TileMap = nullptr;
 
-	FIntPoint Scale;
-	int Index;
+	FIntPoint Scale = FIntPoint(0, 0);
+	int Index = 0;
 
-	ELogicType F;
-	EVLogicType S;
-	ELogicType T;
+	ELogicType F = ELogicType::NONE;
+	EVLogicType S = EVLogicType::NONE;
+	ELogicType T = ELogicType::NONE;
+
+	bool IsFirstCombine = false;
+	bool IsSecondCombine = false;
 
 	std::function<void()> UpdateLogic[static_cast<int>(ELogicType::MAX)][static_cast<int>(EVLogicType::MAX)][static_cast<int>(ELogicType::MAX)] =
 	{ nullptr };
@@ -95,8 +102,10 @@ private:
 
 	USoundPlayer BGMPlayer;
 	USoundPlayer MovePlayer;
+	USoundPlayer UndoPlayer;
 	AFade* Fade = nullptr;
 	bool IsAnimEnd = false;
-	bool IsAnimed = false;
+	bool IsPauseAnimed = false;
+	bool IsRestartAnimed = false;
 };
 

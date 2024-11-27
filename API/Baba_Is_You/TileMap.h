@@ -159,6 +159,7 @@ public:
 	void Serialize(UEngineSerializer& _Ser);
 	void DeSerialize(UEngineSerializer& _Ser);
 
+	void ResetAllTextSprite();
 	void MoveTileTypeReset();
 	void MoveTileStateReset();
 
