@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <EnginePlatform/EngineSound.h>
 
 #include "BabaMapGameMode.h"
 #include "TileMap.h"
@@ -84,5 +85,7 @@ private:
 	std::list<std::function<void()>> TileCombine;
 
 	EGameState State;
+
+	USoundPlayer BGMPlayer;
 };
 

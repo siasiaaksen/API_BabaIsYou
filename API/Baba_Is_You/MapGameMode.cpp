@@ -24,6 +24,8 @@ void AMapGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
+	BGMPlayer = UEngineSound::Play("map.ogg");
+
 	Scale = { 33, 18 };
 	FVector2D CenterPivot;
 	CenterPivot.X = (1280 - (Scale.X * 36)) / 2;
@@ -118,6 +120,7 @@ bool AMapGameMode::IsMovable(FVector2D _NextPos)
 
 		if (2 == NextTile->FloorOrder || 3 == NextTile->FloorOrder)
 		{
+			MoveSound();
 			return true;
 		}
 	}
@@ -207,9 +210,17 @@ void AMapGameMode::SelectStage()
 			break;
 		}
 
+		BGMPlayer.Off();
+
 		// 페이드 인/아웃 필요
 
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
 		UEngineAPICore::GetCore()->OpenLevel("Play");
 	}
+}
+
+void AMapGameMode::MoveSound()
+{
+	MovePlayer = UEngineSound::Play("Move.ogg");
+	MovePlayer.SetVolume(30.0f);
 }

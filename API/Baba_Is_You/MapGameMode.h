@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/GameMode.h>
+#include <EnginePlatform/EngineSound.h>
 #include "TileMap.h"
 #include "SelectBox.h"
 
@@ -21,6 +22,8 @@ public:
 	bool IsSelectable();
 	void SelectStage();
 
+	void MoveSound();
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -33,5 +36,7 @@ private:
 	ASelectBox* SelectBox = nullptr;
 	float ActionTime = 0.0f;
 	int SpriteIndex;
+	USoundPlayer BGMPlayer;
+	USoundPlayer MovePlayer;
 };
 

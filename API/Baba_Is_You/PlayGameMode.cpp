@@ -26,6 +26,8 @@ void APlayGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
+	BGMPlayer = UEngineSound::Play("baba.ogg");
+
 	State = EGameState::SELECT;
 
 	TileMap = GetWorld()->SpawnActor<ATileMap>();
@@ -615,6 +617,7 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	if (true == UEngineInput::GetInst().IsDown('P'))
 	{
+		BGMPlayer.Off();
 		UEngineAPICore::GetCore()->OpenLevel("Map");
 	}
 }
