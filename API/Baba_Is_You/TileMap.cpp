@@ -720,6 +720,7 @@ void ATileMap::SpriteChange(ELogicType _CurSprite, ELogicType _ChangeSprite)
 					int SpriteIndex = 0;
 					std::string_view SpriteName = FindSpriteName(_ChangeSprite);
 					std::string UpperName = UEngineString::ToUpper(SpriteName);
+					CurTile->SpriteName = UpperName;
 					CurTile->FLogicType = _ChangeSprite;
 					CurTile->SpriteRenderer->SetSprite(UpperName, SpriteIndex);
 				}
