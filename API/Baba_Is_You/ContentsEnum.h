@@ -10,6 +10,7 @@ enum class ERenderOrder
 	WORLDMAP = -20,
 	BUTTON = -11,
 	BABASELECT = -9,
+	STAGENAME = -8,
 	STAGEBG = -7,
 	BGOBJECT = 0,
 	LOWER = 1,

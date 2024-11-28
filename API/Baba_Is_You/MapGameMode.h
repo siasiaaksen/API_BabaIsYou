@@ -22,6 +22,7 @@ public:
 	void MoveCheck(FVector2D _Dir);
 	bool IsSelectable();
 	void SelectStage();
+	void VisibleStageName();
 
 	void MoveSound();
 	void MovePlayLevel();
@@ -32,16 +33,23 @@ protected:
 
 private:
 	ATileMap* TileMap = nullptr;
+
 	FIntPoint Scale;
 	FIntPoint MouseIndex;
 	FVector2D EndPos;
+
 	ASelectBox* SelectBox = nullptr;
+	AFade* Fade = nullptr;
+
+	USpriteRenderer* SpriteRenderer;
+
 	float ActionTime = 0.0f;
 	int SpriteIndex = 0;
+
 	USoundPlayer BGMPlayer;
 	USoundPlayer MovePlayer;
 	USoundPlayer SelectSound;
-	AFade* Fade = nullptr;
+
 	bool IsAnimEnd = false;
 	bool IsAnimed = false;
 };

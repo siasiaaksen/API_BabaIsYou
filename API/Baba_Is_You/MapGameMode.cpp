@@ -82,6 +82,8 @@ void AMapGameMode::Tick(float _DeltaTime)
 	BoxMove(_DeltaTime);
 	SelectStage();
 
+	VisibleStageName();
+
 	if (IsAnimed)
 	{
 		MovePlayLevel();
@@ -223,6 +225,119 @@ void AMapGameMode::SelectStage()
 		Fade->FadeOut();
 		IsAnimed = true;
 	}
+}
+
+void AMapGameMode::VisibleStageName()
+{
+	int LastSpriteIndex = -1;
+	USpriteRenderer* LastSpriteRenderer = nullptr;
+
+	if (false == IsSelectable())
+	{
+		if (nullptr != LastSpriteRenderer)
+		{
+			if (true == LastSpriteRenderer->IsActive())
+			{
+				LastSpriteRenderer->SetActive(false);
+				LastSpriteIndex = -1;
+				LastSpriteRenderer = nullptr;
+			}
+		}
+		else
+		{
+			SpriteRenderer->SetActive(false);
+		}
+
+		return;
+	}
+
+	FIntPoint CurIndex = TileMap->LocationToIndex(SelectBox->GetActorLocation() - FVector2D(36, 36));
+	Tile* CurTile = TileMap->GetTileRef(CurIndex, 3);
+
+	if (nullptr == CurTile)
+	{
+		if (true == LastSpriteRenderer->IsActive())
+		{
+			LastSpriteRenderer->SetActive(false);
+			LastSpriteIndex = -1;
+			LastSpriteRenderer = nullptr;
+		}
+
+		return;
+	}
+
+	SpriteIndex = CurTile->SpriteIndex;
+
+	if (SpriteIndex == LastSpriteIndex)
+	{
+		return;
+	}
+
+	if (nullptr != LastSpriteRenderer)
+	{
+		if (true == LastSpriteRenderer->IsActive())
+		{
+			LastSpriteRenderer->SetActive(false);
+			LastSpriteIndex = -1;
+		}
+	}
+
+	if (nullptr == SpriteRenderer)
+	{
+		SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
+		SpriteRenderer->SetOrder(ERenderOrder::STAGENAME);
+	}
+
+
+	FVector2D LocationOffset = FVector2D::ZERO;
+
+	switch (SpriteIndex)
+	{
+	case 0:
+		SpriteRenderer->SetSprite("Title00.png");
+		LocationOffset = FVector2D(36 + 80, 18);
+		break;
+	case 1:
+		SpriteRenderer->SetSprite("Title01.png");
+		LocationOffset = FVector2D(36 + 103, 18);
+		break;
+	case 2:
+		SpriteRenderer->SetSprite("Title02.png");
+		LocationOffset = FVector2D(36 + 126, 18);
+		break;
+	case 3:
+		SpriteRenderer->SetSprite("Title03.png");
+		LocationOffset = FVector2D(36 + 88, 18);
+		break;
+	case 4:
+		SpriteRenderer->SetSprite("Title04.png");
+		LocationOffset = FVector2D(36 + 133, 18);
+		break;
+	case 5:
+		SpriteRenderer->SetSprite("Title05.png");
+		LocationOffset = FVector2D(36 + 51, 18);
+		break;
+	case 6:
+		SpriteRenderer->SetSprite("Title06.png");
+		LocationOffset = FVector2D(36 + 72, 18);
+		break;
+	case 7:
+		SpriteRenderer->SetSprite("Title07.png");
+		LocationOffset = FVector2D(36 + 73, 18);
+		break;
+	default:
+		SpriteRenderer->SetActive(false);
+		LastSpriteIndex = -1;
+		LastSpriteRenderer = nullptr;
+		break;
+	}
+
+	SpriteRenderer->SetActive(true);
+	FVector2D LogoScale = SpriteRenderer->SetSpriteScale(1.0f);
+	SpriteRenderer->SetComponentLocation(LocationOffset);
+
+	LastSpriteIndex = SpriteIndex;
+	LastSpriteRenderer = SpriteRenderer;
 }
 
 void AMapGameMode::MoveSound()
