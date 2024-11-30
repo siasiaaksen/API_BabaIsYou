@@ -90,6 +90,8 @@ void BabaContentsCore::BeginPlay()
 			UImageManager::GetInst().CuttingSprite("Line.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("LevelNum.png", { 36, 36 });
 			UImageManager::GetInst().CuttingSprite("CongratulationsUI.bmp", { 900, 300 });
+			UImageManager::GetInst().CuttingSprite("RestartText72_36.png", { 72, 36 });
+			UImageManager::GetInst().CuttingSprite("UndoText72_36.png", { 72, 36 });
 		}
 	}
 

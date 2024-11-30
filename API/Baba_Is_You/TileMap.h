@@ -119,6 +119,9 @@ public:
 
 	ELogicType PrevSprite = ELogicType::NONE;
 	ELogicType NextSprite = ELogicType::NONE;
+
+	int PrevSpriteIndex = 0;
+	int NextSpriteIndex = 0;
 };
 
 class ATileMap : public AActor, public ISerializObject
@@ -188,6 +191,16 @@ public:
 		ActionTime = _ActionTime;
 	}
 
+	void SetChangeSpriteIndex(int _ChangeSpriteIndex)
+	{
+		ChangeSpriteIndex = _ChangeSpriteIndex;
+	}
+
+	int GetChangeSpriteIndex()
+	{
+		return ChangeSpriteIndex;
+	}
+
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
@@ -219,21 +232,23 @@ private:
 	std::vector<std::vector<std::map<int, Tile*>>> AllTiles;
 
 	std::list<std::list<History>> Histories;
-
 	std::list<History>* LastHistories;
 
 	float ActionTime = 0.0f;
 
-	std::vector<Tile*> DeactiveObject;
+	int ChangeSpriteIndex = 0;
 
+	std::vector<Tile*> DeactiveObject;
 	std::vector<Tile*> ActionAllTile;
 
 	AFade* Fade;
 	ACongratulations* Winning;
+
 	bool IsWinAnimed = false;
 	bool IsFadeAnimed = false;
 	bool IsWinAnimEnd = false;
 	bool IsFadeAnimEnd = false;
+
 	USoundPlayer SoundPlayer;
 	USoundPlayer GameOverSound;
 };

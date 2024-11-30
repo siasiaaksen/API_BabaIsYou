@@ -28,6 +28,40 @@ void APlayGameMode::BeginPlay()
 
 	GetWorld()->SetCameraToMainPawn(false);
 
+	{
+		UndoSprite = CreateDefaultSubObject<USpriteRenderer>();
+		UndoSprite->SetSprite("UndoText72_36.png");
+		UndoSprite->SetOrder(ERenderOrder::UPPER);
+		UndoSprite->CreateAnimation("UndoText", "UndoText72_36.png", 0, 2, 0.3f);
+		UndoSprite->SetSpriteScale(1.0f);
+		UndoSprite->SetComponentLocation({ 468 , 24 });
+	}
+
+	{
+		RestartSprite = CreateDefaultSubObject<USpriteRenderer>();
+		RestartSprite->SetSprite("RestartText72_36.png");
+		RestartSprite->SetOrder(ERenderOrder::UPPER);
+		RestartSprite->CreateAnimation("RestartText", "RestartText72_36.png", 0, 2, 0.3f);
+		RestartSprite->SetSpriteScale(1.0f);
+		RestartSprite->SetComponentLocation({ 828 , 24 });
+	}
+
+	{
+		ZKeySprite = CreateDefaultSubObject<USpriteRenderer>();
+		ZKeySprite->SetSprite("UndoKey.png");
+		ZKeySprite->SetOrder(ERenderOrder::UPPER);
+		ZKeySprite->SetSpriteScale(1.0f);
+		ZKeySprite->SetComponentLocation({ 414 , 24 });
+	}
+
+	{
+		RKeySprite = CreateDefaultSubObject<USpriteRenderer>();
+		RKeySprite->SetSprite("RestartKey.png");
+		RKeySprite->SetOrder(ERenderOrder::UPPER);
+		RKeySprite->SetSpriteScale(1.0f);
+		RKeySprite->SetComponentLocation({ 774 , 24 });
+	}
+
 	Fade = GetWorld()->SpawnActor<AFade>();
 	Fade->FadeIn();
 
@@ -320,28 +354,24 @@ void APlayGameMode::MoveCheck()
 	if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::UP);
-		BabaIndexChange();
 		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::LEFT);
-		BabaIndexChange();
 		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::DOWN);
-		BabaIndexChange();
 		MoveSound();
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
 		TileMap->AllTileMoveCheck(FIntPoint::RIGHT);
-		BabaIndexChange();
 		MoveSound();
 	}
 }
@@ -404,7 +434,7 @@ void APlayGameMode::TileCheck()
 					if (CurTile->FloorOrder == static_cast<int>(EFloorOrder::TEXT) && true == IsFirstCombine)
 					{
 						CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 1);
-						
+
 						IsFirstCombine = false;
 					}
 				}
@@ -630,9 +660,10 @@ void APlayGameMode::GameState(float _DeltaTime)
 
 		MoveCheck();
 		UndoCheck();
+		BabaIndexChange();
 
 		BGMTurnOn();
-
+		TextExist();
 		break;
 	case EGameState::ACTION:
 		Action(_DeltaTime);
@@ -691,25 +722,30 @@ void APlayGameMode::BabaIndexChange()
 						std::string UpperName = UEngineString::ToUpper("BabaObject.png");
 						if (UpperName == CurTile->SpriteName)
 						{
+							int CurSpriteIndex = CurTile->SpriteIndex;
+							int ChangeSpriteIndex = TileMap->GetChangeSpriteIndex();
+
 							if (true == UEngineInput::GetInst().IsDown('W') || true == UEngineInput::GetInst().IsDown(VK_UP))
 							{
-								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 4);
+								TileMap->SetChangeSpriteIndex(4);
 							}
 
 							if (true == UEngineInput::GetInst().IsDown('A') || true == UEngineInput::GetInst().IsDown(VK_LEFT))
 							{
-								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 8);
+								TileMap->SetChangeSpriteIndex(8);
 							}
 
 							if (true == UEngineInput::GetInst().IsDown('S') || true == UEngineInput::GetInst().IsDown(VK_DOWN))
 							{
-								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 12);
+								TileMap->SetChangeSpriteIndex(12);
 							}
 
 							if (true == UEngineInput::GetInst().IsDown('D') || true == UEngineInput::GetInst().IsDown(VK_RIGHT))
 							{
-								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, 0);
+								TileMap->SetChangeSpriteIndex(0);
 							}
+
+							CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, ChangeSpriteIndex);
 						}
 					}
 				}
@@ -735,16 +771,12 @@ void APlayGameMode::InputKey()
 
 	if (true == UEngineInput::GetInst().IsDown('P'))
 	{
-		BGMPlayer.Off();
-		IsBGMOn = false;
 		Fade->FadeOut();
 		IsPauseAnimed = true;
 	}
 
 	if (true == UEngineInput::GetInst().IsDown('R'))
 	{
-		BGMPlayer.Off();
-		IsBGMOn = false;
 		Fade->FadeOut();
 		IsRestartAnimed = true;
 	}
@@ -756,6 +788,9 @@ void APlayGameMode::MoveMapLevel()
 
 	if (IsAnimEnd)
 	{
+		BGMPlayer.Off();
+		IsBGMOn = false;
+
 		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->OpenLevel("Map");
 	
@@ -769,6 +804,9 @@ void APlayGameMode::Restart()
 
 	if (IsAnimEnd)
 	{
+		BGMPlayer.Off();
+		IsBGMOn = false;
+
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, AActor>("Play");
 		UEngineAPICore::GetCore()->OpenLevel("Play");
 
@@ -814,8 +852,6 @@ void APlayGameMode::BGMTurnOn()
 			IsBGMOn = false;
 			GameOverSound = UEngineSound::Play("GameOver.ogg");
 		}
-
-		// 특정 스프라이트 생성 3초 딜레이
 	}
 	else
 	{
@@ -825,8 +861,26 @@ void APlayGameMode::BGMTurnOn()
 			IsBGMOn = true;
 			GameOverSound.Off();
 		}
+	}
+}
 
-		// 스프라이트 비활성화
+void APlayGameMode::TextExist()
+{
+	if (!IsYouTileExist())
+	{
+		UndoSprite->SetActive(true);
+		RestartSprite->SetActive(true);
+		ZKeySprite->SetActive(true);
+		RKeySprite->SetActive(true);
+		UndoSprite->ChangeAnimation("UndoText");
+		RestartSprite->ChangeAnimation("RestartText");
+	}
+	else
+	{
+		UndoSprite->SetActive(false);
+		RestartSprite->SetActive(false);
+		ZKeySprite->SetActive(false);
+		RKeySprite->SetActive(false);
 	}
 }
 

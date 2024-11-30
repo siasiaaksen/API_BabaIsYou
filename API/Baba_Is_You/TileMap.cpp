@@ -563,7 +563,15 @@ bool ATileMap::IsVoid(FIntPoint _NextIndex)
 {
 	std::map<int, Tile*>& NextMap = AllTiles[_NextIndex.Y][_NextIndex.X];
 
-	return NextMap.empty();
+	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
+	{
+		if (nullptr == NextMap[i])
+		{
+			continue;
+		}
+
+		return NextMap.empty() || static_cast<int>(EFloorOrder::BG) == NextMap[i]->FloorOrder;
+	}
 }
 
 Tile* ATileMap::GetTileRef(FVector2D _Location, int _FloorOrder)
@@ -923,6 +931,7 @@ void ATileMap::Action(float _DeltaTime)
 					{
 						continue;
 					}
+
 					ActionAllTile.push_back(CurTile);
 				}
 
@@ -1025,11 +1034,6 @@ void ATileMap::Action(float _DeltaTime)
 								
 								SoundPlayer = UEngineSound::Play("DefeatDeadSound.ogg");
 
-								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-								PGameMode->GetBGMPlayer().Off();
-
-								GameOverSound = UEngineSound::Play("GameOver.ogg");
-
 								CurTile->SpriteRenderer->SetActive(false);
 							}
 						}
@@ -1042,14 +1046,6 @@ void ATileMap::Action(float _DeltaTime)
 							{
 								SoundPlayer = UEngineSound::Play("WaterSinkDead.ogg");
 
-								if (CurTile->MoveType == EMoveType::YOU)
-								{
-									APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-									PGameMode->GetBGMPlayer().Off();
-
-									GameOverSound = UEngineSound::Play("GameOver.ogg");
-								}
-
 								CurTile->SpriteRenderer->SetActive(false);
 								FindTile->SpriteRenderer->SetActive(false);
 							}
@@ -1060,11 +1056,6 @@ void ATileMap::Action(float _DeltaTime)
 							History.State = EState::DEACTIVEONE;
 
 							SoundPlayer = UEngineSound::Play("LavaMeltSound.ogg");
-
-							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-							PGameMode->GetBGMPlayer().Off();
-
-							GameOverSound = UEngineSound::Play("GameOver.ogg");
 
 							CurTile->SpriteRenderer->SetActive(false);
 						}
@@ -1242,6 +1233,39 @@ void ATileMap::Undo(float _DeltaTime)
 			if (nullptr == CurTile)
 			{
 				continue;
+			}
+
+			if (EMoveType::YOU == CurTile->MoveType && ELogicType::BABAOBJECT == CurTile->FLogicType)
+			{
+				for (int y = 0; y < AllTiles.size(); y++)
+				{
+					std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+
+					for (int x = 0; x < VectorY.size(); x++)
+					{
+						std::map<int, Tile*>& VectorX = VectorY[x];
+
+						std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+						std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+						for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+						{
+							Tile* CurTile = StartLeftIter->second;
+
+							if (nullptr == CurTile)
+							{
+								continue;
+							}
+
+							FIntPoint Index = FIntPoint(x, y);
+
+							if (CurTile->SpriteIndex == History.NextSpriteIndex)
+							{
+								CurTile->SpriteIndex = History.PrevSpriteIndex;
+							}
+						}
+					}
+				}
 			}
 
 			int CurFloorOrder = CurTile->FloorOrder;

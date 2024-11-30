@@ -56,6 +56,7 @@ public:
 
 	bool IsYouTileExist();
 	void BGMTurnOn();
+	void TextExist();
 
 	void SetState(EGameState _State)
 	{
@@ -106,12 +107,20 @@ private:
 
 	EGameState State;
 
+	USpriteRenderer* UndoSprite;
+	USpriteRenderer* RestartSprite;
+	USpriteRenderer* ZKeySprite;
+	USpriteRenderer* RKeySprite;
+
 	USoundPlayer BGMPlayer;
 	USoundPlayer MovePlayer;
 	USoundPlayer UndoPlayer;
 	USoundPlayer GameOverSound;
+	USoundPlayer CombineSound;
+
 	AFade* Fade = nullptr;
-	bool IsBGMOn = true;
+
+	bool IsBGMOn = false;
 	bool IsAnimEnd = false;
 	bool IsPauseAnimed = false;
 	bool IsRestartAnimed = false;
