@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "StagePath.h"
 #include "PlayGameMode.h"
+#include "TitleGameMode.h"
 
 
 AMapGameMode::AMapGameMode()

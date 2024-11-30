@@ -9,8 +9,8 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-#include "TestGameMode.h"
-//#include "PlayGameMode.h"
+//#include "TestGameMode.h"
+#include "PlayGameMode.h"
 #include "MapGameMode.h"
 #include "BabaMapGameMode.h"
 
@@ -371,14 +371,14 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		//PGameMode->SetState(EGameState::ACTION);
-		TGameMode->SetState(ETestGameState::ACTION);
+		PGameMode->SetState(EGameState::ACTION);
+		//TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
 	else
@@ -994,7 +994,7 @@ void ATileMap::Action(float _DeltaTime)
 			{
 				std::map<int, Tile*> OtherTile = AllTiles[History.Next.Y][History.Next.X];
 
-				if (false == OtherTile.contains(i))
+				if (!OtherTile.contains(i))
 				{
 					continue;
 				}
@@ -1014,6 +1014,7 @@ void ATileMap::Action(float _DeltaTime)
 								SoundPlayer = UEngineSound::Play("DefeatDeadSound.ogg");
 
 								CurTile->SpriteRenderer->SetActive(false);
+								CurTile->IsMove = false;
 							}
 						}
 						// SINK
@@ -1027,6 +1028,8 @@ void ATileMap::Action(float _DeltaTime)
 
 								CurTile->SpriteRenderer->SetActive(false);
 								FindTile->SpriteRenderer->SetActive(false);
+								CurTile->IsMove = false;
+								FindTile->IsMove = false;
 							}
 						}
 						// HOT
@@ -1037,6 +1040,7 @@ void ATileMap::Action(float _DeltaTime)
 							SoundPlayer = UEngineSound::Play("LavaMeltSound.ogg");
 
 							CurTile->SpriteRenderer->SetActive(false);
+							CurTile->IsMove = false;
 						}
 						// WIN
 						else if (EStateType::WIN == FindTile->StateType)
@@ -1044,14 +1048,15 @@ void ATileMap::Action(float _DeltaTime)
 							if (EMoveType::YOU == CurTile->MoveType)
 							{
 								History.State = EState::DEACTIVEONE;
+								CurTile->IsMove = false;
 
 								SoundPlayer = UEngineSound::Play("Win.ogg");
 
 								Winning->SetActive(true);
 								Winning->Winning();
 								
-								//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-								//PGameMode->GetBGMPlayer().Off();
+								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+								PGameMode->GetBGMPlayer().Off();
 
 								IsWinAnimed = true;
 							}
@@ -1258,7 +1263,9 @@ void ATileMap::Undo(float _DeltaTime)
 					continue;
 				}
 
-				if (nullptr != OtherTile[i])
+				Tile* FindTile = OtherTile[i];
+
+				if (nullptr != FindTile)
 				{
 					// DEFEAT, HOT
 					if (History.State == EState::DEACTIVEONE)
@@ -1269,8 +1276,8 @@ void ATileMap::Undo(float _DeltaTime)
 
 							GameOverSound.Off();
 
-							//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-							//PGameMode->GetBGMPlayer().On();
+							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+							PGameMode->GetBGMPlayer().On();
 						}
 
 						CurTile->IsMove = true;
@@ -1280,12 +1287,13 @@ void ATileMap::Undo(float _DeltaTime)
 					{
 						CurTile->SpriteRenderer->SetActive(true);
 						CurTile->IsMove = true;
-						OtherTile[i]->SpriteRenderer->SetActive(true);
+						FindTile->SpriteRenderer->SetActive(true);
+						FindTile->IsMove = true;
 
 						GameOverSound.Off();
 
-						//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-						//PGameMode->GetBGMPlayer().On();
+						APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+						PGameMode->GetBGMPlayer().On();
 					}
 				}
 			}
