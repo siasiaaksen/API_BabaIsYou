@@ -140,7 +140,7 @@ void BabaContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, AActor>("Play");
 	UEngineAPICore::GetCore()->CreateLevel<ATestGameMode, AActor>("Test");
 	UEngineAPICore::GetCore()->CreateLevel<AMapEditor, AActor>("Editor");
-	UEngineAPICore::GetCore()->OpenLevel("Map");
+	UEngineAPICore::GetCore()->OpenLevel("Test");
 }
 
 void BabaContentsCore::Tick()

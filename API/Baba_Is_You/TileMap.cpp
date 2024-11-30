@@ -9,8 +9,8 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-//#include "TestGameMode.h"
-#include "PlayGameMode.h"
+#include "TestGameMode.h"
+//#include "PlayGameMode.h"
 #include "MapGameMode.h"
 #include "BabaMapGameMode.h"
 
@@ -371,14 +371,14 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 		TileMove(YouTiles[i], _MoveDir);
 	}
 
-	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		PGameMode->SetState(EGameState::ACTION);
-		//TGameMode->SetState(ETestGameState::ACTION);
+		//PGameMode->SetState(EGameState::ACTION);
+		TGameMode->SetState(ETestGameState::ACTION);
 		ActionTime = 0.0f;
 	}
 	else
@@ -387,7 +387,7 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 	}
 }
 
-void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
+void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 {
 	FIntPoint NextIndex = _CurIndex + _MoveIndex;
 
@@ -398,6 +398,8 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
 
 	std::map<int, Tile*>& CurMap = AllTiles[_CurIndex.Y][_CurIndex.X];
 	std::map<int, Tile*>& NextMap = AllTiles[NextIndex.Y][NextIndex.X];
+
+	IsRecord = true;
 
 	// 모든 타일층을 돌면서
 	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
@@ -433,19 +435,27 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
 			// 다음 타일이 비어있어?
 			bool IsEmpty = IsVoid(NextIndex);
 
-			if (true == IsEmpty)
+			if (IsEmpty)
 			{
-				History NewH;
-				NewH.Tile = CurTile;
-				NewH.Prev = _CurIndex;
-				NewH.Next = NextIndex;
+				if (IsRecord)
+				{
+					History NewH;
+					NewH.Tile = CurTile;
+					NewH.Prev = _CurIndex;
+					NewH.Next = NextIndex;
 
-				LastHistories->push_back(NewH);
+					LastHistories->push_back(NewH);
+				}
 			}
 			else
 			{
 				for (int j = 0; j < static_cast<int>(EFloorOrder::MAX); j++)
 				{
+					if (!NextMap.contains(j))
+					{
+						continue;
+					}
+
 					Tile* NextTile = NextMap[j];
 
 					if (nullptr == NextTile)
@@ -456,16 +466,21 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex, int _Count)
 					if (EMoveType::PUSH == NextTile->MoveType)
 					{
 						// 내가 그녀석을 조사해줘야 한다.
-						TileMove(NextIndex, _MoveIndex, ++_Count);
+						TileMove(NextIndex, _MoveIndex);
 					}
 				}
 
-				History NewH;
-				NewH.Tile = CurTile;
-				NewH.Prev = _CurIndex;
-				NewH.Next = NextIndex;
+				if (IsRecord)
+				{
+					History NewH;
+					NewH.Tile = CurTile;
+					NewH.Prev = _CurIndex;
+					NewH.Next = NextIndex;
 
-				LastHistories->push_back(NewH);
+					LastHistories->push_back(NewH);
+
+					IsRecord = true;
+				}
 			}
 		}
 	}
@@ -505,7 +520,7 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 		Tile* CurTile = CurMap[i];
 
-		if (nullptr != CurTile)
+		if (nullptr != CurTile && ELogicType::NONE != CurTile->FLogicType)
 		{
 			USpriteRenderer* CurSprite = CurMap[i]->SpriteRenderer;
 
@@ -514,7 +529,6 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 				continue;
 			}
 
-
 			if (EMoveType::YOU != CurMap[i]->MoveType && EMoveType::PUSH != CurMap[i]->MoveType)
 			{
 				continue;
@@ -522,6 +536,7 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 
 			if (EMoveType::STOP == CurMap[i]->MoveType)
 			{
+				IsRecord = false;
 				return false;
 			}
 
@@ -538,6 +553,7 @@ bool ATileMap::TileMoveCheck(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 				{
 					if (EMoveType::STOP == NextMap[j]->MoveType)
 					{
+						IsRecord = false;
 						return false;
 					}
 
@@ -570,7 +586,7 @@ bool ATileMap::IsVoid(FIntPoint _NextIndex)
 			continue;
 		}
 
-		return NextMap.empty() || static_cast<int>(EFloorOrder::BG) == NextMap[i]->FloorOrder;
+		return NextMap.empty();
 	}
 }
 
@@ -974,30 +990,6 @@ void ATileMap::Action(float _DeltaTime)
 				continue;
 			}
 
-			//// YOU인 개체와 TEXT가 겹쳐있을 때
-			//if (CurTile->MoveType != EMoveType::YOU)
-			//{
-			//	std::map<int, Tile*>& CurMap = AllTiles[History.Prev.Y][History.Prev.X];
-			//	std::map<int, Tile*>& NextMap = AllTiles[History.Next.Y][History.Next.X];
-
-			//	for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
-			//	{
-			//		if (false == NextMap.contains(i))
-			//		{
-			//			continue;
-			//		}
-
-			//		Tile* CurTextTile = NextMap[i];
-
-			//		if (CurTextTile != nullptr && CurTextTile->MoveType == EMoveType::YOU)
-			//		{
-			//			CurTile->IsMove = false;
-			//			CurTile->MoveType = EMoveType::NONE;
-			//			int a = 0;
-			//		}
-			//	}
-			//}
-
 			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
 				std::map<int, Tile*> OtherTile = AllTiles[History.Next.Y][History.Next.X];
@@ -1008,23 +1000,10 @@ void ATileMap::Action(float _DeltaTime)
 				}
 				else
 				{
-
 					Tile* FindTile = OtherTile[i];
 
 					if (nullptr != FindTile)
 					{
-						//if (EMoveType::YOU == FindTile->MoveType)
-						//{
-						//	if (OtherTile.contains(static_cast<int>(EFloorOrder::TEXT)))
-						//	{
-						//		Tile* TextTile = OtherTile[static_cast<int>(EFloorOrder::TEXT)];
-
-						//		TextTile->IsMove = false;
-						//		TextTile->MoveType = EMoveType::NONE;
-						//		int b = 0;
-						//	}
-						//}
-
 						if (EStateType::DEFEAT == FindTile->StateType)
 						{
 							// DEFEAT
@@ -1071,8 +1050,8 @@ void ATileMap::Action(float _DeltaTime)
 								Winning->SetActive(true);
 								Winning->Winning();
 								
-								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-								PGameMode->GetBGMPlayer().Off();
+								//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+								//PGameMode->GetBGMPlayer().Off();
 
 								IsWinAnimed = true;
 							}
@@ -1290,8 +1269,8 @@ void ATileMap::Undo(float _DeltaTime)
 
 							GameOverSound.Off();
 
-							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-							PGameMode->GetBGMPlayer().On();
+							//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+							//PGameMode->GetBGMPlayer().On();
 						}
 
 						CurTile->IsMove = true;
@@ -1305,8 +1284,8 @@ void ATileMap::Undo(float _DeltaTime)
 
 						GameOverSound.Off();
 
-						APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-						PGameMode->GetBGMPlayer().On();
+						//APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
+						//PGameMode->GetBGMPlayer().On();
 					}
 				}
 			}
