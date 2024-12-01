@@ -658,9 +658,9 @@ void APlayGameMode::GameState(float _DeltaTime)
 
 		TileCheck();
 
+		BabaIndexChange();
 		MoveCheck();
 		UndoCheck();
-		BabaIndexChange();
 
 		BGMTurnOn();
 		TextExist();
@@ -744,8 +744,6 @@ void APlayGameMode::BabaIndexChange()
 							{
 								TileMap->SetChangeSpriteIndex(0);
 							}
-
-							CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, ChangeSpriteIndex);
 						}
 					}
 				}

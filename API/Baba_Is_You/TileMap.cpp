@@ -443,6 +443,8 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 					NewH.Tile = CurTile;
 					NewH.Prev = _CurIndex;
 					NewH.Next = NextIndex;
+					NewH.PrevSpriteIndex = CurTile->SpriteIndex;
+					NewH.NextSpriteIndex = ChangeSpriteIndex;
 
 					LastHistories->push_back(NewH);
 				}
@@ -476,6 +478,8 @@ void ATileMap::TileMove(FIntPoint _CurIndex, FIntPoint _MoveIndex)
 					NewH.Tile = CurTile;
 					NewH.Prev = _CurIndex;
 					NewH.Next = NextIndex;
+					NewH.PrevSpriteIndex = CurTile->SpriteIndex;
+					NewH.NextSpriteIndex = ChangeSpriteIndex;
 
 					LastHistories->push_back(NewH);
 
@@ -990,6 +994,33 @@ void ATileMap::Action(float _DeltaTime)
 				continue;
 			}
 
+			if (EMoveType::YOU == CurTile->MoveType && ELogicType::BABAOBJECT == CurTile->FLogicType)
+			{
+				for (int y = 0; y < AllTiles.size(); y++)
+				{
+					std::vector<std::map<int, Tile*>>& VectorY = AllTiles[y];
+
+					for (int x = 0; x < VectorY.size(); x++)
+					{
+						std::map<int, Tile*>& VectorX = VectorY[x];
+
+						std::map<int, Tile*>::iterator StartLeftIter = VectorX.begin();
+						std::map<int, Tile*>::iterator EndLeftIter = VectorX.end();
+
+						for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
+						{
+							FIntPoint Index = FIntPoint(x, y);
+
+							if (CurTile->SpriteIndex == History.PrevSpriteIndex)
+							{
+								CurTile->SpriteIndex = History.NextSpriteIndex;
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, CurTile->SpriteIndex);
+							}
+						}
+					}
+				}
+			}
+
 			for (int i = 0; i < static_cast<int>(EFloorOrder::MAX); i++)
 			{
 				std::map<int, Tile*> OtherTile = AllTiles[History.Next.Y][History.Next.X];
@@ -1190,24 +1221,24 @@ void ATileMap::Undo(float _DeltaTime)
 
 						for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
 						{
-							Tile* CurTile = StartLeftIter->second;
+							Tile* CurSpriteTile = StartLeftIter->second;
 
-							if (nullptr == CurTile)
+							if (nullptr == CurSpriteTile)
 							{
 								continue;
 							}
 
 							FIntPoint Index = FIntPoint(x, y);
 
-							if (CurTile->FLogicType == History.NextSprite && CurTile->IsChange == true)
+							if (CurSpriteTile->FLogicType == History.NextSprite && CurSpriteTile->IsChange == true)
 							{
 								int SpriteIndex = 0;
 								std::string_view SpriteName = FindSpriteName(History.PrevSprite);
 								std::string UpperName = UEngineString::ToUpper(SpriteName);
-								CurTile->SpriteName = UpperName;
-								CurTile->FLogicType = History.PrevSprite;
-								CurTile->SpriteRenderer->SetSprite(UpperName, 0);
-								CurTile->IsChange = false;
+								CurSpriteTile->SpriteName = UpperName;
+								CurSpriteTile->FLogicType = History.PrevSprite;
+								CurSpriteTile->SpriteRenderer->SetSprite(UpperName, 0);
+								CurSpriteTile->IsChange = false;
 							}
 						}
 					}
@@ -1234,18 +1265,12 @@ void ATileMap::Undo(float _DeltaTime)
 
 						for (; StartLeftIter != EndLeftIter; ++StartLeftIter)
 						{
-							Tile* CurTile = StartLeftIter->second;
-
-							if (nullptr == CurTile)
-							{
-								continue;
-							}
-
 							FIntPoint Index = FIntPoint(x, y);
 
 							if (CurTile->SpriteIndex == History.NextSpriteIndex)
 							{
 								CurTile->SpriteIndex = History.PrevSpriteIndex;
+								CurTile->SpriteRenderer->SetSprite(CurTile->SpriteName, CurTile->SpriteIndex);
 							}
 						}
 					}
