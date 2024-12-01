@@ -85,9 +85,16 @@ void AMapGameMode::Tick(float _DeltaTime)
 
 	VisibleStageName();
 
+	MoveTitleLevel();
+
 	if (IsAnimed)
 	{
 		MovePlayLevel();
+	}
+
+	if (IsTitleAnimed)
+	{
+		ChangeTitleLevel();
 	}
 }
 
@@ -359,3 +366,27 @@ void AMapGameMode::MovePlayLevel()
 		IsAnimed = false;
 	}
 }
+
+void AMapGameMode::MoveTitleLevel()
+{
+	if (true == UEngineInput::GetInst().IsDown('P'))
+	{
+		BGMPlayer.Off();
+		Fade->FadeOut();
+		IsTitleAnimed = true;
+	}
+}
+
+void AMapGameMode::ChangeTitleLevel()
+{
+	IsAnimEnd = Fade->GetSRenderer()->IsCurAnimationEnd();
+
+	if (IsAnimEnd)
+	{
+		UEngineAPICore::GetCore()->ResetLevel<ATitleGameMode, AActor>("Title");
+		UEngineAPICore::GetCore()->OpenLevel("Title");
+
+		IsTitleAnimed = false;
+	}
+}
+

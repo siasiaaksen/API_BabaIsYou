@@ -31,6 +31,7 @@ void ATitleGameMode::BeginPlay()
 	ATitleLogo* NewTitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
 	AButtons* Btn = GetWorld()->SpawnActor<AButtons>();
 	Fade = GetWorld()->SpawnActor<AFade>();
+	Fade->FadeIn();
 
 	// Buttons
 	{
@@ -168,6 +169,7 @@ void ATitleGameMode::MoveMapLevel()
 
 	if (IsAnimEnd)
 	{
+		UEngineAPICore::GetCore()->ResetLevel<AMapGameMode, AActor>("Map");
 		UEngineAPICore::GetCore()->OpenLevel("Map");
 	}
 }

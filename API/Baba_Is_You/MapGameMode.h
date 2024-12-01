@@ -26,6 +26,8 @@ public:
 
 	void MoveSound();
 	void MovePlayLevel();
+	void MoveTitleLevel();
+	void ChangeTitleLevel();
 
 protected:
 	void BeginPlay() override;
@@ -52,5 +54,6 @@ private:
 
 	bool IsAnimEnd = false;
 	bool IsAnimed = false;
+	bool IsTitleAnimed = false;
 };
 
