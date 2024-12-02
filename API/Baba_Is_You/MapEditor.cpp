@@ -1,10 +1,14 @@
 #include "PreCompile.h"
 #include "MapEditor.h"
-#include "TileMap.h"
+
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineCoreDebug.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineBase/EnginePath.h>
+
+#include "TitleGameMode.h"
+#include "TileMap.h"
+
 
 AMapEditor::AMapEditor()
 {
@@ -47,6 +51,12 @@ void AMapEditor::Tick(float _DeltaTime)
 
 	MapSave();
 	MapLoad();
+
+	if (true == UEngineInput::GetInst().IsDown('P'))
+	{
+		UEngineAPICore::GetCore()->ResetLevel<ATitleGameMode, AActor>("Title");
+		UEngineAPICore::GetCore()->OpenLevel("Title");
+	}
 }
 
 bool AMapEditor::BGSize()

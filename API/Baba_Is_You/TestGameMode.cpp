@@ -11,6 +11,7 @@
 
 #include "ContentsEnum.h"
 #include "TileMap.h"
+#include "TitleGameMode.h"
 
 
 ATestGameMode::ATestGameMode()
@@ -576,6 +577,12 @@ void ATestGameMode::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	GameState(_DeltaTime);
+
+	if (true == UEngineInput::GetInst().IsDown('P'))
+	{
+		UEngineAPICore::GetCore()->ResetLevel<ATitleGameMode, AActor>("Title");
+		UEngineAPICore::GetCore()->OpenLevel("Title");
+	}
 }
 
 

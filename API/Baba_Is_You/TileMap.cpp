@@ -9,7 +9,7 @@
 #include <EngineBase/EngineString.h>
 #include <EngineBase/EngineFile.h>
 
-//#include "TestGameMode.h"
+#include "TestGameMode.h"
 #include "PlayGameMode.h"
 #include "MapGameMode.h"
 #include "BabaMapGameMode.h"
@@ -372,13 +372,21 @@ void ATileMap::AllTileMoveCheck(FIntPoint _MoveDir)
 	}
 
 	APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-	//ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
+	ATestGameMode* TGameMode = GetWorld()->GetGameMode<ATestGameMode>();
 
 	// 이동한 타일이 있으면
 	if (0 != LastHistories->size())
 	{
-		PGameMode->SetState(EGameState::ACTION);
-		//TGameMode->SetState(ETestGameState::ACTION);
+		if (nullptr != PGameMode)
+		{
+			PGameMode->SetState(EGameState::ACTION);
+		}
+
+		if (nullptr != TGameMode)
+		{
+			TGameMode->SetState(ETestGameState::ACTION);
+		}
+
 		ActionTime = 0.0f;
 	}
 	else
@@ -1087,7 +1095,10 @@ void ATileMap::Action(float _DeltaTime)
 								Winning->Winning();
 								
 								APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-								PGameMode->GetBGMPlayer().Off();
+								if (nullptr != PGameMode)
+								{
+									PGameMode->GetBGMPlayer().Off();
+								}
 
 								IsWinAnimed = true;
 							}
@@ -1302,7 +1313,10 @@ void ATileMap::Undo(float _DeltaTime)
 							GameOverSound.Off();
 
 							APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-							PGameMode->GetBGMPlayer().On();
+							if (nullptr != PGameMode)
+							{
+								PGameMode->GetBGMPlayer().On();
+							}
 						}
 
 						CurTile->IsMove = true;
@@ -1318,7 +1332,10 @@ void ATileMap::Undo(float _DeltaTime)
 						GameOverSound.Off();
 
 						APlayGameMode* PGameMode = GetWorld()->GetGameMode<APlayGameMode>();
-						PGameMode->GetBGMPlayer().On();
+						if (nullptr != PGameMode)
+						{
+							PGameMode->GetBGMPlayer().On();
+						}
 					}
 				}
 			}

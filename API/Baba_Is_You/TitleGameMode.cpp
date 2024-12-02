@@ -9,6 +9,8 @@
 #include "TitleLogo.h"
 #include "TitleBackground.h"
 #include "MapGameMode.h"
+#include "TestGameMode.h"
+#include "MapEditor.h"
 
 
 ATitleGameMode::ATitleGameMode()
@@ -98,6 +100,20 @@ void ATitleGameMode::Tick(float _DeltaTime)
 	if (IsAnimed)
 	{
 		MoveMapLevel();
+	}
+
+	if (true == UEngineInput::GetInst().IsDown(VK_F1))
+	{
+		BGMPlayer.Off();
+		UEngineAPICore::GetCore()->ResetLevel<ATestGameMode, AActor>("Test");
+		UEngineAPICore::GetCore()->OpenLevel("Test");
+	}
+
+	if (true == UEngineInput::GetInst().IsDown(VK_F2))
+	{
+		BGMPlayer.Off();
+		UEngineAPICore::GetCore()->ResetLevel<AMapEditor, AActor>("Editor");
+		UEngineAPICore::GetCore()->OpenLevel("Editor");
 	}
 }
 
